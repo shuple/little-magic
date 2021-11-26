@@ -1,0 +1,4 @@
+# Python 3.8.7
+Flask==1.1.2
+Pillow==8.1.0
+uWSGI==2.0.19.1
