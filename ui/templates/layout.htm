@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ env['name'] }}</title>
+  <meta name="viewport" content="width=device-width" />
+  <!-- CSS for Little Magic -->
+  <link rel="stylesheet" href="/static/css/layout.css" />
+  <!-- JS for Little Magic -->
+  <script src="/static/js/little_magic.js"></script>
+  <!-- icon -->
+  <link rel="shortcut icon" href="/static/image/favicon/64x64.ico">
+  <link rel="apple-touch-icon" sizes="120x120" href="/static/image/favicon/120x120.png"> <!-- iPhone      -->
+  <link rel="apple-touch-icon" sizes="152x152" href="/static/image/favicon/152x152.png"> <!-- iPhone Plus -->
+  <link rel="apple-touch-icon" sizes="167x167" href="/static/image/favicon/167x167.png"> <!-- iPad Retina -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/image/favicon/180x180.png"> <!-- iPad Pro    -->
+</head>
+<body>
+  {% block content %}{% endblock %}
+</body>
+</html>

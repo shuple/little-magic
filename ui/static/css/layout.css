@@ -1,0 +1,7 @@
+@charset "UTF-8";
+
+body {
+  margin: 0;
+  height: 100%;
+  font-family: 'Meiryo', 'Hiragino Kaku Gothic Pro', sans-serif;
+}
