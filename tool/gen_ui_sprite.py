@@ -30,8 +30,7 @@ if __name__ == '__main__':
         image = image.resize((int(w * args['scale']), int(h * args['scale'])), Image.NEAREST)
 
         # create directory and save file
-        replace = f"\\1/{args['scale']}"
-        save_file = f"{args['path']}/{re.sub(f'{path}/(sprite)', replace, str(file))}"
+        save_file = f"{args['path']}/{re.sub(f'{path}/', '', str(file))}"
         os.makedirs(os.path.dirname(save_file), exist_ok=True)
         image.save(save_file, 'png')
     #  for
