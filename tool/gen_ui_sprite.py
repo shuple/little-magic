@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
         # resize image by scale
         w, h = image.size
-        image = image.resize((w * args['scale'], h * args['scale']), Image.NEAREST)
+        image = image.resize((int(w * args['scale']), int(h * args['scale'])), Image.NEAREST)
 
         # create directory and save file
         replace = f"\\1/{args['scale']}"
