@@ -30,6 +30,20 @@ def index():
         return {}
 #  def index()
 
+# stage map data
+#
+@app.route('/post/stage', methods=['POST'])
+def post_oneline():
+    try:
+        data = flask.request.json
+        with open(f"{path}/../data/system/map/sfc/{data['stage']}.json") as f:
+            d = { 'data': f.read() }
+    except Exception as e:
+        logging.error(f'{flask.request.path} {traceback.format_exc()}')
+        d = { 'error': f'{str(e)}' }
+    return json.dumps(d)
+#  def post_oneline()
+
 # parse command line argument
 #
 def parse_args():

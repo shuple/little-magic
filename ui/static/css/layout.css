@@ -1,7 +1,32 @@
 @charset "UTF-8";
-
 body {
   margin: 0;
   height: 100%;
+  overflow: hidden;
   font-family: 'Meiryo', 'Hiragino Kaku Gothic Pro', sans-serif;
+}
+
+div.game {
+  display:flex;
+  justify-content:center;
+}
+
+div.game canvas {
+  position: absolute;
+}
+
+
+/*
+ * responsive design
+ */
+@media (max-width: 599px) {
+}
+
+@media (min-width: 600px) and (max-width: 767px) {
+}
+
+@media (min-width: 768px) {
+}
+
+@media(min-width: 1040px) {
 }
