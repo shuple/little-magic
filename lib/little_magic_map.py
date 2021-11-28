@@ -32,12 +32,9 @@ class LittleMagicMap(sprite.Sprite):
             (255, 255, 255)
         )
 
-        # background, foreground
-        self.set_map(image, data)
-
-        # object
-        for d in data['object']:
-            self.set_object(image, d)
+        self.set_image(image, data['background'])
+        self.set_image(image, data['foreground'])
+        self.set_image(image, data['object'])
 
         timestamp =  datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
         map_name  = f"{self.option['graphic']}/{timestamp}.png"
@@ -53,36 +50,19 @@ class LittleMagicMap(sprite.Sprite):
     # data['foreground']  : map foreground data
     # data['background']  : map background data
     #
-    def set_map(self, image, data):
-        fg = data['foreground']
-        bg = data['background']
-        for row in range(len(fg)):
-            for col in range(len(fg[row])):
+    def set_image(self, image, data):
+        for row in range(len(data)):
+            for col in range(len(data[row])):
+                if not data[row][col]: continue
+
                 width, height = self.block['width'] * col, self.block['height'] * row
                 size = (width, height)
 
-                background = self.image_data[bg[row][col]]
-                foreground = self.image_data[fg[row][col]]
-
-                image.paste(background, size)
-                image.paste(foreground, size, foreground)
+                sprite = self.image_data[data[row][col]]
+                image.paste(sprite, size, sprite)
             #  for
         #  for
-    #  def set_map()
-
-    # set object PIL Image.
-    #
-    # parameters:
-    #
-    # image          : PIL Image
-    # data['object'] : map object data
-    #
-    def set_object(self, image, data):
-        y = data['position']['y']
-        x = data['position']['x']
-        width, height = self.block['width'] * x, self.block['height'] * y
-        image.paste(self.image_data[data['image']], (width ,height), self.image_data[data['image']])
-    #  def set_object
+    #  def set_image()
 #  class LittleMagicMap
 
 if __name__ == '__main__':

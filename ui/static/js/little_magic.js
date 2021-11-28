@@ -50,11 +50,12 @@ window.addEventListener('load', function () {
       return '/static/image/sprite/' + graphic + '/' + src + '.png';
     } // imagesrc()
 
-    loadMapData(canvas, restData) {
+    loadMap(canvas, restData) {
       const context = this.contexts[canvas];
       const data = restData[canvas];
       for (let row = 0; row < data.length; row++) {
         for (let col = 0; col < data[row].length; col++) {
+          if (data[row][col] == '') continue;
           let image = new Image();
           image.onload = function() {
             context.drawImage(image, image.width * col, image.height * row);
@@ -62,27 +63,15 @@ window.addEventListener('load', function () {
           image.src = this.imagesrc(data[row][col], restData['graphic']);
         }
       }
-    }  // loadMapData()
-
-    loadObjectData(canvas, restData) {
-      const context = this.contexts[canvas];
-      const data = restData[canvas];
-      for (let i = 0; i < data.length; i++) {
-        let image = new Image();
-        image.onload = function() {
-          context.drawImage(image, image.width * data[i]['position']['x'], image.height * data[i]['position']['y']);
-        };
-        image.src = this.imagesrc(data[i]['image'], restData['graphic']);
-      }
-    }  // let loadObjectData
+    }  // loadMap()
   }  // class LittleMagic
 
   // callback for /post/stage rest
   //
   let loadMap = function(littleMagic, restData) {
-    littleMagic.loadMapData('background', restData);
-    littleMagic.loadMapData('foreground', restData);
-    littleMagic.loadObjectData('object', restData);
+    littleMagic.loadMap('background', restData);
+    littleMagic.loadMap('foreground', restData);
+    littleMagic.loadMap('object', restData);
   };  // let loadMap
 
   let littleMagic = new LittleMagic();
