@@ -10,10 +10,13 @@ window.addEventListener('load', function () {
         this.contexts[canvas.id] = canvas.getContext('2d');
         this.contexts[canvas.id].scale(scale, scale);
       }
+      // default block sprite size 32x32
+      this.imageSize = 32 * scale;
     }  // constructor()
 
     mouseEvent(canvas, event) {
-      const [x, y] = this.mouseCoordinate(canvas, event);
+      const [x, y] = this.mousePosition(canvas, event);
+      const [ col, row ] = this.mousePositionToIndex(x, y);
       switch (event) {
       // left click
       case 0:
@@ -25,10 +28,17 @@ window.addEventListener('load', function () {
       }
     }  // mouseEvent
 
-    mouseCoordinate(canvas, event) {
+    mousePosition(canvas, event) {
       const rect = canvas.getBoundingClientRect()
-      return [ event.clientX - rect.left, event.clientY - rect.top ]
-    }  // mouseCoordinate()
+      return [ parseInt(event.clientX - rect.left), parseInt(event.clientY - rect.top) ]
+    }  // mousePosition()
+
+    mousePositionToIndex(x, y) {
+      let [ col, row ] = [ parseInt(x / this.imageSize), parseInt(y / this.imageSize) ];
+      if (isNaN(col)) col = 0;
+      if (isNaN(row)) row = 0;
+      return [ row, col ];
+    }  // mousePositionToIndex
 
     rest(url, restData, callback) {
       fetch(url, {
