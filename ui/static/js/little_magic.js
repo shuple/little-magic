@@ -12,6 +12,24 @@ window.addEventListener('load', function () {
       }
     }  // constructor()
 
+    mouseEvent(canvas, event) {
+      const [x, y] = this.mouseCoordinate(canvas, event);
+      switch (event) {
+      // left click
+      case 0:
+        break;
+      // right click
+      case 2:
+        break;
+      default:
+      }
+    }  // mouseEvent
+
+    mouseCoordinate(canvas, event) {
+      const rect = canvas.getBoundingClientRect()
+      return [ event.clientX - rect.left, event.clientY - rect.top ]
+    }  // mouseCoordinate()
+
     rest(url, restData, callback) {
       fetch(url, {
         method: 'POST',
@@ -69,4 +87,16 @@ window.addEventListener('load', function () {
 
   let littleMagic = new LittleMagic();
   littleMagic.rest('/post/stage', { stage: '001' }, loadMap);
+
+  // event listener
+  let canvas = document.getElementById('control')
+
+  // 'click'       : left click
+  // 'contextmenu' : right click
+  for (mouseEvent of [ 'click', 'contextmenu' ]) {
+    canvas.addEventListener(mouseEvent, function(event) {
+      event.preventDefault();
+      littleMagic.mouseEvent(canvas, event);
+    });
+  }
 });
