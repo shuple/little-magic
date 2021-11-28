@@ -78,8 +78,8 @@ class LittleMagicMap(sprite.Sprite):
     # data['object'] : map object data
     #
     def set_object(self, image, data):
-        y = data['coordinate']['y']
-        x = data['coordinate']['x']
+        y = data['position']['y']
+        x = data['position']['x']
         width, height = self.block['width'] * x, self.block['height'] * y
         image.paste(self.image_data[data['image']], (width ,height), self.image_data[data['image']])
     #  def set_object

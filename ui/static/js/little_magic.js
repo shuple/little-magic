@@ -70,7 +70,7 @@ window.addEventListener('load', function () {
       for (let i = 0; i < data.length; i++) {
         let image = new Image();
         image.onload = function() {
-          context.drawImage(image, image.width * data[i]['coordinate']['x'], image.height * data[i]['coordinate']['y']);
+          context.drawImage(image, image.width * data[i]['position']['x'], image.height * data[i]['position']['y']);
         };
         image.src = this.imagesrc(data[i]['image'], restData['graphic']);
       }
