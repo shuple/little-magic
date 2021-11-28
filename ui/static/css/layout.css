@@ -7,18 +7,16 @@ body {
 }
 
 div.game {
-  display:flex;
-  justify-content:center;
+  display: flex;
+  justify-content: center;
 }
 
 div.game canvas {
   position: absolute;
 }
 
-
-/*
- * responsive design
- */
+/* responsive design
+ * -------------------------------------------------- */
 @media (max-width: 599px) {
 }
 
