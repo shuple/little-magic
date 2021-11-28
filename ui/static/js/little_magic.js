@@ -25,7 +25,7 @@ window.addEventListener('load', function () {
         break;
       // right click
       case 2:
-        this.removeBlockSprite(col, row);
+        this.removeSpriteBlock(col, row);
         break;
       default:
       }
@@ -43,11 +43,11 @@ window.addEventListener('load', function () {
       return [ col, row ];
     }  // mousePositionToIndex
 
-    removeBlockSprite(col, row) {
+    removeSpriteBlock(col, row) {
       const x = col * this.imageSize;
       const y = row * this.imageSize;
       this.contexts[this.layer].clearRect(x, y, this.imageSize, this.imageSize);
-    }  // removeBlockSprite()
+    }  // removeSpriteBlock()
 
     rest(url, restData, callback) {
       fetch(url, {
@@ -100,8 +100,7 @@ window.addEventListener('load', function () {
   // event listener
   let canvas = document.getElementById('control')
 
-  // 'click'       : left click
-  // 'contextmenu' : right click
+  // left, right click
   for (mouseEvent of [ 'click', 'contextmenu' ]) {
     canvas.addEventListener(mouseEvent, function(event) {
       event.preventDefault();
