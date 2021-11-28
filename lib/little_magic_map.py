@@ -32,6 +32,7 @@ class LittleMagicMap(sprite.Sprite):
             (255, 255, 255)
         )
 
+        self.set_image(image, data['admin'])
         self.set_image(image, data['background'])
         self.set_image(image, data['foreground'])
         self.set_image(image, data['object'])
@@ -46,9 +47,8 @@ class LittleMagicMap(sprite.Sprite):
     #
     # parameters:
     #
-    # image               : PIL Image
-    # data['foreground']  : map foreground data
-    # data['background']  : map background data
+    # image : PIL Image
+    # data  : 2D array of sprite data
     #
     def set_image(self, image, data):
         for row in range(len(data)):

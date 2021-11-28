@@ -88,6 +88,7 @@ window.addEventListener('load', function () {
   // callback for /post/stage rest
   //
   let loadMap = function(littleMagic, restData) {
+    littleMagic.loadMap('admin', restData);
     littleMagic.loadMap('background', restData);
     littleMagic.loadMap('foreground', restData);
     littleMagic.loadMap('object', restData);
