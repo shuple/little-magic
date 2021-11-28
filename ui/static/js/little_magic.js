@@ -13,7 +13,7 @@ window.addEventListener('load', function () {
       // default block sprite size 32x32
       this.imageSize = 32 * scale;
       // default layer
-      this.layer = 'background';
+      this.layer = 'layer1';
     }  // constructor()
 
     mouseEvent(canvas, event) {
@@ -65,13 +65,13 @@ window.addEventListener('load', function () {
       });
     };  // rest()
 
-    imagesrc(src, graphic) {
-      return '/static/image/sprite/' + graphic + '/' + src + '.png';
+    imagesrc(src, layer, graphic) {
+      return '/static/image/sprite/' + graphic + '/' + layer + '/' + src + '.png';
     } // imagesrc()
 
-    loadMap(canvas, restData) {
-      const context = this.contexts[canvas];
-      const data = restData[canvas];
+    loadMap(layer, restData) {
+      const context = this.contexts[layer];
+      const data = restData[layer];
       for (let row = 0; row < data.length; row++) {
         for (let col = 0; col < data[row].length; col++) {
           if (data[row][col] == '') continue;
@@ -79,7 +79,7 @@ window.addEventListener('load', function () {
           image.onload = function() {
             context.drawImage(image, image.width * col, image.height * row);
           };
-          image.src = this.imagesrc(data[row][col], restData['graphic']);
+          image.src = this.imagesrc(data[row][col], layer, restData['graphic']);
         }
       }
     }  // loadMap()
@@ -88,10 +88,10 @@ window.addEventListener('load', function () {
   // callback for /post/stage rest
   //
   let loadMap = function(littleMagic, restData) {
-    littleMagic.loadMap('admin', restData);
-    littleMagic.loadMap('background', restData);
-    littleMagic.loadMap('foreground', restData);
-    littleMagic.loadMap('object', restData);
+    for (let i = 0; i < 4; i++) {
+      const layer = 'layer' + i;
+      littleMagic.loadMap(layer, restData);
+    }
   };  // let loadMap
 
   let littleMagic = new LittleMagic();

@@ -25,17 +25,16 @@ class LittleMagicMap(sprite.Sprite):
     #
     def gen_map(self, data):
         # create image
-        width  = len(data['foreground'][0]);
-        heigth = len(data['foreground']);
+        width  = len(data['layer0'][0]);
+        heigth = len(data['layer0']);
         image = Image.new('RGBA',
             (self.block['width'] * width, self.block['height'] * heigth),
             (255, 255, 255)
         )
 
-        self.set_image(image, data['admin'])
-        self.set_image(image, data['background'])
-        self.set_image(image, data['foreground'])
-        self.set_image(image, data['object'])
+        for i in range(4):
+            layer = f'layer{i}'
+            self.set_image(image, data[layer], layer)
 
         timestamp =  datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
         map_name  = f"{self.option['graphic']}/{timestamp}.png"
@@ -43,14 +42,15 @@ class LittleMagicMap(sprite.Sprite):
         image.save(map_file, 'png')
     #  def gen_map()
 
-    # set background and foreground on PIL Image.
+    # set PIL Image on layer.
     #
     # parameters:
     #
     # image : PIL Image
     # data  : 2D array of sprite data
+    # layer : layer name
     #
-    def set_image(self, image, data):
+    def set_image(self, image, data, layer):
         for row in range(len(data)):
             for col in range(len(data[row])):
                 if not data[row][col]: continue
@@ -58,7 +58,8 @@ class LittleMagicMap(sprite.Sprite):
                 width, height = self.block['width'] * col, self.block['height'] * row
                 size = (width, height)
 
-                sprite = self.image_data[data[row][col]]
+                relative_path = f'{layer}/{data[row][col]}'
+                sprite = self.image_data[relative_path]
                 image.paste(sprite, size, sprite)
             #  for
         #  for
