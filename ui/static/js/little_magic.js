@@ -12,17 +12,20 @@ window.addEventListener('load', function () {
       }
       // default block sprite size 32x32
       this.imageSize = 32 * scale;
+      // default layer
+      this.layer = 'background';
     }  // constructor()
 
     mouseEvent(canvas, event) {
       const [x, y] = this.mousePosition(canvas, event);
       const [ col, row ] = this.mousePositionToIndex(x, y);
-      switch (event) {
+      switch (event.button) {
       // left click
       case 0:
         break;
       // right click
       case 2:
+        this.removeBlockSprite(col, row);
         break;
       default:
       }
@@ -37,8 +40,14 @@ window.addEventListener('load', function () {
       let [ col, row ] = [ parseInt(x / this.imageSize), parseInt(y / this.imageSize) ];
       if (isNaN(col)) col = 0;
       if (isNaN(row)) row = 0;
-      return [ row, col ];
+      return [ col, row ];
     }  // mousePositionToIndex
+
+    removeBlockSprite(col, row) {
+      const x = col * this.imageSize;
+      const y = row * this.imageSize;
+      this.contexts[this.layer].clearRect(x, y, this.imageSize, this.imageSize);
+    }  // removeBlockSprite()
 
     rest(url, restData, callback) {
       fetch(url, {
