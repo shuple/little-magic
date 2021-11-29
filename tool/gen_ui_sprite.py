@@ -21,7 +21,6 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
     path = f'{os.path.dirname(os.path.abspath(__file__))}/../data/image'
-    backslash = '\\'
     for file in pathlib.Path(f'{path}/sprite').rglob('*.png'):
         image = Image.open(file).convert('RGBA')
 
