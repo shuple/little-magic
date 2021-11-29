@@ -65,8 +65,8 @@ window.addEventListener('load', function () {
       });
     };  // rest()
 
-    imagesrc(src, layer, graphic) {
-      return '/static/image/sprite/' + graphic + '/' + layer + '/' + src + '.png';
+    imagesrc(src, graphic) {
+      return '/static/image/sprite/' + graphic + '/' + src + '.png';
     } // imagesrc()
 
     loadMap(layer, restData) {
@@ -79,7 +79,9 @@ window.addEventListener('load', function () {
           image.onload = function() {
             context.drawImage(image, image.width * col, image.height * row);
           };
-          image.src = this.imagesrc(data[row][col], layer, restData['graphic']);
+          let src = data[row][col];
+          if (/^layer[0-9]/.test(src) == false) src = layer + '/' + src;
+          image.src = this.imagesrc(src, restData['graphic']);
         }
       }
     }  // loadMap()
