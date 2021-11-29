@@ -12,7 +12,7 @@ def parse_args():
     # options
     parser = argparse.ArgumentParser(description='Copy and resize sprite')
     parser.add_argument('path', nargs='?', default=path, help='ui sprite path')
-    parser.add_argument('-s', '--scale', type=float, default=1.0, help='scale of image')
+    parser.add_argument('-s', '--scale', type=float, default=2.0, help='scale of image')
 
     # convert to dict
     return vars(parser.parse_args())
