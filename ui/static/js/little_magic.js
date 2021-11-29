@@ -74,13 +74,13 @@ window.addEventListener('load', function () {
       const data = restData[layer];
       for (let row = 0; row < data.length; row++) {
         for (let col = 0; col < data[row].length; col++) {
-          if (data[row][col] == '') continue;
+          if (data[row][col] === '') continue;
           let image = new Image();
           image.onload = function() {
             context.drawImage(image, image.width * col, image.height * row);
           };
           let src = data[row][col];
-          if (/^layer[0-9]/.test(src) == false) src = layer + '/' + src;
+          if (/^layer[0-9]/.test(src) === false) src = layer + '/' + src;
           image.src = this.imagesrc(src, restData['graphic']);
         }
       }
