@@ -13,7 +13,7 @@ window.addEventListener('load', function () {
       // default block sprite size 32x32
       this.imageSize = 32 * scale;
       // default layer
-      this.layer = 'layer1';
+      this.layer = 'layer2';
     }  // constructor()
 
     mouseEvent(canvas, event) {
@@ -69,35 +69,34 @@ window.addEventListener('load', function () {
       return '/static/image/sprite/' + graphic + '/' + src + '.png';
     } // imagesrc()
 
-    loadMap(layer, restData) {
+    setSprite(layer, layerData, graphic) {
       const context = this.contexts[layer];
-      const data = restData[layer];
-      for (let row = 0; row < data.length; row++) {
-        for (let col = 0; col < data[row].length; col++) {
-          if (data[row][col] === '') continue;
+      for (let row = 0; row < layerData.length; row++) {
+        for (let col = 0; col < layerData[row].length; col++) {
+          if (layerData[row][col] === '') continue;
           let image = new Image();
           image.onload = function() {
             context.drawImage(image, image.width * col, image.height * row);
           };
-          let src = data[row][col];
+          let src = layerData[row][col];
           if (/^layer[0-9]/.test(src) === false) src = layer + '/' + src;
-          image.src = this.imagesrc(src, restData['graphic']);
+          image.src = this.imagesrc(src, graphic);
         }
       }
-    }  // loadMap()
+    }  // setSprite()
   }  // class LittleMagic
 
   // callback for /post/stage rest
   //
-  let loadMap = function(littleMagic, restData) {
-    for (let i = 0; i < 4; i++) {
-      const layer = 'layer' + i;
-      littleMagic.loadMap(layer, restData);
+  let setSprite = function(littleMagic, restData) {
+    for (const [layer, layerData] of Object.entries(restData['layer'])) {
+      littleMagic.setSprite(layer, layerData, restData['graphic']);
     }
-  };  // let loadMap
+  };  // let setSprite
 
   let littleMagic = new LittleMagic();
-  littleMagic.rest('/post/stage', { 'stage': '001', 'graphic': 'sfc' }, loadMap);
+  littleMagic.rest('/post/sprite', { 'content': 'menu/admin', 'graphic': 'sfc' }, setSprite);
+  littleMagic.rest('/post/sprite', { 'content': 'stage/001' , 'graphic': 'sfc' }, setSprite);
 
   // event listener
   let canvas = document.getElementById('control')

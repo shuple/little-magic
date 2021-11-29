@@ -32,17 +32,19 @@ def index():
 
 # stage map data
 #
-@app.route('/post/stage', methods=['POST'])
-def post_oneline():
+@app.route('/post/sprite', methods=['POST'])
+def post_sprite():
     try:
         data = flask.request.json
-        with open(f"{path}/../data/system/{data['graphic']}/map/{data['stage']}.json") as f:
+        content = f"{path}/../data/system/{data['graphic']}/{data['content']}.json"
+        print(content)
+        with open(content) as f:
             d = { 'data': f.read() }
     except Exception as e:
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
         d = { 'error': f'{str(e)}' }
     return json.dumps(d)
-#  def post_oneline()
+#  def post_sprite()
 
 # parse command line argument
 #
