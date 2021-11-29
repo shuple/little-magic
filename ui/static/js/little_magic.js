@@ -12,9 +12,14 @@ window.addEventListener('load', function () {
       }
       // default block sprite size 32x32
       this.imageSize = 32 * scale;
+
+      // default value
       this.graphic = 'sfc';
-      // default layer
       this.layer = 'layer2';
+
+      // hide item layer
+      this.contexts['layer5'].globalAlpha = 0.0;
+      this.contexts['layer6'].globalAlpha = 0.0;
     }  // constructor()
 
     mouseEvent(canvas, event) {
@@ -98,6 +103,7 @@ window.addEventListener('load', function () {
   let littleMagic = new LittleMagic();
   littleMagic.rest('/post/sprite', { 'content': 'menu/admin', 'graphic': 'sfc' }, setSprite);
   littleMagic.rest('/post/sprite', { 'content': 'stage/001' , 'graphic': 'sfc' }, setSprite);
+  littleMagic.rest('/post/sprite', { 'content': 'item/box'  , 'graphic': 'sfc' }, setSprite);
 
   // event listener
   let canvas = document.getElementById('control')
