@@ -85,7 +85,7 @@ class Sprite:
     # write self.image_dict to json
     #
     def write_image_dict(self):
-        file = f"{self.path['root']}/data/system/sprite/{self.option['graphic']}.json"
+        file = f"{self.path['root']}/data/system/{self.option['graphic']}/sprite/data.json"
         with open(file, 'w') as f:
             f.write(json.dumps(self.image_dict, indent=2))
     #  def write_image_dict()

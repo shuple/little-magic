@@ -97,7 +97,7 @@ window.addEventListener('load', function () {
   };  // let loadMap
 
   let littleMagic = new LittleMagic();
-  littleMagic.rest('/post/stage', { stage: '001' }, loadMap);
+  littleMagic.rest('/post/stage', { 'stage': '001', 'graphic': 'sfc' }, loadMap);
 
   // event listener
   let canvas = document.getElementById('control')

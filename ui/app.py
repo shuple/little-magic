@@ -36,7 +36,7 @@ def index():
 def post_oneline():
     try:
         data = flask.request.json
-        with open(f"{path}/../data/system/map/sfc/{data['stage']}.json") as f:
+        with open(f"{path}/../data/system/{data['graphic']}/map/{data['stage']}.json") as f:
             d = { 'data': f.read() }
     except Exception as e:
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
