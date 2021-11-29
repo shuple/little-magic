@@ -12,6 +12,7 @@ window.addEventListener('load', function () {
       }
       // default block sprite size 32x32
       this.imageSize = 32 * scale;
+      this.graphic = 'sfc';
       // default layer
       this.layer = 'layer2';
     }  // constructor()
@@ -66,10 +67,10 @@ window.addEventListener('load', function () {
     };  // rest()
 
     imagesrc(src, graphic) {
-      return '/static/image/sprite/' + graphic + '/' + src + '.png';
+      return '/static/image/sprite/' + this.graphic + '/' + src + '.png';
     } // imagesrc()
 
-    setSprite(layer, layerData, graphic) {
+    setSprite(layer, layerData) {
       const context = this.contexts[layer];
       for (let row = 0; row < layerData.length; row++) {
         for (let col = 0; col < layerData[row].length; col++) {
@@ -80,7 +81,7 @@ window.addEventListener('load', function () {
           };
           let src = layerData[row][col];
           if (/^layer[0-9]/.test(src) === false) src = layer + '/' + src;
-          image.src = this.imagesrc(src, graphic);
+          image.src = this.imagesrc(src);
         }
       }
     }  // setSprite()
@@ -89,8 +90,8 @@ window.addEventListener('load', function () {
   // callback for /post/stage rest
   //
   let setSprite = function(littleMagic, restData) {
-    for (const [layer, layerData] of Object.entries(restData['layer'])) {
-      littleMagic.setSprite(layer, layerData, restData['graphic']);
+    for (const [layer, layerData] of Object.entries(restData)) {
+      littleMagic.setSprite(layer, layerData);
     }
   };  // let setSprite
 
