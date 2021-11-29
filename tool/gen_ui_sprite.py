@@ -12,6 +12,7 @@ def parse_args():
     # options
     parser = argparse.ArgumentParser(description='Copy and resize sprite')
     parser.add_argument('path', nargs='?', default=path, help='ui sprite path')
+    parser.add_argument('-g', '--graphic', default='sfc', help='scale of image')
     parser.add_argument('-s', '--scale', type=float, default=2.0, help='scale of image')
 
     # convert to dict
@@ -21,7 +22,7 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
     path = f'{os.path.dirname(os.path.abspath(__file__))}/../data/image'
-    for file in pathlib.Path(f'{path}/sprite').rglob('*.png'):
+    for file in pathlib.Path(f"{path}/sprite/{args['graphic']}").rglob('*.png'):
         image = Image.open(file).convert('RGBA')
 
         # resize image by scale
