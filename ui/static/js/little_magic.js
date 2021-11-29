@@ -49,6 +49,26 @@ window.addEventListener('load', function () {
       return [ col, row ];
     }  // mousePositionToIndex
 
+    imagesrc(src, graphic) {
+      return '/static/image/sprite/' + this.graphic + '/' + src + '.png';
+    } // imagesrc()
+
+    setSprite(layer, layerData) {
+      const context = this.contexts[layer];
+      for (let row = 0; row < layerData.length; row++) {
+        for (let col = 0; col < layerData[row].length; col++) {
+          if (layerData[row][col] === '') continue;
+          let image = new Image();
+          image.onload = function() {
+            context.drawImage(image, image.width * col, image.height * row);
+          };
+          let src = layerData[row][col];
+          if (/^layer[0-9]/.test(src) === false) src = layer + '/' + src;
+          image.src = this.imagesrc(src);
+        }
+      }
+    }  // setSprite()
+
     removeSpriteBlock(col, row) {
       const x = col * this.imageSize;
       const y = row * this.imageSize;
@@ -70,26 +90,6 @@ window.addEventListener('load', function () {
         console.log(error);
       });
     };  // rest()
-
-    imagesrc(src, graphic) {
-      return '/static/image/sprite/' + this.graphic + '/' + src + '.png';
-    } // imagesrc()
-
-    setSprite(layer, layerData) {
-      const context = this.contexts[layer];
-      for (let row = 0; row < layerData.length; row++) {
-        for (let col = 0; col < layerData[row].length; col++) {
-          if (layerData[row][col] === '') continue;
-          let image = new Image();
-          image.onload = function() {
-            context.drawImage(image, image.width * col, image.height * row);
-          };
-          let src = layerData[row][col];
-          if (/^layer[0-9]/.test(src) === false) src = layer + '/' + src;
-          image.src = this.imagesrc(src);
-        }
-      }
-    }  // setSprite()
   }  // class LittleMagic
 
   // callback for /post/stage rest
