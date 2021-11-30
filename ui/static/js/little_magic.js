@@ -21,26 +21,29 @@ window.addEventListener('load', function () {
       // default value
       this.graphic = 'sfc';
       this.layer = 'layer1';
+
+      // enable debug
+      this.mouseDebug();
     }  // constructor()
 
-    imagesrc(src, graphic) {
-      return '/static/image/sprite/' + this.graphic + '/' + src + '.png';
-    } // imagesrc()
+    mouseDebug() {
+      let context = this.contexts['layer7'];
+      context.font = '12px Merio';
+      context.fillStyle = 'white';
+      context.fillText('X', 452, 14);
+      context.fillText('Y', 452, 34);
+      context.fillText('COL', 452, 54);
+      context.fillText('ROW', 452, 74);
+    }  // mouseDebug()
 
-    setSprite(layer, layerData) {
-      const context = this.contexts[layer];
-      for (let row = 0; row < layerData.length; row++) {
-        for (let col = 0; col < layerData[row].length; col++) {
-          if (layerData[row][col] === '') continue;
-          let image = new Image();
-          image.onload = function() {
-            context.drawImage(image, image.width * col, image.height * row);
-          };
-          let src = layerData[row][col];
-          image.src = this.imagesrc(src);
-        }
-      }
-    }  // setSprite()
+    mouseDebugStatus(x, y, col, row) {
+      let context = this.contexts['layer7'];
+      context.clearRect(480, 0, this.imageSize, this.imageSize * 4);
+      context.fillText(': ' + x, 480, 14);
+      context.fillText(': ' + y, 480, 34);
+      context.fillText(': ' + col, 480, 54);
+      context.fillText(': ' + row, 480, 74);
+    }  // mouseDebug()
 
     mouseEvent(canvas, event) {
       const [x, y] = this.mousePosition(canvas, event);
@@ -55,6 +58,8 @@ window.addEventListener('load', function () {
         break;
       default:
       }
+
+      this.mouseDebugStatus(x, y, col, row);
     }  // mouseEvent
 
     mousePosition(canvas, event) {
@@ -80,6 +85,26 @@ window.addEventListener('load', function () {
       const y = row * this.imageSize;
       this.contexts[this.layer].clearRect(x, y, this.imageSize, this.imageSize);
     }  // removeSpriteBlock()
+
+    imagesrc(src, graphic) {
+      return '/static/image/sprite/' + this.graphic + '/' + src + '.png';
+    } // imagesrc()
+
+    setSprite(layer, layerData) {
+      const context = this.contexts[layer];
+      for (let row = 0; row < layerData.length; row++) {
+        for (let col = 0; col < layerData[row].length; col++) {
+          if (layerData[row][col] === '') continue;
+          let image = new Image();
+          image.onload = function() {
+            context.drawImage(image, image.width * col, image.height * row);
+          };
+          let src = layerData[row][col];
+          image.src = this.imagesrc(src);
+        }
+      }
+    }  // setSprite()
+
 
     rest(url, restData, callback) {
       fetch(url, {
