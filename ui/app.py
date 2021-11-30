@@ -37,7 +37,6 @@ def post_sprite():
     try:
         data = flask.request.json
         content = f"{path}/../data/system/{data['graphic']}/{data['content']}.json"
-        print(content)
         with open(content) as f:
             d = { 'data': f.read() }
     except Exception as e:
