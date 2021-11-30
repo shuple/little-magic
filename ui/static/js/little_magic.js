@@ -5,8 +5,8 @@ window.addEventListener('load', function () {
       const [gameWidth, gameHeight] = [ 512, 448 ];
       const scale = (window.innerWidth > gameWidth && window.innerHeight > gameHeight) ? 1 : 0.5;
       for (let canvas of document.querySelectorAll('canvas')) {
-        canvas.width  = gameWidth  * scale;
-        canvas.height = gameHeight * scale;
+        canvas.width  = gameWidth;
+        canvas.height = gameHeight;
         this.contexts[canvas.id] = canvas.getContext('2d');
         this.contexts[canvas.id].scale(scale, scale);
       }
@@ -16,7 +16,7 @@ window.addEventListener('load', function () {
       this.contexts['layer6'].globalAlpha = 0.0;
 
       // default block sprite size 32x32
-      this.imageSize = 32 * scale;
+      this.imageSize = 32;
 
       // default value
       this.graphic = 'sfc';
