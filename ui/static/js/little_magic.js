@@ -1,48 +1,69 @@
 window.addEventListener('load', function () {
   class LittleMagic {
     constructor() {
+      this.canvas = {}
       this.contexts = {};
       const [gameWidth, gameHeight] = [ 512, 448 ];
       const scale = (window.innerWidth > gameWidth && window.innerHeight > gameHeight) ? 1 : 0.5;
       for (let canvas of document.querySelectorAll('canvas')) {
         canvas.width  = gameWidth;
         canvas.height = gameHeight;
+        this.canvas[canvas.id] = canvas;
         this.contexts[canvas.id] = canvas.getContext('2d');
         this.contexts[canvas.id].scale(scale, scale);
       }
 
-      // hide item layer
-      this.contexts['layer5'].globalAlpha = 0.0;
-      this.contexts['layer6'].globalAlpha = 0.0;
+      // key layer, value 2D array
+      // hold data stored in array[row][col]
+      this.blocks = {}
 
       // default block sprite size 32x32
       this.imageSize = 32;
 
-      // default value
-      this.graphic = 'sfc';
-      this.layer = 'layer1';
+      // state
+      this.state = {
+        'graphic': 'sfc',
+        'item'   : '',
+        'layer'  : 'layer1'
+      };
+
+      // previous state
+      this.cache = {
+        'layer' : 'layer1'
+      };
+
+      // layer name
+      this.layers  = {
+        'itembox': 'layer5'
+      };
+
+      // default layer setting
+      this.contexts[this.layers['itembox']].fillStyle = '#cccccc';
+      this.contexts[this.layers['itembox']].fillRect(0, 0, gameWidth, gameHeight);
+      this.canvas[this.layers['itembox']].style.display = 'none';
 
       // enable debug
       this.mouseDebug();
     }  // constructor()
 
     mouseDebug() {
-      let context = this.contexts['layer7'];
+      let context = this.contexts['layer6'];
       context.font = '12px Merio';
       context.fillStyle = 'white';
-      context.fillText('X', 452, 14);
-      context.fillText('Y', 452, 34);
-      context.fillText('COL', 452, 54);
-      context.fillText('ROW', 452, 74);
+      context.fillText('X'  , 452, 20);
+      context.fillText('Y'  , 452, 40);
+      context.fillText('COL', 452, 60);
+      context.fillText('ROW', 452, 80);
     }  // mouseDebug()
 
     mouseDebugStatus(x, y, col, row) {
-      let context = this.contexts['layer7'];
+      let context = this.contexts['layer6'];
       context.clearRect(480, 0, this.imageSize, this.imageSize * 4);
-      context.fillText(': ' + x, 480, 14);
-      context.fillText(': ' + y, 480, 34);
-      context.fillText(': ' + col, 480, 54);
-      context.fillText(': ' + row, 480, 74);
+      context.fillText(': ' + x  , 480, 20);
+      context.fillText(': ' + y  , 480, 40);
+      context.fillText(': ' + col, 480, 60);
+      context.fillText(': ' + row, 480, 80);
+      context.fillText(': ' + ctx, 480, 100);
     }  // mouseDebug()
 
     mouseEvent(canvas, event) {
@@ -51,6 +72,7 @@ window.addEventListener('load', function () {
       switch (event.button) {
       // left click
       case 0:
+        this.leftClick(col, row);
         break;
       // right click
       case 2:
@@ -58,7 +80,6 @@ window.addEventListener('load', function () {
         break;
       default:
       }
-
       this.mouseDebugStatus(x, y, col, row);
     }  // mouseEvent
 
@@ -74,23 +95,62 @@ window.addEventListener('load', function () {
       return [ col, row ];
     }  // mousePositionToIndex
 
+    leftClick(col, row) {
+      switch (this.state['layer']) {
+      case this.layers['itembox']:
+        this.selectItem(col, row);
+        break;
+      default:
+        if (col == 14 && row >= 6 && row <= 7) {
+          this.itemBox();
+        }
+      }
+    }  // leftClick()
+
     rightClick(col, row) {
-      if (col >= 1 && col <= 13 && row >= 0 && row <= 13) {
-        this.removeSpriteBlock(col, row);
+      switch (this.state['layer']) {
+      case 'layer1':
+      case 'layer2':
+      case 'layer3':
+        if (col >= 1 && col <= 13 && row >= 0 && row <= 13) {
+          this.removeSpriteBlock(col, row);
+        }
+        break;
+      case this.layers['itembox']:
+        this.canvas[this.state['layer']].style.display = 'none';
+        this.state['layer'] = this.cache['layer']
+        break;
+      default:
       }
     }  // rightClick()
 
     removeSpriteBlock(col, row) {
       const x = col * this.imageSize;
       const y = row * this.imageSize;
-      this.contexts[this.layer].clearRect(x, y, this.imageSize, this.imageSize);
+      this.contexts[this.state['layer']].clearRect(x, y, this.imageSize, this.imageSize);
     }  // removeSpriteBlock()
 
+    itemBox() {
+      this.state['layer'] = this.layers['itembox'];
+      this.canvas[this.layers['itembox']].style.display = 'inline';
+    }  // itemBox()
+
+    selectItem(col, row) {
+      this.state['item'] = this.blocks[this.layers['itembox']][row][col]
+      const layer = /^(layer\d)/.exec(this.state['item']);
+      if (layer) {
+        this.state['layer'] = layer[1];
+        this.cache['layer'] = layer[1];
+        this.canvas[this.layers['itembox']].style.display = 'none';
+      }
+    }  // itemToLayer()
+
     imagesrc(src, graphic) {
-      return '/static/image/sprite/' + this.graphic + '/' + src + '.png';
+      return '/static/image/sprite/' + this.state['graphic'] + '/' + src + '.png';
     } // imagesrc()
 
     setSprite(layer, layerData) {
+      this.blocks[layer] = layerData;
       const context = this.contexts[layer];
       for (let row = 0; row < layerData.length; row++) {
         for (let col = 0; col < layerData[row].length; col++) {
@@ -104,7 +164,6 @@ window.addEventListener('load', function () {
         }
       }
     }  // setSprite()
-
 
     rest(url, restData, callback) {
       fetch(url, {
@@ -132,9 +191,9 @@ window.addEventListener('load', function () {
   };  // let setSprite
 
   let littleMagic = new LittleMagic();
-  littleMagic.rest('/post/sprite', { 'content': 'menu/admin', 'graphic': 'sfc' }, setSprite);
-  littleMagic.rest('/post/sprite', { 'content': 'stage/001' , 'graphic': 'sfc' }, setSprite);
-  littleMagic.rest('/post/sprite', { 'content': 'admin/item', 'graphic': 'sfc' }, setSprite);
+  littleMagic.rest('/post/sprite', { 'content': 'menu/admin'   , 'graphic': 'sfc' }, setSprite);
+  littleMagic.rest('/post/sprite', { 'content': 'stage/001'    , 'graphic': 'sfc' }, setSprite);
+  littleMagic.rest('/post/sprite', { 'content': 'admin/itembox', 'graphic': 'sfc' }, setSprite);
 
   // event listener
   let canvas = document.getElementById('control')
