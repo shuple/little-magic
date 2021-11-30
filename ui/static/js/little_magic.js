@@ -64,7 +64,6 @@ window.addEventListener('load', function () {
             context.drawImage(image, image.width * col, image.height * row);
           };
           let src = layerData[row][col];
-          if (/^layer[0-9]/.test(src) === false) src = layer + '/' + src;
           image.src = this.imagesrc(src);
         }
       }
