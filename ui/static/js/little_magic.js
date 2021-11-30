@@ -54,10 +54,12 @@ window.addEventListener('load', function () {
       context.fillText('Y'  , 452, 40);
       context.fillText('COL', 452, 60);
       context.fillText('ROW', 452, 80);
+      context.fillText('CTX', 452, 100);
     }  // mouseDebug()
 
     mouseDebugStatus(x, y, col, row) {
       let context = this.contexts['layer6'];
+      const ctx = /(\d)/.exec(this.state['layer'])[1];
       context.clearRect(480, 0, this.imageSize, this.imageSize * 4);
       context.fillText(': ' + x  , 480, 20);
       context.fillText(': ' + y  , 480, 40);
