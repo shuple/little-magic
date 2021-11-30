@@ -20,7 +20,7 @@ window.addEventListener('load', function () {
 
       // default value
       this.graphic = 'sfc';
-      this.layer = 'layer2';
+      this.layer = 'layer1';
     }  // constructor()
 
     mouseEvent(canvas, event) {
