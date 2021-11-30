@@ -103,7 +103,7 @@ window.addEventListener('load', function () {
   let littleMagic = new LittleMagic();
   littleMagic.rest('/post/sprite', { 'content': 'menu/admin', 'graphic': 'sfc' }, setSprite);
   littleMagic.rest('/post/sprite', { 'content': 'stage/001' , 'graphic': 'sfc' }, setSprite);
-  littleMagic.rest('/post/sprite', { 'content': 'item/box'  , 'graphic': 'sfc' }, setSprite);
+  littleMagic.rest('/post/sprite', { 'content': 'admin/item', 'graphic': 'sfc' }, setSprite);
 
   // event listener
   let canvas = document.getElementById('control')
