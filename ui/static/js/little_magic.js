@@ -10,16 +10,17 @@ window.addEventListener('load', function () {
         this.contexts[canvas.id] = canvas.getContext('2d');
         this.contexts[canvas.id].scale(scale, scale);
       }
+
+      // hide item layer
+      this.contexts['layer5'].globalAlpha = 0.0;
+      this.contexts['layer6'].globalAlpha = 0.0;
+
       // default block sprite size 32x32
       this.imageSize = 32 * scale;
 
       // default value
       this.graphic = 'sfc';
       this.layer = 'layer2';
-
-      // hide item layer
-      this.contexts['layer5'].globalAlpha = 0.0;
-      this.contexts['layer6'].globalAlpha = 0.0;
     }  // constructor()
 
     mouseEvent(canvas, event) {
