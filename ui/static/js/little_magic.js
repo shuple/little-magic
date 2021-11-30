@@ -23,33 +23,6 @@ window.addEventListener('load', function () {
       this.layer = 'layer1';
     }  // constructor()
 
-    mouseEvent(canvas, event) {
-      const [x, y] = this.mousePosition(canvas, event);
-      const [ col, row ] = this.mousePositionToIndex(x, y);
-      switch (event.button) {
-      // left click
-      case 0:
-        break;
-      // right click
-      case 2:
-        this.removeSpriteBlock(col, row);
-        break;
-      default:
-      }
-    }  // mouseEvent
-
-    mousePosition(canvas, event) {
-      const rect = canvas.getBoundingClientRect()
-      return [ parseInt(event.clientX - rect.left), parseInt(event.clientY - rect.top) ]
-    }  // mousePosition()
-
-    mousePositionToIndex(x, y) {
-      let [ col, row ] = [ parseInt(x / this.imageSize), parseInt(y / this.imageSize) ];
-      if (isNaN(col)) col = 0;
-      if (isNaN(row)) row = 0;
-      return [ col, row ];
-    }  // mousePositionToIndex
-
     imagesrc(src, graphic) {
       return '/static/image/sprite/' + this.graphic + '/' + src + '.png';
     } // imagesrc()
@@ -68,6 +41,39 @@ window.addEventListener('load', function () {
         }
       }
     }  // setSprite()
+
+    mouseEvent(canvas, event) {
+      const [x, y] = this.mousePosition(canvas, event);
+      const [ col, row ] = this.mousePositionToIndex(x, y);
+      switch (event.button) {
+      // left click
+      case 0:
+        break;
+      // right click
+      case 2:
+        this.rightClick(col, row);
+        break;
+      default:
+      }
+    }  // mouseEvent
+
+    mousePosition(canvas, event) {
+      const rect = canvas.getBoundingClientRect()
+      return [ parseInt(event.clientX - rect.left), parseInt(event.clientY - rect.top) ]
+    }  // mousePosition()
+
+    mousePositionToIndex(x, y) {
+      let [ col, row ] = [ parseInt(x / this.imageSize), parseInt(y / this.imageSize) ];
+      if (isNaN(col)) col = 0;
+      if (isNaN(row)) row = 0;
+      return [ col, row ];
+    }  // mousePositionToIndex
+
+    rightClick(col, row) {
+      if (col >= 1 && col <= 13 && row >= 0 && row <= 13) {
+        this.removeSpriteBlock(col, row);
+      }
+    }  // rightClick()
 
     removeSpriteBlock(col, row) {
       const x = col * this.imageSize;
