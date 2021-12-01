@@ -24,6 +24,8 @@ window.addEventListener('load', function () {
       this.state = {
         'graphic': 'sfc',
         'item'   : '',
+        'col'    : 0,
+        'row'    : 0,
         'layer'  : 'layer1'
       };
 
@@ -34,6 +36,7 @@ window.addEventListener('load', function () {
 
       // layer name
       this.layers  = {
+        'item'   : 'layer4',
         'itembox': 'layer5'
       };
 
@@ -98,14 +101,22 @@ window.addEventListener('load', function () {
     }  // mousePositionToIndex
 
     leftClick(col, row) {
-      switch (this.state['layer']) {
-      case this.layers['itembox']:
-        this.selectItem(col, row);
-        break;
-      default:
-        if (col == 14 && row >= 6 && row <= 7) {
-          this.itemBox();
-        }
+      if (this.areaItembox(col, row)) {
+        this.itemBox();
+      } else {
+        switch (this.state['layer']) {
+        case this.layers['itembox']:
+          this.selectItem(col, row);
+          break;
+        case 'layer1':
+        case 'layer2':
+        case 'layer3':
+          if (this.areaStage(col, row) && this.state['item']) {
+            const layer = /^(layer\d)/.exec(this.state['item']);
+            this.setSpriteBlock(col, row, layer[0], this.state['item']);
+          }
+          break;
+        }  // leftClick()
       }
     }  // leftClick()
 
@@ -114,8 +125,8 @@ window.addEventListener('load', function () {
       case 'layer1':
       case 'layer2':
       case 'layer3':
-        if (col >= 1 && col <= 13 && row >= 0 && row <= 13) {
-          this.removeSpriteBlock(col, row);
+        if (this.areaStage(col, row)) {
+          this.removeSpriteBlock(col, row, this.state['layer']);
         }
         break;
       case this.layers['itembox']:
@@ -126,10 +137,28 @@ window.addEventListener('load', function () {
       }
     }  // rightClick()
 
-    removeSpriteBlock(col, row) {
+    areaItembox(col, row) {
+      return (col == 14 && row == 4);
+    }  // areaItembox()
+
+    areaStage(col, row) {
+        return (col >= 1 && col <= 13 && row >= 0 && row <= 13);
+    }  // areaStage()
+
+    setSpriteBlock(col, row, layer, src) {
+      this.removeSpriteBlock(col, row, layer);
+      const context = this.contexts[layer];
+      let image = new Image();
+      image.onload = function() {
+        context.drawImage(image, image.width * col, image.height * row);
+      };
+      image.src = this.imagesrc(src);
+    }  // setSpriteBlock();
+
+    removeSpriteBlock(col, row, layer) {
       const x = col * this.imageSize;
       const y = row * this.imageSize;
-      this.contexts[this.state['layer']].clearRect(x, y, this.imageSize, this.imageSize);
+      this.contexts[layer].clearRect(x, y, this.imageSize, this.imageSize);
     }  // removeSpriteBlock()
 
     itemBox() {
@@ -139,8 +168,9 @@ window.addEventListener('load', function () {
 
     selectItem(col, row) {
       this.state['item'] = this.blocks[this.layers['itembox']][row][col]
-      const layer = /^(layer\d)/.exec(this.state['item']);
-      if (layer) {
+      if (this.state['item']) {
+        const layer = /^(layer\d)/.exec(this.state['item']);
+        this.setSpriteBlock(14, 4, this.layers['item'], this.state['item']);
         this.state['layer'] = layer[1];
         this.cache['layer'] = layer[1];
         this.canvas[this.layers['itembox']].style.display = 'none';
@@ -161,8 +191,7 @@ window.addEventListener('load', function () {
           image.onload = function() {
             context.drawImage(image, image.width * col, image.height * row);
           };
-          let src = layerData[row][col];
-          image.src = this.imagesrc(src);
+          image.src = this.imagesrc(layerData[row][col]);
         }
       }
     }  // setSprite()
@@ -193,9 +222,9 @@ window.addEventListener('load', function () {
   };  // let setSprite
 
   let littleMagic = new LittleMagic();
-  littleMagic.rest('/post/sprite', { 'content': 'menu/admin'   , 'graphic': 'sfc' }, setSprite);
-  littleMagic.rest('/post/sprite', { 'content': 'stage/001'    , 'graphic': 'sfc' }, setSprite);
-  littleMagic.rest('/post/sprite', { 'content': 'admin/itembox', 'graphic': 'sfc' }, setSprite);
+  littleMagic.rest('/post/sprite', { 'content': 'menu/admin' , 'graphic': 'sfc' }, setSprite);
+  littleMagic.rest('/post/sprite', { 'content': 'stage/001'  , 'graphic': 'sfc' }, setSprite);
+  littleMagic.rest('/post/sprite', { 'content': 'status/make', 'graphic': 'sfc' }, setSprite);
 
   // event listener
   let canvas = document.getElementById('control')
