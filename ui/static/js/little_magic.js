@@ -124,6 +124,7 @@ window.addEventListener('load', function () {
       case 'layer2':
       case 'layer3':
         if (this.areaStage(col, row)) {
+          this.crntState['layer'] = this.activeLayer(col, row);
           this.removeSpriteBlock(col, row, this.crntState['layer']);
         }
         break;
@@ -143,6 +144,13 @@ window.addEventListener('load', function () {
       return (col == 14 && row == 4);
     }  // areaItem()
 
+    activeLayer(col, row) {
+      for (let layer of [ 'layer3', 'layer2', 'layer1' ]) {
+        if (this.blocks[layer][row][col]) return layer;
+      }
+      return this.crntState['layer'];
+    }  // activeBlock()
+
     setSpriteBlock(col, row, layer, src) {
       this.removeSpriteBlock(col, row, layer);
       const context = this.contexts[layer];
@@ -151,12 +159,14 @@ window.addEventListener('load', function () {
         context.drawImage(image, image.width * col, image.height * row);
       };
       image.src = this.imagesrc(src);
+      this.blocks[layer][row][col] = src;
     }  // setSpriteBlock();
 
     removeSpriteBlock(col, row, layer) {
       const x = col * this.imageSize;
       const y = row * this.imageSize;
       this.contexts[layer].clearRect(x, y, this.imageSize, this.imageSize);
+      this.blocks[layer][row][col] = '';
     }  // removeSpriteBlock()
 
     itemBox() {
