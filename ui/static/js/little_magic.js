@@ -29,14 +29,12 @@ window.addEventListener('load', function () {
         'layer'  : 'layer1'
       };
 
-      // previous state
       this.prevState = {
         'layer' : 'layer1'
       };
 
-      // layer name
       this.layers  = {
-        'item'   : 'layer4',
+        'system' : 'layer4',
         'itembox': 'layer5'
       };
 
@@ -50,7 +48,7 @@ window.addEventListener('load', function () {
     }  // constructor()
 
     mouseDebug() {
-      let context = this.contexts['layer6'];
+      let context = this.contexts[this.layers['system']];
       context.font = '12px Merio';
       context.fillStyle = 'white';
       context.fillText('X'  , 452, 20);
@@ -61,7 +59,7 @@ window.addEventListener('load', function () {
     }  // mouseDebug()
 
     mouseDebugStatus(x, y, col, row) {
-      let context = this.contexts['layer6'];
+      let context = this.contexts[this.layers['system']];
       const ctx = /(\d)/.exec(this.crntState['layer'])[1];
       context.clearRect(480, 0, this.imageSize, this.imageSize * 4);
       context.fillText(': ' + x  , 480, 20);
@@ -178,7 +176,7 @@ window.addEventListener('load', function () {
       this.crntState['item'] = this.blocks[this.layers['itembox']][row][col]
       if (this.crntState['item']) {
         const layer = /^(layer\d)/.exec(this.crntState['item']);
-        this.setSpriteBlock(14, 4, this.layers['item'], this.crntState['item']);
+        this.setSpriteBlock(14, 4, this.layers['system'], this.crntState['item']);
         this.crntState['layer'] = layer[1];
         this.prevState['layer'] = layer[1];
         this.canvas[this.layers['itembox']].style.display = 'none';
