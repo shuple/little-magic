@@ -1,26 +1,13 @@
 window.addEventListener('load', function () {
   class LittleMagic {
     constructor() {
-      this.canvas = {}
-      this.contexts = {};
-      const [gameWidth, gameHeight] = [ 512, 448 ];
-      const scale = (window.innerWidth > gameWidth && window.innerHeight > gameHeight) ? 1 : 0.5;
-      for (let canvas of document.querySelectorAll('canvas')) {
-        canvas.width  = gameWidth;
-        canvas.height = gameHeight;
-        this.canvas[canvas.id] = canvas;
-        this.contexts[canvas.id] = canvas.getContext('2d');
-        this.contexts[canvas.id].scale(scale, scale);
-      }
-
-      // key layer, value 2D array
-      // hold data stored in array[row][col]
+      // object[layer]: array[row][col]
+      // hold game data
       this.blocks = {}
 
       // default sprite block size 32x32
       this.imageSize = 32;
 
-      // current state
       this.crntState = {
         'graphic': 'sfc',
         'item'   : '',
@@ -38,14 +25,30 @@ window.addEventListener('load', function () {
         'itembox': 'layer5'
       };
 
-      // default layer setting
-      this.contexts[this.layers['itembox']].fillStyle = '#cccccc';
-      this.contexts[this.layers['itembox']].fillRect(0, 0, gameWidth, gameHeight);
-      this.canvas[this.layers['itembox']].style.display = 'none';
+      this.canvas = {}
+      this.contexts = {};
+      this.initContext();
 
       // enable debug
       this.mouseDebug();
     }  // constructor()
+
+    initContext() {
+      const [gameWidth, gameHeight] = [ 512, 448 ];
+      const scale = (window.innerWidth > gameWidth && window.innerHeight > gameHeight) ? 1 : 0.5;
+      for (let canvas of document.querySelectorAll('canvas')) {
+        canvas.width  = gameWidth;
+        canvas.height = gameHeight;
+        this.canvas[canvas.id] = canvas;
+        this.contexts[canvas.id] = canvas.getContext('2d');
+        this.contexts[canvas.id].scale(scale, scale);
+      }
+
+      // default context setting
+      this.contexts[this.layers['itembox']].fillStyle = '#cccccc';
+      this.contexts[this.layers['itembox']].fillRect(0, 0, gameWidth, gameHeight);
+      this.canvas[this.layers['itembox']].style.display = 'none';
+    }  // initContext()
 
     mouseDebug() {
       let context = this.contexts[this.layers['system']];
