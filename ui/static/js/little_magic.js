@@ -44,17 +44,33 @@ window.addEventListener('load', function () {
         this.contexts[canvas.id].scale(scale, scale);
       }
 
-      // default context setting
-      this.contexts[this.layers['itembox']].fillStyle = '#cccccc';
+      this.contexts[this.layers['itembox']].fillStyle = 'white';
       this.contexts[this.layers['itembox']].fillRect(
-        this.imageSize, 0, gameWidth - (this.imageSize * 3), gameHeight);
+        this.imageSize, 0, gameWidth - this.imageSize * 3, gameHeight);
       this.canvas[this.layers['itembox']].style.display = 'none';
+
+      // icon
+      let context = this.contexts[this.layers['system']];
+      this.setIcon(context, 15,  4, 'Item');
+      this.setIcon(context, 15,  5, 'Field');
+      this.setIcon(context, 15, 12, 'Save');
     }  // initContext()
+
+    setIcon(context, col, row, desc) {
+      context.font = '12px Merio';
+      context.fillStyle = 'white';
+      context.textAlign='center';
+      context.textBaseline = 'middle';
+      const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
+      context.fillText(desc, iconWidth + (this.imageSize / 2), iconHeight + (this.imageSize / 2));
+    }  // initIcon
 
     mouseDebug() {
       let context = this.contexts[this.layers['system']];
       context.font = '12px Merio';
       context.fillStyle = 'white';
+      context.textAlign = 'start';
+      context.textBaseline = 'alphabetic';
       context.fillText('X'  , 452, 20);
       context.fillText('Y'  , 452, 40);
       context.fillText('COL', 452, 60);
@@ -224,7 +240,7 @@ window.addEventListener('load', function () {
     };  // rest()
   }  // class LittleMagic
 
-  // callback for /post/stage rest
+  // callback for /post/sprite rest
   //
   let setSprite = function(littleMagic, restData) {
     for (const [layer, layerData] of Object.entries(restData)) {
