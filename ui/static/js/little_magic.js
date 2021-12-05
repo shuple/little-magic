@@ -46,7 +46,8 @@ window.addEventListener('load', function () {
 
       // default context setting
       this.contexts[this.layers['itembox']].fillStyle = '#cccccc';
-      this.contexts[this.layers['itembox']].fillRect(0, 0, gameWidth, gameHeight);
+      this.contexts[this.layers['itembox']].fillRect(
+        this.imageSize, 0, gameWidth - (this.imageSize * 3), gameHeight);
       this.canvas[this.layers['itembox']].style.display = 'none';
     }  // initContext()
 
