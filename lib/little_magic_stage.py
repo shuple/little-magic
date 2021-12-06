@@ -6,8 +6,8 @@ from PIL import Image
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import sprite
 
-class LittleMagicMap(sprite.Sprite):
-    'Little Magic Map'
+class LittleMagicStage(sprite.Sprite):
+    'Little Magic Stage Generator'
 
     # parameter:
     #
@@ -17,13 +17,13 @@ class LittleMagicMap(sprite.Sprite):
         super().__init__(option)
     #  def __init__()
 
-    # generate png image from map data.
+    # generate png image from stage data.
     #
     # parameter:
     #
-    # data : map data
+    # data : stage data
     #
-    def gen_map(self, data):
+    def generate(self, data):
         # create image
         layer = next(iter(data))
         width  = len(data[layer][0]);
@@ -37,10 +37,10 @@ class LittleMagicMap(sprite.Sprite):
             self.set_image(image, d, l)
 
         timestamp =  datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
-        map_name  = f"{self.option['graphic']}/{timestamp}.png"
-        map_file  = f"{self.path['root']}/data/image/stage/{map_name}"
-        image.save(map_file, 'png')
-    #  def gen_map()
+        stage_name  = f"{self.option['graphic']}/{timestamp}.png"
+        stage_file  = f"{self.path['root']}/data/image/stage/{stage_name}"
+        image.save(stage_file, 'png')
+    #  def generate()
 
     # set PIL Image on layer.
     #
@@ -63,7 +63,7 @@ class LittleMagicMap(sprite.Sprite):
             #  for
         #  for
     #  def set_image()
-#  class LittleMagicMap
+#  class LittleMagicStage
 
 if __name__ == '__main__':
     pass
