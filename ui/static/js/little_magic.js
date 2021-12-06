@@ -82,11 +82,11 @@ window.addEventListener('load', function () {
       let context = this.contexts[this.layers['system']];
       const ctx = /(\d)/.exec(this.crntState['layer'])[1];
       context.clearRect(480, 0, this.imageSize, this.imageSize * 4);
-      context.fillText(': ' + x  , 480, 20);
-      context.fillText(': ' + y  , 480, 40);
-      context.fillText(': ' + col, 480, 60);
-      context.fillText(': ' + row, 480, 80);
-      context.fillText(': ' + ctx, 480, 100);
+      context.fillText(`: ${x}`  , 480, 20);
+      context.fillText(`: ${y}`  , 480, 40);
+      context.fillText(`: ${col}`, 480, 60);
+      context.fillText(`: ${row}`, 480, 80);
+      context.fillText(`: ${ctx}`, 480, 100);
     }  // mouseDebug()
 
     mouseEvent(canvas, event) {
@@ -204,7 +204,7 @@ window.addEventListener('load', function () {
     }  // itemToLayer()
 
     imagesrc(src, graphic) {
-      return '/static/image/sprite/' + this.crntState['graphic'] + '/' + src + '.png';
+      return `/static/image/sprite/${this.crntState['graphic']}/${src}.png`;
     } // imagesrc()
 
     setSprite(layer, layerData) {
