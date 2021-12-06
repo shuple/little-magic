@@ -36,6 +36,13 @@ class LittleMagicStage(sprite.Sprite):
         for l, d in data.items():
             self.set_image(image, d, l)
 
+        # crop row 0, -1, -2
+        image = image.crop((
+            self.block['width'], 0,
+            self.block['width'] * (len(data[layer][0]) - 2),
+            self.block['height'] * len(data[layer])
+        ))
+
         timestamp =  datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
         stage_name  = f"{self.option['graphic']}/{timestamp}.png"
         stage_file  = f"{self.path['root']}/data/image/stage/{stage_name}"
