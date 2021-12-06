@@ -25,20 +25,20 @@ class LittleMagicMap(sprite.Sprite):
     #
     def gen_map(self, data):
         # create image
-        width  = len(data['layer0'][0]);
-        heigth = len(data['layer0']);
+        layer = next(iter(data))
+        width  = len(data[layer][0]);
+        heigth = len(data[layer]);
         image = Image.new('RGBA',
             (self.block['width'] * width, self.block['height'] * heigth),
             (255, 255, 255)
         )
 
-        for i in range(4):
-            layer = f'layer{i}'
-            self.set_image(image, data[layer], layer)
+        for l, d in data.items():
+            self.set_image(image, d, l)
 
         timestamp =  datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
         map_name  = f"{self.option['graphic']}/{timestamp}.png"
-        map_file  = f"{self.path['root']}/data/image/map/{map_name}"
+        map_file  = f"{self.path['root']}/data/image/stage/{map_name}"
         image.save(map_file, 'png')
     #  def gen_map()
 
@@ -58,8 +58,7 @@ class LittleMagicMap(sprite.Sprite):
                 width, height = self.block['width'] * col, self.block['height'] * row
                 size = (width, height)
 
-                relative_path = f'{layer}/{data[row][col]}'
-                sprite = self.image_data[relative_path]
+                sprite = self.image_data[data[row][col]]
                 image.paste(sprite, size, sprite)
             #  for
         #  for
