@@ -134,7 +134,7 @@ window.addEventListener('load', function () {
         }
         break;
       case this.layers['itembox']:
-        if (this.areaStage(col, row) && this.crntState['item']) {
+        if (this.areaStage(col, row)) {
           this.selectItem(col, row);
         } else if (this.areaField(col, row)) {
           this.selectField(col, row);
