@@ -13,7 +13,8 @@ window.addEventListener('load', function () {
         'item'   : '',
         'col'    : 0,
         'row'    : 0,
-        'layer'  : 'layer1'
+        'layer'  : 'layer1',
+        'field'  : ''
       };
 
       this.prevState = {
@@ -127,11 +128,17 @@ window.addEventListener('load', function () {
           const layer = /^(layer\d)/.exec(this.crntState['item']);
           this.setSpriteBlock(col, row, layer[0], this.crntState['item']);
         } else if (this.areaItem(col, row)) {
-          this.itemBox();
+          this.selectItembox();
+        } else if (this.areaField(col, row)) {
+          this.selectField(col, row);
         }
         break;
       case this.layers['itembox']:
-        this.selectItem(col, row);
+        if (this.areaStage(col, row) && this.crntState['item']) {
+          this.selectItem(col, row);
+        } else if (this.areaField(col, row)) {
+          this.selectField(col, row);
+        }
         break;
       }
     }  // leftClick()
@@ -162,12 +169,35 @@ window.addEventListener('load', function () {
       return (col == 14 && row == 4);
     }  // areaItem()
 
+    areaField(col, row) {
+      return (col == 14 && row == 5);
+    }  // areaField()
+
     activeLayer(col, row) {
       for (let layer of [ 'layer3', 'layer2', 'layer1' ]) {
         if (this.blocks[layer][row][col]) return layer;
       }
       return this.crntState['layer'];
     }  // activeBlock()
+
+    selectItembox() {
+      this.crntState['layer'] = this.layers['itembox'];
+      this.canvas[this.layers['itembox']].style.display = 'inline';
+    }  // selectItembox()
+
+    selectField(col, row) {
+    }  // selectField()
+
+    selectItem(col, row) {
+      this.crntState['item'] = this.blocks[this.layers['itembox']][row][col]
+      if (this.crntState['item']) {
+        const layer = /^(layer\d)/.exec(this.crntState['item']);
+        this.setSpriteBlock(14, 4, this.layers['system'], this.crntState['item']);
+        this.crntState['layer'] = layer[1];
+        this.prevState['layer'] = layer[1];
+        this.canvas[this.layers['itembox']].style.display = 'none';
+      }
+    }  // itemToLayer()
 
     setSpriteBlock(col, row, layer, src) {
       this.removeSpriteBlock(col, row, layer);
@@ -186,22 +216,6 @@ window.addEventListener('load', function () {
       this.contexts[layer].clearRect(x, y, this.imageSize, this.imageSize);
       this.blocks[layer][row][col] = '';
     }  // removeSpriteBlock()
-
-    itemBox() {
-      this.crntState['layer'] = this.layers['itembox'];
-      this.canvas[this.layers['itembox']].style.display = 'inline';
-    }  // itemBox()
-
-    selectItem(col, row) {
-      this.crntState['item'] = this.blocks[this.layers['itembox']][row][col]
-      if (this.crntState['item']) {
-        const layer = /^(layer\d)/.exec(this.crntState['item']);
-        this.setSpriteBlock(14, 4, this.layers['system'], this.crntState['item']);
-        this.crntState['layer'] = layer[1];
-        this.prevState['layer'] = layer[1];
-        this.canvas[this.layers['itembox']].style.display = 'none';
-      }
-    }  // itemToLayer()
 
     imagesrc(src, graphic) {
       return `/static/image/sprite/${this.crntState['graphic']}/${src}.png`;
