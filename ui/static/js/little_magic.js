@@ -237,7 +237,7 @@ window.addEventListener('load', function () {
       }
     }  // setSprite()
 
-    rest(url, restData, callback) {
+    async rest(url, restData, callback) {
       fetch(url, {
         method: 'POST',
         body: JSON.stringify(restData),
@@ -263,9 +263,12 @@ window.addEventListener('load', function () {
   };  // let setSprite
 
   let littleMagic = new LittleMagic();
-  littleMagic.rest('/post/sprite', { 'content': 'menu/admin' , 'graphic': 'sfc' }, setSprite);
-  littleMagic.rest('/post/sprite', { 'content': 'stage/001'  , 'graphic': 'sfc' }, setSprite);
-  littleMagic.rest('/post/sprite', { 'content': 'status/make', 'graphic': 'sfc' }, setSprite);
+  const initSprite = async function() {
+    await littleMagic.rest('/post/sprite', { 'content': 'menu/admin' , 'graphic': 'sfc' }, setSprite);
+    await littleMagic.rest('/post/sprite', { 'content': 'status/make', 'graphic': 'sfc' }, setSprite);
+    await littleMagic.rest('/post/sprite', { 'content': 'stage/001'  , 'graphic': 'sfc' }, setSprite);
+  }
+  initSprite();
 
   // event listener
   let canvas = document.getElementById('control')
