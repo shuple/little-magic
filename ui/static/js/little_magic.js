@@ -235,16 +235,18 @@ window.addEventListener('load', function () {
       this.blocks[layer][row][col] = '';
     }  // removeSpriteBlock()
 
+    replaceStage(src, stage) {
+      const match = /\/(stage\/\d)/.exec(src);
+      return match ? src.replace(/stage\/\d{2}/, `${match[1]}${stage}`) : '';
+    }  // replaceStage()
+
     updateStage(stage) {
       for (const layer of [ 'layer1', 'layer2' ]) {
         let block = this.blocks[layer];
         for (let row = 0; row < block.length; row++) {
           for (let col = 0; col < block[row].length; col++) {
-            const match = /\/(stage\/\d)/.exec(block[row][col]);
-            if (match) {
-              const src = block[row][col].replace(/stage\/\d{2}/, `${match[1]}${stage}`);
-              this.setSpriteBlock(col, row, layer, src);
-            }
+            const src = this.replaceStage(block[row][col], stage);
+            if (src) this.setSpriteBlock(col, row, layer, src);
           }
         }
       }
