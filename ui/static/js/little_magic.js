@@ -248,15 +248,18 @@ window.addEventListener('load', function () {
     updateItembox(stage) {
       const layer = this.layers['itembox'];
       const block = this.blocks[layer];
+      const context = this.contexts[layer];
+      context.fillStyle = 'white';
+      context.fillRect(this.imageSize * 2, this.imageSize, this.imageSize * 7, this.imageSize);
       const row = 1;
       for (let col = 0; col < block[row].length; col++) {
         const src = this.replaceStage(block[row][col], stage);
-        if (src) this.setSpriteBlock(col, row, layer, src);
+        if (src) this.setSpriteBlock(col, row, layer, src, false);
       }
     }  // updateItembox()
 
-    setSpriteBlock(col, row, layer, src) {
-      this.removeSpriteBlock(col, row, layer);
+    setSpriteBlock(col, row, layer, src, overwrite = true) {
+      if (overwrite) this.removeSpriteBlock(col, row, layer);
       const context = this.contexts[layer];
       let image = new Image();
       image.onload = function() {
