@@ -53,7 +53,7 @@ window.addEventListener('load', function () {
       // icon
       let context = this.contexts[this.layers['system']];
       this.setIcon(context, 15,  4, 'Item');
-      this.setIcon(context, 15,  5, 'Field');
+      this.setIcon(context, 15,  5, 'Block');
       this.setIcon(context, 15, 12, 'Save');
     }  // initContext()
 
@@ -129,15 +129,15 @@ window.addEventListener('load', function () {
           this.setSpriteBlock(col, row, layer[0], this.crntState['item']);
         } else if (this.areaItem(col, row)) {
           this.selectItembox();
-        } else if (this.areaField(col, row)) {
-          this.selectField(col, row, 1);
+        } else if (this.areaBlock(col, row)) {
+          this.selectBlock(col, row, 1);
         }
         break;
       case this.layers['itembox']:
         if (this.areaStage(col, row)) {
           this.selectItem(col, row);
-        } else if (this.areaField(col, row)) {
-          this.selectField(col, row, 1);
+        } else if (this.areaBlock(col, row)) {
+          this.selectBlock(col, row, 1);
         }
         break;
       }
@@ -151,16 +151,16 @@ window.addEventListener('load', function () {
         if (this.areaStage(col, row)) {
           this.crntState['layer'] = this.activeLayer(col, row);
           this.removeSpriteBlock(col, row, this.crntState['layer']);
-        } else if (this.areaField(col, row)) {
-          this.selectField(col, row, -1);
+        } else if (this.areaBlock(col, row)) {
+          this.selectBlock(col, row, -1);
         }
         break;
       case this.layers['itembox']:
         if (this.areaStage(col, row)) {
           this.canvas[this.crntState['layer']].style.display = 'none';
           this.crntState['layer'] = this.prevState['layer']
-        } else if (this.areaField(col, row)) {
-          this.selectField(col, row, -1);
+        } else if (this.areaBlock(col, row)) {
+          this.selectBlock(col, row, -1);
         }
 
         break;
@@ -176,9 +176,9 @@ window.addEventListener('load', function () {
       return (col == 14 && row == 4);
     }  // areaItem()
 
-    areaField(col, row) {
+    areaBlock(col, row) {
       return (col == 14 && row == 5);
-    }  // areaField()
+    }  // areaBlock()
 
     activeLayer(col, row) {
       for (let layer of [ 'layer3', 'layer2', 'layer1' ]) {
@@ -202,7 +202,7 @@ window.addEventListener('load', function () {
       }
     }  // selectItem()
 
-    selectField(col, row, rotate) {
+    selectBlock(col, row, rotate) {
       let stage = this.crntState['stage'] + rotate
       const lastStage = 5;
       if (stage > lastStage) {
@@ -217,7 +217,7 @@ window.addEventListener('load', function () {
       this.updateStage(stage);
       this.updateItem(stage);
       this.updateItembox(stage);
-    }  // selectField()
+    }  // selectBlock()
 
     replaceStage(src, stage) {
       const match = /\/(stage\/\d)/.exec(src);
