@@ -14,7 +14,7 @@ window.addEventListener('load', function () {
         'col'    : 0,
         'row'    : 0,
         'layer'  : 'layer1',
-        'field'  : ''
+        'field'  : 0,
       };
 
       this.prevState = {
@@ -130,14 +130,14 @@ window.addEventListener('load', function () {
         } else if (this.areaItem(col, row)) {
           this.selectItembox();
         } else if (this.areaField(col, row)) {
-          this.selectField(col, row);
+          this.selectField(col, row, 1);
         }
         break;
       case this.layers['itembox']:
         if (this.areaStage(col, row)) {
           this.selectItem(col, row);
         } else if (this.areaField(col, row)) {
-          this.selectField(col, row);
+          this.selectField(col, row, 1);
         }
         break;
       }
@@ -151,11 +151,18 @@ window.addEventListener('load', function () {
         if (this.areaStage(col, row)) {
           this.crntState['layer'] = this.activeLayer(col, row);
           this.removeSpriteBlock(col, row, this.crntState['layer']);
+        } else if (this.areaField(col, row)) {
+          this.selectField(col, row, -1);
         }
         break;
       case this.layers['itembox']:
-        this.canvas[this.crntState['layer']].style.display = 'none';
-        this.crntState['layer'] = this.prevState['layer']
+        if (this.areaStage(col, row)) {
+          this.canvas[this.crntState['layer']].style.display = 'none';
+          this.crntState['layer'] = this.prevState['layer']
+        } else if (this.areaField(col, row)) {
+          this.selectField(col, row, -1);
+        }
+
         break;
       default:
       }
@@ -185,7 +192,17 @@ window.addEventListener('load', function () {
       this.canvas[this.layers['itembox']].style.display = 'inline';
     }  // selectItembox()
 
-    selectField(col, row) {
+    selectField(col, row, rotate) {
+      let field = this.crntState['field'] + rotate
+      const lastStage = 5;
+      if (field > lastStage) {
+        field = 0;
+      } else if (field < 0) {
+        field = lastStage;
+      }
+      this.crntState['field'] = field;
+      const src = `layer1/stage/0${field}/field/00`;
+      this.setSpriteBlock(col, row, this.layers['system'], src);
     }  // selectField()
 
     selectItem(col, row) {
