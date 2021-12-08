@@ -217,7 +217,7 @@ window.addEventListener('load', function () {
       this.blocks[layer][row][col] = '';
     }  // removeSpriteBlock()
 
-    imagesrc(src, graphic) {
+    imagesrc(src) {
       return `/static/image/sprite/${this.crntState['graphic']}/${src}.png`;
     } // imagesrc()
 
@@ -265,8 +265,8 @@ window.addEventListener('load', function () {
   let littleMagic = new LittleMagic();
   const initSprite = async function() {
     await littleMagic.rest('/post/read', { 'content': 'menu/admin' , 'graphic': 'sfc' }, setSprite);
-    await littleMagic.rest('/post/read', { 'content': 'stage/001'  , 'graphic': 'sfc' }, setSprite);
     await littleMagic.rest('/post/read', { 'content': 'status/make', 'graphic': 'sfc' }, setSprite);
+    await littleMagic.rest('/post/read', { 'content': 'stage/001'  , 'graphic': 'sfc' }, setSprite);
   }
   initSprite();
 
