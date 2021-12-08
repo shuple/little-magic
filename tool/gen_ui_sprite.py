@@ -4,7 +4,6 @@ import argparse, os, pathlib, re, shutil, sys
 from PIL import Image
 
 sys.path.insert(0, f'{(os.path.dirname(os.path.abspath(__file__)))}/../lib')
-import little_magic_map as lm
 
 def parse_args():
     path = f'{os.path.dirname(os.path.abspath(__file__))}/../ui/static/image'
