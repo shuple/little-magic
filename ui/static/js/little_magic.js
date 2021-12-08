@@ -215,6 +215,7 @@ window.addEventListener('load', function () {
       this.setSpriteBlock(col, row, this.layers['system'], src);
       // update sprite
       this.updateStage(stage);
+      this.updateItem(stage);
       this.updateItembox(stage);
     }  // selectField()
 
@@ -235,6 +236,14 @@ window.addEventListener('load', function () {
         }
       }
     }  // updateStage()
+
+    updateItem(stage) {
+      const layer = this.layers['system'];
+      const block = this.blocks[layer];
+      const col = 14, row = 4;
+      const src = this.replaceStage(block[row][col], stage);
+      if (src) this.setSpriteBlock(col, row, layer, src);
+    }  // updateItem()
 
     updateItembox(stage) {
       const layer = this.layers['itembox'];
