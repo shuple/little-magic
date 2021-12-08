@@ -219,7 +219,6 @@ window.addEventListener('load', function () {
       this.updateItembox(stage);
     }  // selectField()
 
-
     replaceStage(src, stage) {
       const match = /\/(stage\/\d)/.exec(src);
       return match ? src.replace(/stage\/\d{2}/, `${match[1]}${stage}`) : '';
@@ -241,8 +240,15 @@ window.addEventListener('load', function () {
       const layer = this.layers['system'];
       const block = this.blocks[layer];
       const col = 14, row = 4;
+      const context = this.contexts[layer];
+      context.fillStyle = 'black';
+      context.fillRect(
+        this.imageSize * col, this.imageSize * row, this.imageSize, this.imageSize);
       const src = this.replaceStage(block[row][col], stage);
-      if (src) this.setSpriteBlock(col, row, layer, src);
+      if (src) {
+        this.crntState['item'] = src;
+        this.setSpriteBlock(col, row, layer, src, false);
+      }
     }  // updateItem()
 
     updateItembox(stage) {
