@@ -14,7 +14,7 @@ window.addEventListener('load', function () {
         'col'    : 0,
         'row'    : 0,
         'layer'  : 'layer1',
-        'field'  : 0,
+        'stage'  : 0,
       };
 
       this.prevState = {
@@ -197,44 +197,27 @@ window.addEventListener('load', function () {
       if (this.crntState['item']) {
         const layer = /^(layer\d)/.exec(this.crntState['item']);
         this.setSpriteBlock(14, 4, this.layers['system'], this.crntState['item']);
-        this.crntState['layer'] = layer[1];
-        this.prevState['layer'] = layer[1];
+        [ this.crntState['layer'], this.prevState['layer'] ] = [ layer[1], layer[1] ];
         this.canvas[this.layers['itembox']].style.display = 'none';
       }
     }  // selectItem()
 
     selectField(col, row, rotate) {
-      let field = this.crntState['field'] + rotate
+      let stage = this.crntState['stage'] + rotate
       const lastStage = 5;
-      if (field > lastStage) {
-        field = 0;
-      } else if (field < 0) {
-        field = lastStage;
+      if (stage > lastStage) {
+        stage = 0;
+      } else if (stage < 0) {
+        stage = lastStage;
       }
-      this.crntState['field'] = field;
-      const src = `layer1/stage/0${field}/field/00`;
+      this.crntState['stage'] = stage;
+      const src = `layer1/stage/0${stage}/field/00`;
       this.setSpriteBlock(col, row, this.layers['system'], src);
-      this.updateStage(field);
-      this.updateItembox(field);
+      // update sprite
+      this.updateStage(stage);
+      this.updateItembox(stage);
     }  // selectField()
 
-    setSpriteBlock(col, row, layer, src) {
-      this.removeSpriteBlock(col, row, layer);
-      const context = this.contexts[layer];
-      let image = new Image();
-      image.onload = function() {
-        context.drawImage(image, image.width * col, image.height * row);
-      };
-      image.src = this.imagesrc(src);
-      this.blocks[layer][row][col] = src;
-    }  // setSpriteBlock();
-
-    removeSpriteBlock(col, row, layer) {
-      const x = col * this.imageSize;
-      const y = row * this.imageSize;
-      this.contexts[layer].clearRect(x, y, this.imageSize, this.imageSize);
-      this.blocks[layer][row][col] = '';
-    }  // removeSpriteBlock()
 
     replaceStage(src, stage) {
       const match = /\/(stage\/\d)/.exec(src);
@@ -263,9 +246,23 @@ window.addEventListener('load', function () {
       }
     }  // updateItembox()
 
-    imagesrc(src) {
-      return `/static/image/sprite/${this.crntState['graphic']}/${src}.png`;
-    } // imagesrc()
+    setSpriteBlock(col, row, layer, src) {
+      this.removeSpriteBlock(col, row, layer);
+      const context = this.contexts[layer];
+      let image = new Image();
+      image.onload = function() {
+        context.drawImage(image, image.width * col, image.height * row);
+      };
+      image.src = this.imagesrc(src);
+      this.blocks[layer][row][col] = src;
+    }  // setSpriteBlock();
+
+    removeSpriteBlock(col, row, layer) {
+      const x = col * this.imageSize;
+      const y = row * this.imageSize;
+      this.contexts[layer].clearRect(x, y, this.imageSize, this.imageSize);
+      this.blocks[layer][row][col] = '';
+    }  // removeSpriteBlock()
 
     setSprite(layer, layerData) {
       this.blocks[layer] = layerData;
@@ -282,6 +279,10 @@ window.addEventListener('load', function () {
         }
       }
     }  // setSprite()
+
+    imagesrc(src) {
+      return `/static/image/sprite/${this.crntState['graphic']}/${src}.png`;
+    } // imagesrc()
 
     async rest(url, restData, callback) {
       fetch(url, {
