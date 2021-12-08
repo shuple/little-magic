@@ -32,8 +32,8 @@ def index():
 
 # stage map data
 #
-@app.route('/post/sprite', methods=['POST'])
-def post_sprite():
+@app.route('/post/read', methods=['POST'])
+def post_read():
     try:
         data = flask.request.json
         content = f"{path}/../data/system/{data['graphic']}/{data['content']}.json"
@@ -43,7 +43,7 @@ def post_sprite():
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
         d = { 'error': f'{str(e)}' }
     return json.dumps(d)
-#  def post_sprite()
+#  def post_read()
 
 # parse command line argument
 #

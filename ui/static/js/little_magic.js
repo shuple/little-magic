@@ -254,7 +254,7 @@ window.addEventListener('load', function () {
     };  // rest()
   }  // class LittleMagic
 
-  // callback for /post/sprite rest
+  // callback for /post/read rest
   //
   let setSprite = function(littleMagic, restData) {
     for (const [layer, layerData] of Object.entries(restData)) {
@@ -264,9 +264,9 @@ window.addEventListener('load', function () {
 
   let littleMagic = new LittleMagic();
   const initSprite = async function() {
-    await littleMagic.rest('/post/sprite', { 'content': 'menu/admin' , 'graphic': 'sfc' }, setSprite);
-    await littleMagic.rest('/post/sprite', { 'content': 'stage/001'  , 'graphic': 'sfc' }, setSprite);
-    await littleMagic.rest('/post/sprite', { 'content': 'status/make', 'graphic': 'sfc' }, setSprite);
+    await littleMagic.rest('/post/read', { 'content': 'menu/admin' , 'graphic': 'sfc' }, setSprite);
+    await littleMagic.rest('/post/read', { 'content': 'stage/001'  , 'graphic': 'sfc' }, setSprite);
+    await littleMagic.rest('/post/read', { 'content': 'status/make', 'graphic': 'sfc' }, setSprite);
   }
   initSprite();
 
