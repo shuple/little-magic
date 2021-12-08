@@ -203,6 +203,7 @@ window.addEventListener('load', function () {
       this.crntState['field'] = field;
       const src = `layer1/stage/0${field}/field/00`;
       this.setSpriteBlock(col, row, this.layers['system'], src);
+      this.updateStage(field);
     }  // selectField()
 
     selectItem(col, row) {
@@ -233,6 +234,21 @@ window.addEventListener('load', function () {
       this.contexts[layer].clearRect(x, y, this.imageSize, this.imageSize);
       this.blocks[layer][row][col] = '';
     }  // removeSpriteBlock()
+
+    updateStage(stage) {
+      for (const layer of [ 'layer1', 'layer2' ]) {
+        let block = this.blocks[layer];
+        for (let row = 0; row < block.length; row++) {
+          for (let col = 0; col < block[row].length; col++) {
+            const match = /\/(stage\/\d)/.exec(block[row][col]);
+            if (match) {
+              const src = block[row][col].replace(/stage\/\d{2}/, `${match[1]}${stage}`);
+              this.setSpriteBlock(col, row, layer, src);
+            }
+          }
+        }
+      }
+    }  // updateStage()
 
     imagesrc(src) {
       return `/static/image/sprite/${this.crntState['graphic']}/${src}.png`;
