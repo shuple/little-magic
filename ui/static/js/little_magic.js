@@ -192,6 +192,17 @@ window.addEventListener('load', function () {
       this.canvas[this.layers['itembox']].style.display = 'inline';
     }  // selectItembox()
 
+    selectItem(col, row) {
+      this.crntState['item'] = this.blocks[this.layers['itembox']][row][col]
+      if (this.crntState['item']) {
+        const layer = /^(layer\d)/.exec(this.crntState['item']);
+        this.setSpriteBlock(14, 4, this.layers['system'], this.crntState['item']);
+        this.crntState['layer'] = layer[1];
+        this.prevState['layer'] = layer[1];
+        this.canvas[this.layers['itembox']].style.display = 'none';
+      }
+    }  // selectItem()
+
     selectField(col, row, rotate) {
       let field = this.crntState['field'] + rotate
       const lastStage = 5;
@@ -205,17 +216,6 @@ window.addEventListener('load', function () {
       this.setSpriteBlock(col, row, this.layers['system'], src);
       this.updateStage(field);
     }  // selectField()
-
-    selectItem(col, row) {
-      this.crntState['item'] = this.blocks[this.layers['itembox']][row][col]
-      if (this.crntState['item']) {
-        const layer = /^(layer\d)/.exec(this.crntState['item']);
-        this.setSpriteBlock(14, 4, this.layers['system'], this.crntState['item']);
-        this.crntState['layer'] = layer[1];
-        this.prevState['layer'] = layer[1];
-        this.canvas[this.layers['itembox']].style.display = 'none';
-      }
-    }  // selectItem()
 
     setSpriteBlock(col, row, layer, src) {
       this.removeSpriteBlock(col, row, layer);
