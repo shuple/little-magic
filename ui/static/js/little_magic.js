@@ -197,7 +197,7 @@ window.addEventListener('load', function () {
         this.prevState['layer'] = layer[1];
         this.canvas[this.layers['itembox']].style.display = 'none';
       }
-    }  // itemToLayer()
+    }  // selectItem()
 
     setSpriteBlock(col, row, layer, src) {
       this.removeSpriteBlock(col, row, layer);
@@ -260,13 +260,13 @@ window.addEventListener('load', function () {
     for (const [layer, layerData] of Object.entries(restData)) {
       littleMagic.setSprite(layer, layerData);
     }
-  };  // let setSprite
+  };  // let setSprite()
 
   let littleMagic = new LittleMagic();
   const initSprite = async function() {
     await littleMagic.rest('/post/sprite', { 'content': 'menu/admin' , 'graphic': 'sfc' }, setSprite);
-    await littleMagic.rest('/post/sprite', { 'content': 'status/make', 'graphic': 'sfc' }, setSprite);
     await littleMagic.rest('/post/sprite', { 'content': 'stage/001'  , 'graphic': 'sfc' }, setSprite);
+    await littleMagic.rest('/post/sprite', { 'content': 'status/make', 'graphic': 'sfc' }, setSprite);
   }
   initSprite();
 
