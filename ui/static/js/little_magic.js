@@ -37,7 +37,7 @@ window.addEventListener('load', function () {
     initContext() {
       const [gameWidth, gameHeight] = [ 512, 448 ];
       const scale = (window.innerWidth > gameWidth && window.innerHeight > gameHeight) ? 1 : 0.5;
-      for (let canvas of document.querySelectorAll('canvas')) {
+      for (const canvas of document.querySelectorAll('canvas')) {
         canvas.width  = gameWidth;
         canvas.height = gameHeight;
         this.canvas[canvas.id] = canvas;
@@ -51,7 +51,7 @@ window.addEventListener('load', function () {
       this.canvas[this.layers['itembox']].style.display = 'none';
 
       // icon
-      let context = this.contexts[this.layers['system']];
+      const context = this.contexts[this.layers['system']];
       this.setIcon(context, 15,  4, 'Item');
       this.setIcon(context, 15,  5, 'Block');
       this.setIcon(context, 15, 12, 'Save');
@@ -67,7 +67,7 @@ window.addEventListener('load', function () {
     }  // initIcon
 
     mouseDebug() {
-      let context = this.contexts[this.layers['system']];
+      const context = this.contexts[this.layers['system']];
       context.font = '12px Merio';
       context.fillStyle = 'white';
       context.textAlign = 'start';
@@ -80,7 +80,7 @@ window.addEventListener('load', function () {
     }  // mouseDebug()
 
     mouseDebugStatus(x, y, col, row) {
-      let context = this.contexts[this.layers['system']];
+      const context = this.contexts[this.layers['system']];
       const ctx = /(\d)/.exec(this.crntState['layer'])[1];
       context.clearRect(480, 0, this.imageSize, this.imageSize * 4);
       context.fillText(`: ${x}`  , 480, 20);
@@ -113,7 +113,7 @@ window.addEventListener('load', function () {
     }  // mousePosition()
 
     mousePositionToIndex(x, y) {
-      let [ col, row ] = [ parseInt(x / this.imageSize), parseInt(y / this.imageSize) ];
+      const [ col, row ] = [ parseInt(x / this.imageSize), parseInt(y / this.imageSize) ];
       if (isNaN(col)) col = 0;
       if (isNaN(row)) row = 0;
       return [ col, row ];
@@ -181,7 +181,7 @@ window.addEventListener('load', function () {
     }  // areaBlock()
 
     activeLayer(col, row) {
-      for (let layer of [ 'layer3', 'layer2', 'layer1' ]) {
+      for (const layer of [ 'layer3', 'layer2', 'layer1' ]) {
         if (this.blocks[layer][row][col]) return layer;
       }
       return this.crntState['layer'];
@@ -267,7 +267,7 @@ window.addEventListener('load', function () {
     setSpriteBlock(col, row, layer, src, overwrite = true) {
       if (overwrite) this.removeSpriteBlock(col, row, layer);
       const context = this.contexts[layer];
-      let image = new Image();
+      const image = new Image();
       image.onload = function() {
         context.drawImage(image, image.width * col, image.height * row);
       };
@@ -289,7 +289,7 @@ window.addEventListener('load', function () {
       for (let row = 0; row < layerData.length; row++) {
         for (let col = 0; col < layerData[row].length; col++) {
           if (layerData[row][col] === '') continue;
-          let image = new Image();
+          const image = new Image();
           image.onload = function() {
             context.drawImage(image, image.width * col, image.height * row);
           };
@@ -321,7 +321,7 @@ window.addEventListener('load', function () {
 
   // callback for /post/read rest
   //
-  let setSprite = function(littleMagic, restData) {
+  const setSprite = function(littleMagic, restData) {
     for (const [layer, layerData] of Object.entries(restData)) {
       if (layerData[0].constructor === Array) {
         littleMagic.setSpriteBlocks(layer, layerData);
@@ -331,9 +331,9 @@ window.addEventListener('load', function () {
         }
       }
     }
-  };  // let setSprite()
+  };  // const setSprite()
 
-  let littleMagic = new LittleMagic();
+  const littleMagic = new LittleMagic();
   const initSprite = async function() {
     const callback = setSprite;
     await littleMagic.rest('/post/read', { 'content': 'menu/wall' , 'graphic': 'sfc' }, callback);
@@ -344,7 +344,7 @@ window.addEventListener('load', function () {
   initSprite();
 
   // event listener
-  let canvas = document.getElementById('control')
+  const canvas = document.getElementById('control')
 
   // left, right click
   for (mouseEvent of [ 'click', 'contextmenu' ]) {
