@@ -329,9 +329,9 @@ window.addEventListener('load', function () {
 
   let littleMagic = new LittleMagic();
   const initSprite = async function() {
-    await littleMagic.rest('/post/read', { 'content': 'menu/admin' , 'graphic': 'sfc' }, setSprite);
-    await littleMagic.rest('/post/read', { 'content': 'system/make', 'graphic': 'sfc' }, setSprite);
-    await littleMagic.rest('/post/read', { 'content': 'stage/001'  , 'graphic': 'sfc' }, setSprite);
+    await littleMagic.rest('/post/read', { 'content': 'menu/wall', 'graphic': 'sfc' }, setSprite);
+    await littleMagic.rest('/post/read', { 'content': 'menu/make', 'graphic': 'sfc' }, setSprite);
+    await littleMagic.rest('/post/read', { 'content': 'stage/001', 'graphic': 'sfc' }, setSprite);
   }
   initSprite();
 
