@@ -240,14 +240,14 @@ window.addEventListener('load', function () {
       const layer = this.layers['system'];
       const block = this.blocks[layer];
       const col = 14, row = 4;
-      const context = this.contexts[layer];
-      context.fillStyle = 'black';
-      context.fillRect(
-        this.imageSize * col, this.imageSize * row, this.imageSize, this.imageSize);
       const src = this.replaceStage(block[row][col], stage);
       if (src) {
-        this.crntState['item'] = src;
-        this.setSpriteBlock(col, row, layer, src, false);
+        const context = this.contexts[layer];
+        context.fillStyle = 'black';
+        context.fillRect(
+          this.imageSize * col, this.imageSize * row, this.imageSize, this.imageSize);
+          this.crntState['item'] = src;
+          this.setSpriteBlock(col, row, layer, src, false);
       }
     }  // updateItem()
 
