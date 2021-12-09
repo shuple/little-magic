@@ -282,7 +282,7 @@ window.addEventListener('load', function () {
       this.blocks[layer][row][col] = '';
     }  // removeSpriteBlock()
 
-    setSprite(layer, layerData) {
+    setSpriteBlocks(layer, layerData) {
       this.blocks[layer] = layerData;
       const context = this.contexts[layer];
       context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -296,7 +296,7 @@ window.addEventListener('load', function () {
           image.src = this.imagesrc(layerData[row][col]);
         }
       }
-    }  // setSprite()
+    }  // setSpriteBlocks()
 
     imagesrc(src) {
       return `/static/image/sprite/${this.crntState['graphic']}/${src}.png`;
@@ -323,15 +323,23 @@ window.addEventListener('load', function () {
   //
   let setSprite = function(littleMagic, restData) {
     for (const [layer, layerData] of Object.entries(restData)) {
-      littleMagic.setSprite(layer, layerData);
+      if (layerData[0].constructor === Array) {
+        littleMagic.setSpriteBlocks(layer, layerData);
+      } else if (typeof layerData[0] === 'object') {
+        for (const data of layerData) {
+          littleMagic.setSpriteBlock(data['col'], data['row'], layer, data['sprite']);
+        }
+      }
     }
   };  // let setSprite()
 
   let littleMagic = new LittleMagic();
   const initSprite = async function() {
-    await littleMagic.rest('/post/read', { 'content': 'menu/wall', 'graphic': 'sfc' }, setSprite);
-    await littleMagic.rest('/post/read', { 'content': 'menu/make', 'graphic': 'sfc' }, setSprite);
-    await littleMagic.rest('/post/read', { 'content': 'stage/001', 'graphic': 'sfc' }, setSprite);
+    const callback = setSprite;
+    await littleMagic.rest('/post/read', { 'content': 'menu/wall' , 'graphic': 'sfc' }, callback);
+    await littleMagic.rest('/post/read', { 'content': 'menu/make' , 'graphic': 'sfc' }, callback);
+    await littleMagic.rest('/post/read', { 'content': 'stage/s000', 'graphic': 'sfc' }, callback);
+    await littleMagic.rest('/post/read', { 'content': 'stage/m000', 'graphic': 'sfc' }, callback);
   }
   initSprite();
 
