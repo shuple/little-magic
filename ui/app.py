@@ -30,7 +30,7 @@ def index():
         return {}
 #  def index()
 
-# stage map data
+# read json data
 #
 @app.route('/post/read', methods=['POST'])
 def post_read():
