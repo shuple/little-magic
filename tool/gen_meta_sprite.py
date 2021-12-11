@@ -5,11 +5,9 @@ import argparse, json, os, sys
 sys.path.insert(0, f'{(os.path.dirname(os.path.abspath(__file__)))}/../lib')
 import sprite
 
-import little_magic_map as lm
-
 def parse_args():
     # options
-    parser = argparse.ArgumentParser(description='Generate sprite map file')
+    parser = argparse.ArgumentParser(description='Generate meta sprite data')
     parser.add_argument('--graphic', default='sfc', help='graphic type')
 
     # convert to dict
