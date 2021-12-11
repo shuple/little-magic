@@ -225,7 +225,7 @@ window.addEventListener('load', function () {
     }  // replaceStage()
 
     updateStage(stage) {
-      for (const layer of [ 'layer1', 'layer2' ]) {
+      for (const layer of [ 'layer1', 'layer2', 'layer3' ]) {
         const block = this.blocks[layer];
         for (let row = 0; row < block.length; row++) {
           for (let col = 0; col < block[row].length; col++) {
