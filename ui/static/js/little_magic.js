@@ -322,12 +322,14 @@ window.addEventListener('load', function () {
   // callback for /post/read rest
   //
   const setSprite = function(littleMagic, restData) {
-    for (const [layer, layerData] of Object.entries(restData)) {
-      if (layerData[0].constructor === Array) {
-        littleMagic.setSpriteBlocks(layer, layerData);
-      } else if (typeof layerData[0] === 'object') {
-        for (const data of layerData) {
-          littleMagic.setSpriteBlock(data['col'], data['row'], layer, data['sprite']);
+    for (data of restData) {
+      for (const [layer, layerData] of Object.entries(data)) {
+        if (layerData[0].constructor === Array) {
+          littleMagic.setSpriteBlocks(layer, layerData);
+        } else if (typeof layerData[0] === 'object') {
+          for (const d of layerData) {
+            littleMagic.setSpriteBlock(d['col'], d['row'], layer, d['sprite']);
+          }
         }
       }
     }
@@ -335,9 +337,8 @@ window.addEventListener('load', function () {
 
   const littleMagic = new LittleMagic();
   const initSprite = async function() {
-    const callback = setSprite;
-    await littleMagic.rest('/post/read', { 'content': 'menu/make', 'graphic': 'sfc' }, callback);
-    await littleMagic.rest('/post/read', { 'content': 'stage/000', 'graphic': 'sfc' }, callback);
+    await littleMagic.rest('/post/read',
+      { 'file': [ 'menu/make', 'stage/000' ], 'graphic': 'sfc' }, setSprite);
   }
   initSprite();
 

@@ -30,19 +30,23 @@ def index():
         return {}
 #  def index()
 
-# read json data
+# read arbitrary files
 #
 @app.route('/post/read', methods=['POST'])
 def post_read():
     try:
-        data = flask.request.json
-        content = f"{path}/../data/system/{data['graphic']}/{data['content']}.json"
-        with open(content) as f:
-            d = { 'data': f.read() }
+        data = []
+        post = flask.request.json
+        for file in post['file']:
+            file_path = f"{path}/../data/system/{post['graphic']}/{file}.json"
+            with open(file_path) as f:
+                d = json.loads(f.read())
+                data += [ { k: v } for k, v in d.items() ]
+        #  for
     except Exception as e:
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
         d = { 'error': f'{str(e)}' }
-    return json.dumps(d)
+    return json.dumps({ 'data': json.dumps(data) })
 #  def post_read()
 
 # parse command line argument
