@@ -203,13 +203,9 @@ window.addEventListener('load', function () {
     }  // selectItem()
 
     selectBlock(col, row, rotate) {
-      let stage = this.crntState['stage'] + rotate
+      let stage = this.crntState['stage'] + rotate;
       const lastStage = 5;
-      if (stage > lastStage) {
-        stage = 0;
-      } else if (stage < 0) {
-        stage = lastStage;
-      }
+      stage = stage < 0 ? lastStage : stage %= lastStage + 1;
       this.crntState['stage'] = stage;
       const src = `layer1/stage/0${stage}/field/00`;
       this.setSpriteBlock(col, row, this.layers['system'], src);
