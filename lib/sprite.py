@@ -42,23 +42,20 @@ class Sprite:
     # load self.image_dict self.image_data
     #
     def load(self):
-        self.load_image_dict(self.path['sprite'], self.image_dict)
-        self.load_image_data(self.image_dict, self.image_data)
+        self.load_image_dict()
+        self.load_image_data()
     #  def load()
 
     #  load self.image_dict
     # '/path/to/image/01': {}
     #
-    # path       : path to image directory
-    # image_dict : self.image_dict
-    #
-    def load_image_dict(self, path, image_dict):
-        for root, dir, files in sorted(os.walk(path)):
+    def load_image_dict(self):
+        for root, _, files in sorted(os.walk(self.path['sprite'])):
             if not files: continue
             for file in files:
                 content_path = re.sub(f"{self.path['sprite']}/", '', root)
                 content_path += f'/{os.path.splitext(file)[0]}'
-                image_dict[content_path] = {}
+                self.image_dict[content_path] = {}
             #  for
         #  for
     #  def load_image_dict()
@@ -73,16 +70,11 @@ class Sprite:
 
     # load self.image_data, dict, key: relative path to image, value: PIL Image
     #
-    # parameters:
-    #
-    # image_dict : self.image_dict in the first recursion
-    # image_data : self.image_dict
-    #
-    def load_image_data(self, image_dict, image_data):
-        for image in image_dict.keys():
+    def load_image_data(self):
+        for image in self.image_dict.keys():
             file = f"{self.path['sprite']}/{image}.png"
             if os.path.exists(file):
-                image_data[image] = Image.open(file).convert('RGBA')
+                self.image_data[image] = Image.open(file).convert('RGBA')
         #  for
     #  def load_image_data()
 #  class Sprite
