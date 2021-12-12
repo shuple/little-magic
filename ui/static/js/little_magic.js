@@ -5,6 +5,9 @@ window.addEventListener('load', function () {
       // hold game data
       this.blocks = {}
 
+      // sprite meta data
+      this.metaData = {};
+
       // default sprite block size 32x32
       this.imageSize = 32;
 
@@ -331,10 +334,18 @@ window.addEventListener('load', function () {
     }
   };  // const setSprite()
 
+  const setMeta = function(littleMagic, restData) {
+    littleMagic.metaData = restData;
+    console.log(littleMagic.metaData);
+  }  // setMeta()
+
   const littleMagic = new LittleMagic();
   const initSprite = async function() {
-    await littleMagic.rest('/post/read',
+    await littleMagic.rest('/post/read/file',
+      { 'file': 'meta/sprite', 'graphic': 'sfc' }, setMeta);
+    await littleMagic.rest('/post/read/files',
       { 'file': [ 'menu/make', 'stage/000' ], 'graphic': 'sfc' }, setSprite);
+
   }
   initSprite();
 
