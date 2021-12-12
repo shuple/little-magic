@@ -264,6 +264,7 @@ window.addEventListener('load', function () {
     }  // updateItembox()
 
     setSpriteBlock(col, row, layer, src, overwrite = true) {
+      if (src === this.blocks[layer][row][col]) return;
       if (overwrite) this.removeSpriteBlock(col, row, layer);
       const context = this.contexts[layer];
       const image = new Image();
