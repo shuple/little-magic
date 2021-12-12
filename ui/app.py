@@ -30,41 +30,27 @@ def index():
         return {}
 #  def index()
 
-# read arbitrary file
-#
-@app.route('/post/read/file', methods=['POST'])
-def post_read_file():
-    try:
-        data = {}
-        post = flask.request.json
-        file_path = f"{path}/../data/system/{post['graphic']}/{post['file']}.json"
-        with open(file_path) as f:
-            data = json.loads(f.read())
-        #  for
-    except Exception as e:
-        logging.error(f'{flask.request.path} {traceback.format_exc()}')
-        d = { 'error': f'{str(e)}' }
-    return json.dumps({ 'data': json.dumps(data) })
-#  def post_read_file()
-
 # read arbitrary files
 #
-@app.route('/post/read/files', methods=['POST'])
-def post_read_files():
+@app.route('/post/read', methods=['POST'])
+def post_read():
     try:
-        data = []
         post = flask.request.json
+        data = post['returnData']
         for file in post['file']:
             file_path = f"{path}/../data/system/{post['graphic']}/{file}.json"
             with open(file_path) as f:
                 d = json.loads(f.read())
-                data += [ { k: v } for k, v in d.items() ]
+                if isinstance(data, list):
+                    data += [ { k: v } for k, v in d.items() ]
+                elif isinstance(data, dict):
+                    data = { **data, **d }
         #  for
     except Exception as e:
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
         d = { 'error': f'{str(e)}' }
     return json.dumps({ 'data': json.dumps(data) })
-#  def post_read_files()
+#  def post_read()
 
 # parse command line argument
 #
