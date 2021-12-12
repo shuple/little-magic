@@ -55,7 +55,6 @@ class Sprite:
     def load_image_dict(self, path, image_dict):
         for root, dir, file in sorted(os.walk(path)):
             if not file: continue
-
             content_path = re.sub(f"{self.path['sprite']}/", '', root)
             image_dict[content_path] = {}
         #  for
