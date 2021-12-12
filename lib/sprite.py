@@ -47,16 +47,19 @@ class Sprite:
     #  def load()
 
     #  load self.image_dict
-    # '/path/to/image/01.png': {}
+    # '/path/to/image/01': {}
     #
     # path       : path to image directory
     # image_dict : self.image_dict
     #
     def load_image_dict(self, path, image_dict):
-        for root, dir, file in sorted(os.walk(path)):
-            if not file: continue
-            content_path = re.sub(f"{self.path['sprite']}/", '', root)
-            image_dict[content_path] = {}
+        for root, dir, files in sorted(os.walk(path)):
+            if not files: continue
+            for file in files:
+                content_path = re.sub(f"{self.path['sprite']}/", '', root)
+                content_path += f'/{os.path.splitext(file)[0]}'
+                image_dict[content_path] = {}
+            #  for
         #  for
     #  def load_image_dict()
 
@@ -76,15 +79,10 @@ class Sprite:
     # image_data : self.image_dict
     #
     def load_image_data(self, image_dict, image_data):
-        for k, v in image_dict.items():
-            if isinstance(v, list):
-                for image in v:
-                    file = f"{self.path['sprite']}/{image}.png"
-                    if os.path.exists(file):
-                        image_data[image] = Image.open(file).convert('RGBA')
-                #  for
-            else:
-                self.load_image_data(v, image_data)
+        for image in image_dict.keys():
+            file = f"{self.path['sprite']}/{image}.png"
+            if os.path.exists(file):
+                image_data[image] = Image.open(file).convert('RGBA')
         #  for
     #  def load_image_data()
 #  class Sprite

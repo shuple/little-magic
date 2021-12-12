@@ -59,6 +59,7 @@ class LittleMagicStage(sprite.Sprite):
     #
     def set_image(self, image, data, layer):
         for row in range(len(data)):
+            if not isinstance(data[row], list): continue
             for col in range(len(data[row])):
                 if not data[row][col]: continue
 
