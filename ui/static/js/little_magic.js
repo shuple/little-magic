@@ -3,7 +3,7 @@ window.addEventListener('load', function () {
     constructor() {
       // object[layer]: array[row][col]
       // hold game data
-      this.blocks = {}
+      this.blocks = {};
 
       // sprite meta data
       this.metaData = {};
@@ -29,7 +29,7 @@ window.addEventListener('load', function () {
         'itembox': 'layer5'
       };
 
-      this.canvas = {}
+      this.canvas = {};
       this.contexts = {};
       this.initContext();
 
@@ -336,7 +336,6 @@ window.addEventListener('load', function () {
 
   const setMeta = function(littleMagic, restData) {
     littleMagic.metaData = restData;
-    console.log(littleMagic.metaData);
   }  // setMeta()
 
   const littleMagic = new LittleMagic();
