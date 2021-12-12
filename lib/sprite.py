@@ -43,6 +43,7 @@ class Sprite:
     #
     def load(self):
         self.load_image_dict()
+        self.merge_image_dict()
         self.load_image_data()
     #  def load()
 
@@ -59,6 +60,20 @@ class Sprite:
             #  for
         #  for
     #  def load_image_dict()
+
+    # merge self.image_dict with existing meta/sprite.json
+    #
+    # image_dict : self.image_dict
+    #
+    def merge_image_dict(self):
+        file = f"{self.path['root']}/data/system/{self.option['graphic']}/meta/sprite.json"
+        if os.path.exists(file):
+            with open(file, 'r') as f:
+                meta_data = json.loads(f.read())
+                self.image_dict = { **self.image_dict, **meta_data }
+            #  with
+        #  if
+    #  def merge_image_dict
 
     # write self.image_dict to json
     #
