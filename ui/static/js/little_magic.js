@@ -355,7 +355,7 @@ window.addEventListener('load', function () {
   const littleMagic = new LittleMagic();
   const initSprite = async function() {
     await littleMagic.rest('/post/read',
-      { 'file': [ 'meta/sprite' ], 'graphic': 'sfc', 'returnData': {} }, setMeta);
+      { 'file': [ 'meta/make' ], 'graphic': 'sfc', 'returnData': {} }, setMeta);
     await littleMagic.rest('/post/read',
       { 'file': [ 'menu/make', 'stage/000' ], 'graphic': 'sfc', 'returnData': [] }, setSprite);
 
