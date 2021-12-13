@@ -2,10 +2,9 @@ window.addEventListener('load', function () {
   class LittleMagic {
     constructor() {
       // object[layer]: array[row][col]
-      // hold game data
       this.blocks = {};
 
-      // sprite meta data
+      // object[sprite]: {}
       this.metaData = {};
 
       // default sprite block size 32x32
