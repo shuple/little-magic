@@ -9,6 +9,7 @@ def parse_args():
     # options
     parser = argparse.ArgumentParser(description='Generate meta sprite data')
     parser.add_argument('--graphic', default='sfc', help='graphic type')
+    parser.add_argument('-f', '--file', default='sprite', help='save file name')
 
     # convert to dict
     return vars(parser.parse_args())
