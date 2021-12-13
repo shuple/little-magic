@@ -79,8 +79,9 @@ class Sprite:
     #
     def write_image_dict(self):
         file = f"{self.path['root']}/data/system/{self.option['graphic']}/meta/{self.option['file']}"
+        image_dict = { k : self.image_dict[k] for k in sorted(self.image_dict) }
         with open(file, 'w') as f:
-            f.write(json.dumps(self.image_dict, indent=2))
+            f.write(json.dumps(image_dict, indent=2))
     #  def write_image_dict()
 
     # load self.image_data, dict, key: relative path to image, value: PIL Image
