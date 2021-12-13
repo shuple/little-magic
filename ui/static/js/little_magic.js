@@ -7,6 +7,18 @@ window.addEventListener('load', function () {
       // object[sprite]: {}
       this.metaData = {};
 
+      this.position = {
+        'block'     : { 'col': 14, 'row':  5 },
+        'item'      : { 'col': 14, 'row':  4 },
+        'stageEnd'  : { 'col': 13, 'row': 13 },
+        'stageStart': { 'col':  1, 'row':  0 },
+        'save'      : { 'col': 14, 'row': 12 },
+      };
+
+      this.font = {
+        'medium': '12px Merio'
+      };
+
       // default sprite block size 32x32
       this.imageSize = 32;
 
@@ -54,13 +66,15 @@ window.addEventListener('load', function () {
 
       // icon
       const context = this.contexts[this.layers['menu']];
-      this.setIcon(context, 15,  4, 'Item');
-      this.setIcon(context, 15,  5, 'Block');
-      this.setIcon(context, 15, 12, 'Save');
+      for (const content of [ 'item', 'block', 'save' ]) {
+        const key = content.toLowerCase();
+        const position = this.position[key];
+        this.setIcon(context, position['col'] + 1,  position['row'], content);
+      }
     }  // initContext()
 
     setIcon(context, col, row, desc) {
-      context.font = '12px Merio';
+      context.font = this.font['medium'];
       context.fillStyle = 'white';
       context.textAlign='center';
       context.textBaseline = 'middle';
@@ -69,27 +83,29 @@ window.addEventListener('load', function () {
     }  // initIcon
 
     mouseDebug() {
+      const [ x, y ] = [  452, 20 ];
       const context = this.contexts[this.layers['menu']];
-      context.font = '12px Merio';
+      context.font = this.font['medium'];
       context.fillStyle = 'white';
       context.textAlign = 'start';
       context.textBaseline = 'alphabetic';
-      context.fillText('X'  , 452, 20);
-      context.fillText('Y'  , 452, 40);
-      context.fillText('COL', 452, 60);
-      context.fillText('ROW', 452, 80);
-      context.fillText('CTX', 452, 100);
+      context.fillText('X'  , x, y);
+      context.fillText('Y'  , x, y * 2);
+      context.fillText('COL', x, y * 3);
+      context.fillText('ROW', x, y * 4);
+      context.fillText('CTX', x, y * 5);
     }  // mouseDebug()
 
-    mouseDebugStatus(x, y, col, row) {
+    mouseDebugStatus(xAxis, yAxis, col, row) {
+      const [ x, y ] = [  480, 20 ];
       const context = this.contexts[this.layers['menu']];
       const ctx = /(\d)/.exec(this.crntState['layer'])[1];
       context.clearRect(480, 0, this.imageSize, this.imageSize * 4);
-      context.fillText(`: ${x}`  , 480, 20);
-      context.fillText(`: ${y}`  , 480, 40);
-      context.fillText(`: ${col}`, 480, 60);
-      context.fillText(`: ${row}`, 480, 80);
-      context.fillText(`: ${ctx}`, 480, 100);
+      context.fillText(`: ${xAxis}`, x, y);
+      context.fillText(`: ${yAxis}`, x, y * 2);
+      context.fillText(`: ${col}`  , x, y * 3);
+      context.fillText(`: ${row}`  , x, y * 4);
+      context.fillText(`: ${ctx}`  , x, y * 5);
     }  // mouseDebug()
 
     mouseEvent(canvas, event) {
@@ -128,21 +144,21 @@ window.addEventListener('load', function () {
       case 'layer3':
         if (this.crntState['item'] === '')
           this.crntState['item'] = this.itemOnBlock(col, row);
-        if (this.areaStage(col, row) && this.crntState['item']) {
+        if (this.areaRange(col, row, 'stage') && this.crntState['item']) {
           const layer = /^(layer\d)/.exec(this.crntState['item']);
           const src = this.itemRotate(col, row, layer[0], this.crntState['item']);
           this.crntState['item'] = src;
           this.setSpriteBlock(col, row, layer[0], src);
-        } else if (this.areaItem(col, row)) {
+        } else if (this.areaBlock(col, row, 'item')) {
           this.selectItembox();
-        } else if (this.areaBlock(col, row)) {
+        } else if (this.areaBlock(col, row, 'block')) {
           this.selectBlock(col, row, 1);
         }
         break;
       case this.layers['system']:
-        if (this.areaStage(col, row)) {
+        if (this.areaRange(col, row, 'stage')) {
           this.selectItem(col, row);
-        } else if (this.areaBlock(col, row)) {
+        } else if (this.areaBlock(col, row, 'block')) {
           this.selectBlock(col, row, 1);
         }
         break;
@@ -154,22 +170,22 @@ window.addEventListener('load', function () {
       case 'layer1':
       case 'layer2':
       case 'layer3':
-        if (this.areaStage(col, row)) {
+        if (this.areaRange(col, row, 'stage')) {
           this.crntState['layer'] = this.activeLayer(col, row);
           this.itemRotateReset();
           this.removeSpriteBlock(col, row, this.crntState['layer']);
-        } else if (this.areaBlock(col, row)) {
-          this.selectBlock(col, row, -1);
-        } else if (this.areaItem(col, row)) {
+        } else if (this.areaBlock(col, row, 'item')) {
           this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/01');
           this.crntState['item'] = ''
+        } else if (this.areaBlock(col, row, 'block')) {
+          this.selectBlock(col, row, -1);
         }
         break;
       case this.layers['system']:
-        if (this.areaStage(col, row)) {
+        if (this.areaRange(col, row, 'stage')) {
           this.canvas[this.crntState['layer']].style.display = 'none';
           this.crntState['layer'] = this.prevState['layer']
-        } else if (this.areaBlock(col, row)) {
+        } else if (this.areaBlock(col, row, 'block')) {
           this.selectBlock(col, row, -1);
         }
         break;
@@ -177,16 +193,15 @@ window.addEventListener('load', function () {
       }
     }  // rightClick()
 
-    areaStage(col, row) {
-        return (col >= 1 && col <= 13 && row >= 0 && row <= 13);
-    }  // areaStage()
+    areaRange(col, row, content) {
+        const start = this.position[`${content}Start`];
+        const end = this.position[`${content}End`];
+        return (col >= start['col'] && col <= end['col'] && row >= start['row'] && row <= end['row']);
+    }  // areaRange()
 
-    areaItem(col, row) {
-      return (col == 14 && row == 4);
-    }  // areaItem()
-
-    areaBlock(col, row) {
-      return (col == 14 && row == 5);
+    areaBlock(col, row, content) {
+      const position = this.position[content];
+      return (col == position['col'] && row == position['row']);
     }  // areaBlock()
 
     activeLayer(col, row) {
