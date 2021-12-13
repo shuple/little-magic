@@ -25,8 +25,8 @@ window.addEventListener('load', function () {
       };
 
       this.layers  = {
-        'system' : 'layer4',
-        'itembox': 'layer5'
+        'menu'  : 'layer4',
+        'system': 'layer5'
       };
 
       this.canvas = {};
@@ -48,13 +48,13 @@ window.addEventListener('load', function () {
         this.contexts[canvas.id].scale(scale, scale);
       }
 
-      this.contexts[this.layers['itembox']].fillStyle = 'white';
-      this.contexts[this.layers['itembox']].fillRect(
+      this.contexts[this.layers['system']].fillStyle = 'white';
+      this.contexts[this.layers['system']].fillRect(
         this.imageSize, 0, gameWidth - this.imageSize * 3, gameHeight);
-      this.canvas[this.layers['itembox']].style.display = 'none';
+      this.canvas[this.layers['system']].style.display = 'none';
 
       // icon
-      const context = this.contexts[this.layers['system']];
+      const context = this.contexts[this.layers['menu']];
       this.setIcon(context, 15,  4, 'Item');
       this.setIcon(context, 15,  5, 'Block');
       this.setIcon(context, 15, 12, 'Save');
@@ -70,7 +70,7 @@ window.addEventListener('load', function () {
     }  // initIcon
 
     mouseDebug() {
-      const context = this.contexts[this.layers['system']];
+      const context = this.contexts[this.layers['menu']];
       context.font = '12px Merio';
       context.fillStyle = 'white';
       context.textAlign = 'start';
@@ -83,7 +83,7 @@ window.addEventListener('load', function () {
     }  // mouseDebug()
 
     mouseDebugStatus(x, y, col, row) {
-      const context = this.contexts[this.layers['system']];
+      const context = this.contexts[this.layers['menu']];
       const ctx = /(\d)/.exec(this.crntState['layer'])[1];
       context.clearRect(480, 0, this.imageSize, this.imageSize * 4);
       context.fillText(`: ${x}`  , 480, 20);
@@ -136,7 +136,7 @@ window.addEventListener('load', function () {
           this.selectBlock(col, row, 1);
         }
         break;
-      case this.layers['itembox']:
+      case this.layers['system']:
         if (this.areaStage(col, row)) {
           this.selectItem(col, row);
         } else if (this.areaBlock(col, row)) {
@@ -158,7 +158,7 @@ window.addEventListener('load', function () {
           this.selectBlock(col, row, -1);
         }
         break;
-      case this.layers['itembox']:
+      case this.layers['system']:
         if (this.areaStage(col, row)) {
           this.canvas[this.crntState['layer']].style.display = 'none';
           this.crntState['layer'] = this.prevState['layer']
@@ -191,17 +191,17 @@ window.addEventListener('load', function () {
     }  // activeBlock()
 
     selectItembox() {
-      this.crntState['layer'] = this.layers['itembox'];
-      this.canvas[this.layers['itembox']].style.display = 'inline';
+      this.crntState['layer'] = this.layers['system'];
+      this.canvas[this.layers['system']].style.display = 'inline';
     }  // selectItembox()
 
     selectItem(col, row) {
-      this.crntState['item'] = this.blocks[this.layers['itembox']][row][col]
+      this.crntState['item'] = this.blocks[this.layers['system']][row][col]
       if (this.crntState['item']) {
         const layer = /^(layer\d)/.exec(this.crntState['item']);
-        this.setSpriteBlock(14, 4, this.layers['system'], this.crntState['item']);
+        this.setSpriteBlock(14, 4, this.layers['menu'], this.crntState['item']);
         [ this.crntState['layer'], this.prevState['layer'] ] = [ layer[1], layer[1] ];
-        this.canvas[this.layers['itembox']].style.display = 'none';
+        this.canvas[this.layers['system']].style.display = 'none';
       }
     }  // selectItem()
 
@@ -211,7 +211,7 @@ window.addEventListener('load', function () {
       stage = stage < 0 ? lastStage : stage %= lastStage + 1;
       this.crntState['stage'] = stage;
       const src = `layer1/stage/0${stage}/field/00`;
-      this.setSpriteBlock(col, row, this.layers['system'], src);
+      this.setSpriteBlock(col, row, this.layers['menu'], src);
       // update sprite
       this.updateStage(stage);
       this.updateItem(stage);
@@ -236,7 +236,7 @@ window.addEventListener('load', function () {
     }  // updateStage()
 
     updateItem(stage) {
-      const layer = this.layers['system'];
+      const layer = this.layers['menu'];
       const block = this.blocks[layer];
       const col = 14, row = 4;
       const src = this.replaceStage(block[row][col], stage);
@@ -251,7 +251,7 @@ window.addEventListener('load', function () {
     }  // updateItem()
 
     updateItembox(stage) {
-      const layer = this.layers['itembox'];
+      const layer = this.layers['system'];
       const block = this.blocks[layer];
       const context = this.contexts[layer];
       context.fillStyle = 'white';
