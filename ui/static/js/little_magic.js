@@ -129,7 +129,9 @@ window.addEventListener('load', function () {
       case 'layer3':
         if (this.areaStage(col, row) && this.crntState['item']) {
           const layer = /^(layer\d)/.exec(this.crntState['item']);
-          this.setSpriteBlock(col, row, layer[0], this.crntState['item']);
+          const src = this.itemRotate(col, row, layer[0], this.crntState['item']);
+          this.crntState['item'] = src;
+          this.setSpriteBlock(col, row, layer[0], src);
         } else if (this.areaItem(col, row)) {
           this.selectItembox();
         } else if (this.areaBlock(col, row)) {
@@ -153,6 +155,7 @@ window.addEventListener('load', function () {
       case 'layer3':
         if (this.areaStage(col, row)) {
           this.crntState['layer'] = this.activeLayer(col, row);
+          this.itemRotateReset();
           this.removeSpriteBlock(col, row, this.crntState['layer']);
         } else if (this.areaBlock(col, row)) {
           this.selectBlock(col, row, -1);
@@ -165,7 +168,6 @@ window.addEventListener('load', function () {
         } else if (this.areaBlock(col, row)) {
           this.selectBlock(col, row, -1);
         }
-
         break;
       default:
       }
@@ -217,6 +219,17 @@ window.addEventListener('load', function () {
       this.updateItem(stage);
       this.updateItembox(stage);
     }  // selectBlock()
+
+    itemRotate(col, row, layer, src) {
+      return this.blocks[layer][row][col] && 'rotateItem' in this.metaData[src] ?
+        this.metaData[src]['rotateItem'] : src;
+    }  // itemRotate
+
+    itemRotateReset() {
+      if ('rotateItem' in this.metaData[this.crntState['item']]) {
+        this.crntState['item'] = this.blocks[this.layers['menu']][4][14]
+      }
+    }
 
     replaceStage(src, stage) {
       const match = /\/(stage\/\d)/.exec(src);
