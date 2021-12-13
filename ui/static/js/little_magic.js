@@ -221,7 +221,7 @@ window.addEventListener('load', function () {
     }  // selectBlock()
 
     itemRotate(col, row, layer, src) {
-      return this.blocks[layer][row][col] && 'rotateItem' in this.metaData[src] ?
+      return this.blocks[layer][row][col] == src && 'rotateItem' in this.metaData[src] ?
         this.metaData[src]['rotateItem'] : src;
     }  // itemRotate
 
