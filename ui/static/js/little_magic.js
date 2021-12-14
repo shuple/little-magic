@@ -396,7 +396,7 @@ window.addEventListener('load', function () {
   // event listener
   const canvas = document.getElementById('control')
 
-  // left, right click
+  // mouse event
   for (mouseEvent of [ 'click', 'contextmenu' ]) {
     canvas.addEventListener(mouseEvent, function(event) {
       event.preventDefault();
