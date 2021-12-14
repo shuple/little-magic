@@ -15,12 +15,15 @@ window.addEventListener('load', function () {
         'save'      : { 'col': 14, 'row': 12 },
       };
 
-      this.font = {
-        'medium': '12px Merio'
-      };
-
-      // default sprite block size 32x32
+      // default sprite block size
       this.imageSize = 32;
+
+      // canvas size
+      [this.gameWidth, this.gameHeight] = [ this.imageSize * 16, this.imageSize * 14 ];
+
+      this.font = {
+        'medium': `${this.imageSize * 0.375 }px Merio`
+      };
 
       this.crntState = {
         'graphic': 'sfc',
@@ -49,7 +52,7 @@ window.addEventListener('load', function () {
     }  // constructor()
 
     initContext() {
-      const [gameWidth, gameHeight] = [ 512, 448 ];
+      const [gameWidth, gameHeight] = [ this.gameWidth, this.gameHeight ];
       const scale = (window.innerWidth > gameWidth && window.innerHeight > gameHeight) ? 1 : 0.5;
       for (const canvas of document.querySelectorAll('canvas')) {
         canvas.width  = gameWidth;
@@ -83,7 +86,8 @@ window.addEventListener('load', function () {
     }  // initIcon
 
     mouseDebug() {
-      const [ x, y ] = [  452, 20 ];
+      const imageSize = this.imageSize
+      const [ x, y ] = [ (imageSize * 14) + (imageSize / 8), imageSize * 0.6 ];
       const context = this.contexts[this.layers['menu']];
       context.font = this.font['medium'];
       context.fillStyle = 'white';
@@ -97,10 +101,11 @@ window.addEventListener('load', function () {
     }  // mouseDebug()
 
     mouseDebugStatus(xAxis, yAxis, col, row) {
-      const [ x, y ] = [  480, 20 ];
+      const imageSize = this.imageSize
+      const [ x, y ] = [  imageSize * 15, imageSize * 0.6 ];
       const context = this.contexts[this.layers['menu']];
       const ctx = /(\d)/.exec(this.crntState['layer'])[1];
-      context.clearRect(480, 0, this.imageSize, this.imageSize * 4);
+      context.clearRect(x, 0, imageSize, imageSize * 4);
       context.fillText(`: ${xAxis}`, x, y);
       context.fillText(`: ${yAxis}`, x, y * 2);
       context.fillText(`: ${col}`  , x, y * 3);
