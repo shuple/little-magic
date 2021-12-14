@@ -220,7 +220,8 @@ window.addEventListener('load', function () {
       this.crntState['item'] = this.blocks[this.layers['system']][row][col]
       if (this.crntState['item']) {
         const layer = /^(layer\d)/.exec(this.crntState['item']);
-        this.setSpriteBlock(14, 4, this.layers['menu'], this.crntState['item']);
+        const position = this.position['item'];
+        this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], this.crntState['item']);
         [ this.crntState['layer'], this.prevState['layer'] ] = [ layer[1], layer[1] ];
         this.canvas[this.layers['system']].style.display = 'none';
       }
@@ -244,7 +245,8 @@ window.addEventListener('load', function () {
       for (const layer of [ 'layer3', 'layer2', 'layer1' ]) {
         if (this.blocks[layer][row][col]) {
           src = this.blocks[layer][row][col];
-          this.setSpriteBlock(14, 4, this.layers['menu'], src);
+          const position = this.position['item'];
+          this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], src);
           break;
         }
       }
@@ -258,7 +260,8 @@ window.addEventListener('load', function () {
 
     itemRotateReset() {
       if ('rotateItem' in this.metaData[this.crntState['item']]) {
-        this.crntState['item'] = this.blocks[this.layers['menu']][4][14]
+        const [ col, row ] = [ this.position['item']['col'], this.position['item']['row'] ];
+        this.crntState['item'] = this.blocks[this.layers['menu']][row][col]
       }
     }
 
@@ -282,7 +285,7 @@ window.addEventListener('load', function () {
     updateItem(stage) {
       const layer = this.layers['menu'];
       const block = this.blocks[layer];
-      const col = 14, row = 4;
+      const [ col, row ] = [ this.position['item']['col'], this.position['item']['row'] ];
       const src = this.replaceStage(block[row][col], stage);
       if (src) {
         const context = this.contexts[layer];
