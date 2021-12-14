@@ -263,7 +263,7 @@ window.addEventListener('load', function () {
         const [ col, row ] = [ this.position['item']['col'], this.position['item']['row'] ];
         this.crntState['item'] = this.blocks[this.layers['menu']][row][col]
       }
-    }
+    }  // itemRotateReset()
 
     replaceStage(src, stage) {
       const match = /\/(stage\/\d)/.exec(src);
