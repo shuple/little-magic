@@ -259,7 +259,7 @@ window.addEventListener('load', function () {
     }  // itemRotate
 
     itemRotateReset() {
-      if ('rotateItem' in this.metaData[this.crntState['item']]) {
+      if (this.crntState['item'] && 'rotateItem' in this.metaData[this.crntState['item']]) {
         const [ col, row ] = [ this.position['item']['col'], this.position['item']['row'] ];
         this.crntState['item'] = this.blocks[this.layers['menu']][row][col]
       }
