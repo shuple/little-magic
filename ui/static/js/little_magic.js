@@ -142,14 +142,16 @@ window.addEventListener('load', function () {
       case 'layer1':
       case 'layer2':
       case 'layer3':
-        if (this.crntState['item'] === '' && event.ctrlKey === false)
-          this.crntState['item'] = this.itemOnBlock(col, row);
-        if (this.areaRange(col, row, 'stage') && this.crntState['item']) {
+        if (this.areaRange(col, row, 'stage')) {
           if (event.ctrlKey) {
             this.crntState['layer'] = this.activeLayer(col, row);
             this.itemRotateReset();
             this.removeSpriteBlock(col, row, this.crntState['layer']);
+          } else if (event.altKey) {
+            this.crntState['item'] = this.itemOnBlock(col, row);
           } else {
+            if (this.crntState['item'] === '' && event.ctrlKey === false)
+              this.crntState['item'] = this.itemOnBlock(col, row);
             const layer = /^(layer\d)/.exec(this.crntState['item']);
             const src = this.itemRotate(col, row, layer[0], this.crntState['item']);
             this.crntState['item'] = src;
