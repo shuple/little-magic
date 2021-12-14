@@ -114,7 +114,7 @@ window.addEventListener('load', function () {
       switch (event.button) {
       // left click
       case 0:
-        this.leftClick(col, row);
+        this.leftClick(col, row, event);
         break;
       // right click
       case 2:
@@ -137,18 +137,24 @@ window.addEventListener('load', function () {
       return [ col, row ];
     }  // mousePositionToIndex
 
-    leftClick(col, row) {
+    leftClick(col, row, event) {
       switch (this.crntState['layer']) {
       case 'layer1':
       case 'layer2':
       case 'layer3':
-        if (this.crntState['item'] === '')
+        if (this.crntState['item'] === '' && event.ctrlKey === false)
           this.crntState['item'] = this.itemOnBlock(col, row);
         if (this.areaRange(col, row, 'stage') && this.crntState['item']) {
-          const layer = /^(layer\d)/.exec(this.crntState['item']);
-          const src = this.itemRotate(col, row, layer[0], this.crntState['item']);
-          this.crntState['item'] = src;
-          this.setSpriteBlock(col, row, layer[0], src);
+          if (event.ctrlKey) {
+            this.crntState['layer'] = this.activeLayer(col, row);
+            this.itemRotateReset();
+            this.removeSpriteBlock(col, row, this.crntState['layer']);
+          } else {
+            const layer = /^(layer\d)/.exec(this.crntState['item']);
+            const src = this.itemRotate(col, row, layer[0], this.crntState['item']);
+            this.crntState['item'] = src;
+            this.setSpriteBlock(col, row, layer[0], src);
+          }
         } else if (this.areaBlock(col, row, 'item')) {
           this.selectItembox();
         } else if (this.areaBlock(col, row, 'block')) {
