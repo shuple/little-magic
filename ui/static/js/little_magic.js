@@ -15,11 +15,15 @@ window.addEventListener('load', function () {
         'save'      : { 'col': 14, 'row': 12 },
       };
 
-      // default sprite block size
-      this.imageSize = 32;
+      // default size
+      const [ gameWidth, gameHeight ] = [ 512, 448 ];
+      const imageSize = 32;
+      [ this.col, this.row ] = [ gameWidth / imageSize, gameHeight / imageSize ]
 
-      // canvas size
-      [this.gameWidth, this.gameHeight] = [ this.imageSize * 16, this.imageSize * 14 ];
+      // adjust scale
+      this.scale = 1;
+      this.imageSize = this.scale * imageSize;
+      [this.gameWidth, this.gameHeight] = [ this.imageSize * this.col, this.imageSize * this.row ];
 
       this.font = {
         'medium': `${this.imageSize * 0.375 }px Merio`
@@ -53,13 +57,11 @@ window.addEventListener('load', function () {
 
     initContext() {
       const [gameWidth, gameHeight] = [ this.gameWidth, this.gameHeight ];
-      const scale = (window.innerWidth > gameWidth && window.innerHeight > gameHeight) ? 1 : 0.5;
       for (const canvas of document.querySelectorAll('canvas')) {
         canvas.width  = gameWidth;
         canvas.height = gameHeight;
         this.canvas[canvas.id] = canvas;
         this.contexts[canvas.id] = canvas.getContext('2d');
-        this.contexts[canvas.id].scale(scale, scale);
       }
 
       this.contexts[this.layers['system']].fillStyle = 'white';
@@ -333,8 +335,9 @@ window.addEventListener('load', function () {
       if (overwrite) this.removeSpriteBlock(col, row, layer);
       const context = this.contexts[layer];
       const image = new Image();
+      const imageSize = this.imageSize;
       image.onload = function() {
-        context.drawImage(image, image.width * col, image.height * row);
+        context.drawImage(image, imageSize * col, imageSize * row, imageSize, imageSize);
       };
       image.src = this.imagesrc(src);
       this.blocks[layer][row][col] = src;
