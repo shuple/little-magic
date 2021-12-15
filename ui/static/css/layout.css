@@ -4,6 +4,7 @@ body {
   height: 100%;
   overflow: hidden;
   font-family: 'Meiryo', 'Hiragino Kaku Gothic Pro', sans-serif;
+  background-color: #000;
 }
 
 div.game {
