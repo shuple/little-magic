@@ -155,9 +155,7 @@ window.addEventListener('load', function () {
           } else if (event.altKey) {
             this.crntState['item'] = this.itemOnBlock(col, row);
             this.crntState['layer'] = this.itemLayer(this.crntState['item']);
-          } else {
-            if (this.crntState['item'] === '' && event.ctrlKey === false)
-              this.crntState['item'] = this.itemOnBlock(col, row);
+          } else if (this.crntState['item']) {
             const layer = this.itemLayer(this.crntState['item']);
             const src = this.itemRotate(col, row, layer, this.crntState['item']);
             this.crntState['item'] = src;
