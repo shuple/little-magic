@@ -150,14 +150,14 @@ window.addEventListener('load', function () {
         if (this.areaRange(col, row, 'stage')) {
           if (event.ctrlKey) {
             this.crntState['layer'] = this.activeLayer(col, row);
-            this.itemRotateReset();
             this.removeSpriteBlock(col, row, this.crntState['layer']);
+            this.rotateItemReset();
           } else if (event.altKey) {
             this.crntState['item'] = this.itemOnBlock(col, row);
             this.crntState['layer'] = this.itemLayer(this.crntState['item']);
           } else if (this.crntState['item']) {
             const layer = this.itemLayer(this.crntState['item']);
-            const src = this.itemRotate(col, row, layer, this.crntState['item']);
+            const src = this.rotateItem(col, row, layer, this.crntState['item']);
             this.crntState['item'] = src;
             this.crntState['layer'] = this.itemLayer(src);
             this.setSpriteBlock(col, row, layer, src);
@@ -185,8 +185,8 @@ window.addEventListener('load', function () {
       case 'layer3':
         if (this.areaRange(col, row, 'stage')) {
           this.crntState['layer'] = this.activeLayer(col, row);
-          this.itemRotateReset();
           this.removeSpriteBlock(col, row, this.crntState['layer']);
+          this.rotateItemReset();
         } else if (this.areaBlock(col, row, 'item')) {
           this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/01');
           this.crntState['item'] = ''
@@ -271,17 +271,17 @@ window.addEventListener('load', function () {
       return src;
     }  // itemOnBlock()
 
-    itemRotate(col, row, layer, src) {
+    rotateItem(col, row, layer, src) {
       return this.blocks[layer][row][col] == src && 'rotateItem' in this.metaData[src] ?
         this.metaData[src]['rotateItem'] : src;
-    }  // itemRotate
+    }  // rotateItem
 
-    itemRotateReset() {
+    rotateItemReset() {
       if (this.crntState['item'] && 'rotateItem' in this.metaData[this.crntState['item']]) {
         const [ col, row ] = [ this.position['item']['col'], this.position['item']['row'] ];
         this.crntState['item'] = this.blocks[this.layers['menu']][row][col]
       }
-    }  // itemRotateReset()
+    }  // rotateItemReset()
 
     replaceStage(src, stage) {
       const match = /\/(stage\/\d)/.exec(src);
