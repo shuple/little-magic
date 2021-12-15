@@ -154,13 +154,15 @@ window.addEventListener('load', function () {
             this.removeSpriteBlock(col, row, this.crntState['layer']);
           } else if (event.altKey) {
             this.crntState['item'] = this.itemOnBlock(col, row);
+            this.crntState['layer'] = this.itemLayer(this.crntState['item']);
           } else {
             if (this.crntState['item'] === '' && event.ctrlKey === false)
               this.crntState['item'] = this.itemOnBlock(col, row);
-            const layer = /^(layer\d)/.exec(this.crntState['item']);
-            const src = this.itemRotate(col, row, layer[0], this.crntState['item']);
+            const layer = this.itemLayer(this.crntState['item']);
+            const src = this.itemRotate(col, row, layer, this.crntState['item']);
             this.crntState['item'] = src;
-            this.setSpriteBlock(col, row, layer[0], src);
+            this.crntState['layer'] = this.itemLayer(src);
+            this.setSpriteBlock(col, row, layer, src);
           }
         } else if (this.areaBlock(col, row, 'item')) {
           this.selectItembox();
@@ -216,6 +218,11 @@ window.addEventListener('load', function () {
       const position = this.position[content];
       return (col == position['col'] && row == position['row']);
     }  // areaBlock()
+
+    itemLayer(item) {
+      const layer = /^(layer\d)/.exec(item);
+      return layer[0];
+    }  // itemLayer()
 
     activeLayer(col, row) {
       for (const layer of [ 'layer3', 'layer2', 'layer1' ]) {
