@@ -26,7 +26,7 @@ window.addEventListener('load', function () {
       [this.gameWidth, this.gameHeight] = [ this.imageSize * this.col, this.imageSize * this.row ];
 
       this.font = {
-        'medium': `${this.imageSize * 0.375 }px Merio`
+        'medium': `bold ${this.imageSize * 0.375 }px Merio`
       };
 
       this.crntState = {
@@ -71,7 +71,7 @@ window.addEventListener('load', function () {
 
       // icon
       const context = this.contexts[this.layers['menu']];
-      for (const content of [ 'item', 'block', 'save' ]) {
+      for (const content of [ 'Item', 'Block', 'Save' ]) {
         const key = content.toLowerCase();
         const position = this.position[key];
         this.setIcon(context, position['col'] + 1,  position['row'], content);
