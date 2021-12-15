@@ -348,17 +348,16 @@ window.addEventListener('load', function () {
     }  // removeSpriteBlock()
 
     setSpriteBlocks(layer, layerData) {
-      this.blocks[layer] = layerData;
+      const [ colSize, rowSize ] =
+        [ this.gameWidth / this.imageSize, this.gameHeight / this.imageSize ];
+      this.blocks[layer] = [...Array(rowSize)].map(x=>Array(colSize).fill(''));
       const context = this.contexts[layer];
       context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       for (let row = 0; row < layerData.length; row++) {
         for (let col = 0; col < layerData[row].length; col++) {
-          if (layerData[row][col] === '') continue;
-          const image = new Image();
-          image.onload = function() {
-            context.drawImage(image, image.width * col, image.height * row);
-          };
-          image.src = this.imagesrc(layerData[row][col]);
+          if (layerData[row][col]) {
+            this.setSpriteBlock(col, row, layer, layerData[row][col], false);
+          }
         }
       }
     }  // setSpriteBlocks()
