@@ -6,10 +6,10 @@ window.addEventListener('load', function () {
       super();
 
       this.position = {
-        'block'     : { 'col': 14, 'row':  6 },
-        'item'      : { 'col': 14, 'row':  4 },
         'stageEnd'  : { 'col': 13, 'row': 13 },
-        'stageStart': { 'col':  1, 'row':  0 }
+        'stageStart': { 'col':  1, 'row':  0 },
+        'item'      : { 'col': 14, 'row':  4 },
+        'block'     : { 'col': 14, 'row':  5 }
       };
 
       this.crntState = Object.assign(this.crntState, {
