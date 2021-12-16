@@ -6,11 +6,10 @@ window.addEventListener('load', function () {
       super();
 
       this.position = {
-        'block'     : { 'col': 14, 'row':  5 },
+        'block'     : { 'col': 14, 'row':  6 },
         'item'      : { 'col': 14, 'row':  4 },
         'stageEnd'  : { 'col': 13, 'row': 13 },
-        'stageStart': { 'col':  1, 'row':  0 },
-        'save'      : { 'col': 14, 'row': 12 },
+        'stageStart': { 'col':  1, 'row':  0 }
       };
 
       this.crntState = Object.assign(this.crntState, {
@@ -48,7 +47,7 @@ window.addEventListener('load', function () {
 
     menuContext() {
       const context = this.contexts[this.layers['menu']];
-      for (const content of [ 'Item', 'Block', 'Save' ]) {
+      for (const content of [ 'Item', 'Block' ]) {
         const key = content.toLowerCase();
         const position = this.position[key];
         this.setIcon(context, position['col'] + 1,  position['row'], content);
