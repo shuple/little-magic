@@ -412,7 +412,6 @@ window.addEventListener('load', function () {
       { 'file': [ 'meta/make' ], 'graphic': 'sfc', 'returnData': {} }, setMeta);
     await littleMagic.rest('/post/read',
       { 'file': [ 'menu/make', 'stage/000' ], 'graphic': 'sfc', 'returnData': [] }, setSprite);
-
   }
   initSprite();
 
