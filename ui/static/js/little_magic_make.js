@@ -218,7 +218,6 @@ window.addEventListener('load', function () {
           this.crntState['layer'] = this.prevState['layer']
           this.closeItembox();
         } else if (this.areaBlock(col, row, 'item')) {
-          this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/01');
           this.crntState['layer'] = this.prevState['layer']
           this.crntState['item'] = ''
           this.closeItembox();
