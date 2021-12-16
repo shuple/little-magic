@@ -12,7 +12,9 @@ class LittleMagicSprite {
     [ this.col, this.row ] = [ gameWidth / imageSize, gameHeight / imageSize ]
 
     // adjust scale
-    this.scale = 1;
+    const [ clientWidth, clientHeight ] =
+      [ document.documentElement.clientWidth, document.documentElement.clientHeight ];
+    this.scale = (clientWidth > gameWidth && clientHeight > gameHeight) ? 1 : 0.75;
     this.imageSize = this.scale * imageSize;
     [this.gameWidth, this.gameHeight] = [ this.imageSize * this.col, this.imageSize * this.row ];
 
