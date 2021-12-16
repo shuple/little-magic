@@ -27,7 +27,8 @@ window.addEventListener('load', function () {
 
       this.layers  = {
         'menu'  : 'layer4',
-        'system': 'layer5'
+        'system': 'layer5',
+        'grid'  : 'layer6'
       };
 
       this.canvas = {};
@@ -40,19 +41,60 @@ window.addEventListener('load', function () {
 
     initContext() {
       super.initContext();
-      this.contexts[this.layers['system']].fillStyle = 'white';
-      this.contexts[this.layers['system']].fillRect(
-        this.imageSize, 0, this.gameWidth - this.imageSize * 3, this.gameHeight);
-      this.canvas[this.layers['system']].style.display = 'none';
+      this.menuContext();
+      this.systemContext();
+      this.gridContext();
+    }  // initContext()
 
-      // icon
+    menuContext() {
       const context = this.contexts[this.layers['menu']];
       for (const content of [ 'Item', 'Block', 'Save' ]) {
         const key = content.toLowerCase();
         const position = this.position[key];
         this.setIcon(context, position['col'] + 1,  position['row'], content);
       }
-    }  // initContext()
+    }  // menuContext()
+
+    systemContext() {
+      const context = this.contexts[this.layers['system']];
+      context.fillStyle = 'black';
+      context.fillRect(this.imageSize, 0, this.gameWidth - this.imageSize * 3, this.gameHeight);
+      this.canvas[this.layers['system']].style.display = 'none';
+    }  // systemContext()
+
+    gridContext() {
+      const context = this.contexts[this.layers['grid']];
+      const imageSize = this.imageSize
+      const [ col, row ] = [ 1, 1 ];
+      const [ colEnd, rowEnd ] = [ this.col - 3, this.row - 1];
+      const color = 'red';
+      for (let i = 0; i < colEnd; i++) {
+        // col line
+        this.drawLine(
+          context,
+          [ imageSize * 2, imageSize * (row + i)],
+          [ imageSize * colEnd, imageSize * (row + i)], color
+        );
+        // row line
+        if (i > 0) {
+          this.drawLine(
+            context,
+            [ imageSize * (col + i), imageSize ],
+            [ imageSize * (col + i), imageSize * rowEnd ], color
+          );
+        }
+      }
+      this.canvas[this.layers['grid']].style.display = 'none';
+    }  // gridContext()
+
+    drawLine(context, begin, end, stroke = 'black', width = 1) {
+      context.strokeStyle = stroke;
+      context.lineWidth = width;
+      context.beginPath();
+      context.moveTo(...begin);
+      context.lineTo(...end);
+      context.stroke();
+    }  // drawLine()
 
     setIcon(context, col, row, desc) {
       context.font = this.font['medium'];
@@ -175,6 +217,7 @@ window.addEventListener('load', function () {
       case this.layers['system']:
         if (this.areaRange(col, row, 'stage')) {
           this.canvas[this.crntState['layer']].style.display = 'none';
+          this.canvas[this.layers['grid']].style.display = 'none';
           this.crntState['layer'] = this.prevState['layer']
         } else if (this.areaBlock(col, row, 'block')) {
           this.selectBlock(col, row, -1);
@@ -209,7 +252,9 @@ window.addEventListener('load', function () {
 
     selectItembox() {
       this.crntState['layer'] = this.layers['system'];
-      this.canvas[this.layers['system']].style.display = 'inline';
+      for (const layer of [ 'system', 'grid']) {
+        this.canvas[this.layers[layer]].style.display = 'inline';
+      }
     }  // selectItembox()
 
     selectItem(col, row) {
@@ -219,7 +264,9 @@ window.addEventListener('load', function () {
         const position = this.position['item'];
         this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], this.crntState['item']);
         [ this.crntState['layer'], this.prevState['layer'] ] = [ layer[1], layer[1] ];
-        this.canvas[this.layers['system']].style.display = 'none';
+        for (const layer of [ 'system', 'grid']) {
+          this.canvas[this.layers[layer]].style.display = 'none';
+        }
       }
     }  // selectItem()
 
@@ -297,7 +344,7 @@ window.addEventListener('load', function () {
       const layer = this.layers['system'];
       const block = this.blocks[layer];
       const context = this.contexts[layer];
-      context.fillStyle = 'white';
+      context.fillStyle = 'black';
       context.fillRect(this.imageSize * 2, this.imageSize, this.imageSize * 7, this.imageSize);
       const row = 1;
       for (let col = 0; col < block[row].length; col++) {
