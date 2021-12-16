@@ -1,19 +1,11 @@
 window.addEventListener('load', function () {
-  class LittleMagic {
+  class LittleMagicSprite {
     constructor() {
       // object[layer]: array[row][col]
       this.blocks = {};
 
       // object[sprite]: {}
       this.metaData = {};
-
-      this.position = {
-        'block'     : { 'col': 14, 'row':  5 },
-        'item'      : { 'col': 14, 'row':  4 },
-        'stageEnd'  : { 'col': 13, 'row': 13 },
-        'stageStart': { 'col':  1, 'row':  0 },
-        'save'      : { 'col': 14, 'row': 12 },
-      };
 
       // default size
       const [ gameWidth, gameHeight ] = [ 512, 448 ];
@@ -31,12 +23,93 @@ window.addEventListener('load', function () {
 
       this.crntState = {
         'graphic': 'sfc',
+      };
+    }  // constructor
+
+    initContext() {
+      for (const canvas of document.querySelectorAll('canvas')) {
+        canvas.width  = this.gameWidth;
+        canvas.height = this.gameHeight;
+        this.canvas[canvas.id] = canvas;
+        this.contexts[canvas.id] = canvas.getContext('2d');
+      }
+    }   // initContext()
+
+    setSpriteBlock(col, row, layer, src, overwrite = true) {
+      if (src === this.blocks[layer][row][col]) return;
+      if (overwrite) this.removeSpriteBlock(col, row, layer);
+      const context = this.contexts[layer];
+      const image = new Image();
+      const imageSize = this.imageSize;
+      image.onload = function() {
+        context.drawImage(image, imageSize * col, imageSize * row, imageSize, imageSize);
+      };
+      image.src = this.imagesrc(src);
+      this.blocks[layer][row][col] = src;
+    }  // setSpriteBlock();
+
+    removeSpriteBlock(col, row, layer) {
+      const x = col * this.imageSize;
+      const y = row * this.imageSize;
+      this.contexts[layer].clearRect(x, y, this.imageSize, this.imageSize);
+      this.blocks[layer][row][col] = '';
+    }  // removeSpriteBlock()
+
+    setSpriteBlocks(layer, layerData) {
+      const [ colSize, rowSize ] =
+        [ this.gameWidth / this.imageSize, this.gameHeight / this.imageSize ];
+      this.blocks[layer] = [...Array(rowSize)].map(x=>Array(colSize).fill(''));
+      const context = this.contexts[layer];
+      context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      for (let row = 0; row < layerData.length; row++) {
+        for (let col = 0; col < layerData[row].length; col++) {
+          if (layerData[row][col]) {
+            this.setSpriteBlock(col, row, layer, layerData[row][col], false);
+          }
+        }
+      }
+    }  // setSpriteBlocks()
+
+    imagesrc(src) {
+      return `/static/image/sprite/${this.crntState['graphic']}/${src}.png`;
+    } // imagesrc()
+
+    async rest(url, restData, callback) {
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(restData),
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .then(response => response.json())
+      .then(data => {
+        data = JSON.parse(data['data']);
+        callback(this, data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    };  // rest()
+  };  // class LittleMagic
+
+  class LittleMagicMaker extends LittleMagicSprite {
+    constructor() {
+      super();
+
+      this.position = {
+        'block'     : { 'col': 14, 'row':  5 },
+        'item'      : { 'col': 14, 'row':  4 },
+        'stageEnd'  : { 'col': 13, 'row': 13 },
+        'stageStart': { 'col':  1, 'row':  0 },
+        'save'      : { 'col': 14, 'row': 12 },
+      };
+
+      this.crntState = Object.assign(this.crntState, {
         'item'   : '',
         'col'    : 0,
         'row'    : 0,
         'layer'  : 'layer1',
-        'stage'  : 0,
-      };
+        'stage'  : 0
+      });
 
       this.prevState = {
         'layer' : 'layer1'
@@ -56,17 +129,10 @@ window.addEventListener('load', function () {
     }  // constructor()
 
     initContext() {
-      const [gameWidth, gameHeight] = [ this.gameWidth, this.gameHeight ];
-      for (const canvas of document.querySelectorAll('canvas')) {
-        canvas.width  = gameWidth;
-        canvas.height = gameHeight;
-        this.canvas[canvas.id] = canvas;
-        this.contexts[canvas.id] = canvas.getContext('2d');
-      }
-
+      super.initContext();
       this.contexts[this.layers['system']].fillStyle = 'white';
       this.contexts[this.layers['system']].fillRect(
-        this.imageSize, 0, gameWidth - this.imageSize * 3, gameHeight);
+        this.imageSize, 0, this.gameWidth - this.imageSize * 3, this.gameHeight);
       this.canvas[this.layers['system']].style.display = 'none';
 
       // icon
@@ -330,61 +396,7 @@ window.addEventListener('load', function () {
       }
     }  // updateItembox()
 
-    setSpriteBlock(col, row, layer, src, overwrite = true) {
-      if (src === this.blocks[layer][row][col]) return;
-      if (overwrite) this.removeSpriteBlock(col, row, layer);
-      const context = this.contexts[layer];
-      const image = new Image();
-      const imageSize = this.imageSize;
-      image.onload = function() {
-        context.drawImage(image, imageSize * col, imageSize * row, imageSize, imageSize);
-      };
-      image.src = this.imagesrc(src);
-      this.blocks[layer][row][col] = src;
-    }  // setSpriteBlock();
-
-    removeSpriteBlock(col, row, layer) {
-      const x = col * this.imageSize;
-      const y = row * this.imageSize;
-      this.contexts[layer].clearRect(x, y, this.imageSize, this.imageSize);
-      this.blocks[layer][row][col] = '';
-    }  // removeSpriteBlock()
-
-    setSpriteBlocks(layer, layerData) {
-      const [ colSize, rowSize ] =
-        [ this.gameWidth / this.imageSize, this.gameHeight / this.imageSize ];
-      this.blocks[layer] = [...Array(rowSize)].map(x=>Array(colSize).fill(''));
-      const context = this.contexts[layer];
-      context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      for (let row = 0; row < layerData.length; row++) {
-        for (let col = 0; col < layerData[row].length; col++) {
-          if (layerData[row][col]) {
-            this.setSpriteBlock(col, row, layer, layerData[row][col], false);
-          }
-        }
-      }
-    }  // setSpriteBlocks()
-
-    imagesrc(src) {
-      return `/static/image/sprite/${this.crntState['graphic']}/${src}.png`;
-    } // imagesrc()
-
-    async rest(url, restData, callback) {
-      fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(restData),
-        headers: { 'Content-Type': 'application/json' },
-      })
-      .then(response => response.json())
-      .then(data => {
-        data = JSON.parse(data['data']);
-        callback(this, data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-    };  // rest()
-  }  // class LittleMagic
+  }  // class LittleMagicMaker
 
   // callback for /post/read rest
   //
@@ -406,7 +418,7 @@ window.addEventListener('load', function () {
     littleMagic.metaData = restData;
   }  // setMeta()
 
-  const littleMagic = new LittleMagic();
+  const littleMagic = new LittleMagicMaker();
   const initSprite = async function() {
     await littleMagic.rest('/post/read',
       { 'file': [ 'meta/make' ], 'graphic': 'sfc', 'returnData': {} }, setMeta);
