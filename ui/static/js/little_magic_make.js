@@ -216,9 +216,13 @@ window.addEventListener('load', function () {
         break;
       case this.layers['system']:
         if (this.areaRange(col, row, 'stage')) {
-          this.canvas[this.crntState['layer']].style.display = 'none';
-          this.canvas[this.layers['grid']].style.display = 'none';
           this.crntState['layer'] = this.prevState['layer']
+          this.closeItembox();
+        } else if (this.areaBlock(col, row, 'item')) {
+          this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/01');
+          this.crntState['layer'] = this.prevState['layer']
+          this.crntState['item'] = ''
+          this.closeItembox();
         } else if (this.areaBlock(col, row, 'block')) {
           this.selectBlock(col, row, -1);
         }
@@ -264,11 +268,15 @@ window.addEventListener('load', function () {
         const position = this.position['item'];
         this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], this.crntState['item']);
         [ this.crntState['layer'], this.prevState['layer'] ] = [ layer[1], layer[1] ];
-        for (const layer of [ 'system', 'grid']) {
-          this.canvas[this.layers[layer]].style.display = 'none';
-        }
+        this.closeItembox();
       }
     }  // selectItem()
+
+    closeItembox() {
+      for (const layer of [ 'system', 'grid']) {
+        this.canvas[this.layers[layer]].style.display = 'none';
+      }
+    }  // closeItembox()
 
     selectBlock(col, row, rotate) {
       let stage = this.crntState['stage'] + rotate;
