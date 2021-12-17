@@ -43,6 +43,7 @@ window.addEventListener('load', function () {
       this.menuContext();
       this.systemContext();
       this.gridContext();
+      this.canvas[this.layers['menu']].style.display = 'none';
     }  // initContext()
 
     menuContext() {
@@ -165,6 +166,7 @@ window.addEventListener('load', function () {
     //
     init() {
       this.setStageBlock();
+      this.canvas[this.layers['menu']].style.display = 'inline';
     }  // init()
 
     leftClick(col, row, event) {
