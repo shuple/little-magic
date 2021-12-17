@@ -161,6 +161,30 @@ window.addEventListener('load', function () {
       return [ col, row ];
     }  // mousePositionToIndex
 
+    // call after this.setMeta() and this.setSprite()
+    //
+    init() {
+      // find stage src from layer1
+      const src = this.stageBlock('layer1');
+      const stage = /stage\/(\d{2})/.exec(src)[1];
+      this.crntState['stage'] = parseInt(stage);
+      this.updateItembox(this.crntState['stage']);
+      // set block on menu
+      const [ col, row ] = [ this.position['block']['col'], this.position['block']['row'] ];
+      this.setSpriteBlock(col, row, this.layers['menu'], `layer1/stage/${stage}/field/00`);
+    }  // init()
+
+    stageBlock(layer) {
+      for (let row = 0; row < this.row; row++) {
+        for (let col = 1; col < this.col - 2; col++) {
+          const src = this.blocks[layer][row][col];
+          if (/stage/.exec(src)) return src;
+        }
+      }
+      // default block
+      return 'layer1/stage/00/field/00';
+    }  // stageBlock()
+
     leftClick(col, row, event) {
       switch (this.crntState['layer']) {
       case 'layer1':
@@ -366,6 +390,7 @@ window.addEventListener('load', function () {
       { 'file': [ 'meta/make' ], 'graphic': 'sfc', 'returnData': {} }, setMeta);
     await littleMagic.rest('/post/read',
       { 'file': [ 'menu/make', 'stage/000' ], 'graphic': 'sfc', 'returnData': [] }, setSprite);
+    littleMagic.init();
   }
   initSprite();
 
