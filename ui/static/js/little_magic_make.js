@@ -385,14 +385,14 @@ window.addEventListener('load', function () {
   }  // class LittleMagicMaker
 
   const littleMagic = new LittleMagicMaker();
-  const initSprite = async function() {
+  const init = async function() {
     await littleMagic.rest('/post/read',
       { 'file': [ 'meta/make' ], 'graphic': 'sfc', 'returnData': {} }, setMeta);
     await littleMagic.rest('/post/read',
       { 'file': [ 'menu/make', 'stage/000' ], 'graphic': 'sfc', 'returnData': [] }, setSprite);
     littleMagic.init();
   }
-  initSprite();
+  init();
 
   // event listener
   const canvas = document.getElementById('control')
