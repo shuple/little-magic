@@ -17,7 +17,7 @@ window.addEventListener('load', function () {
         'col'  : 0,
         'row'  : 0,
         'layer': 'layer1',
-        'stage': 0
+        'block': 0
       });
 
       this.prevState = {
@@ -271,8 +271,8 @@ window.addEventListener('load', function () {
       // find stage src from layer1
       const src = this.findStageBlock('layer1');
       const stage = /stage\/(\d{2})/.exec(src)[1];
-      this.crntState['stage'] = parseInt(stage);
-      this.updateItembox(this.crntState['stage']);
+      this.crntState['block'] = parseInt(stage);
+      this.updateItembox(this.crntState['block']);
       // set block on menu
       const [ col, row ] = [ this.position['block']['col'], this.position['block']['row'] ];
       this.setSpriteBlock(col, row, this.layers['menu'], `layer1/stage/${stage}/field/00`);
@@ -307,10 +307,10 @@ window.addEventListener('load', function () {
     }  // closeItembox()
 
     selectBlock(col, row, rotate) {
-      let stage = this.crntState['stage'] + rotate;
+      let stage = this.crntState['block'] + rotate;
       const lastStage = 5;
       stage = stage < 0 ? lastStage : stage %= lastStage + 1;
-      this.crntState['stage'] = stage;
+      this.crntState['block'] = stage;
       const src = `layer1/stage/0${stage}/field/00`;
       this.setSpriteBlock(col, row, this.layers['menu'], src);
       // update sprite
