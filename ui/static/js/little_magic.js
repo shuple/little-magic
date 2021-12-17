@@ -90,7 +90,7 @@ class LittleMagicSprite {
   } // imagesrc()
 
   async rest(url, restData, callback) {
-    fetch(url, {
+    await fetch(url, {
       method: 'POST',
       body: JSON.stringify(restData),
       headers: { 'Content-Type': 'application/json' },
