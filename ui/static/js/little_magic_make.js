@@ -13,11 +13,11 @@ window.addEventListener('load', function () {
       };
 
       this.crntState = Object.assign(this.crntState, {
-        'item'   : '',
-        'col'    : 0,
-        'row'    : 0,
-        'layer'  : 'layer1',
-        'stage'  : 0
+        'item' : '',
+        'col'  : 0,
+        'row'  : 0,
+        'layer': 'layer1',
+        'stage': 0
       });
 
       this.prevState = {
