@@ -1,7 +1,7 @@
-import { LittleMagicSprite, setSprite, setMeta } from './little_magic.js';
+import { LittleMagic, setSprite, setMeta } from './little_magic.js';
 
 window.addEventListener('load', function () {
-  class LittleMagicMaker extends LittleMagicSprite {
+  class LittleMagicMaker extends LittleMagic {
     constructor() {
       super();
 
