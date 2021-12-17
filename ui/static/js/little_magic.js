@@ -36,6 +36,20 @@ class LittleMagicSprite {
     }
   }   // initContext()
 
+  setSprite(restData) {
+    for (const data of restData) {
+      for (const [layer, layerData] of Object.entries(data)) {
+        if (layerData[0].constructor === Array) {
+          this.setSpriteBlocks(layer, layerData);
+        } else if (typeof layerData[0] === 'object') {
+          for (const d of layerData) {
+            this.setSpriteBlock(d['col'], d['row'], layer, d['sprite']);
+          }
+        }
+      }
+    }
+  }  // setSprite()
+
   setSpriteBlock(col, row, layer, src, overwrite = true) {
     if (src === this.blocks[layer][row][col]) return;
     if (overwrite) this.removeSpriteBlock(col, row, layer);
@@ -95,17 +109,7 @@ class LittleMagicSprite {
 // callback for /post/read rest
 //
 const setSprite = function(littleMagic, restData) {
-  for (const data of restData) {
-    for (const [layer, layerData] of Object.entries(data)) {
-      if (layerData[0].constructor === Array) {
-        littleMagic.setSpriteBlocks(layer, layerData);
-      } else if (typeof layerData[0] === 'object') {
-        for (const d of layerData) {
-          littleMagic.setSpriteBlock(d['col'], d['row'], layer, d['sprite']);
-        }
-      }
-    }
-  }
+  littleMagic.setSprite(restData);
 };  // const setSprite()
 
 const setMeta = function(littleMagic, restData) {
