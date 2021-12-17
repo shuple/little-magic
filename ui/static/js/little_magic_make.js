@@ -353,7 +353,7 @@ window.addEventListener('load', function () {
       context.fillStyle = 'black';
       context.fillRect(this.imageSize * 2, this.imageSize, this.imageSize * 7, this.imageSize);
       const row = 1;
-      for (let col = 0; col < block[row].length; col++) {
+      for (let col = 2; col < block[row].length - 4; col++) {
         const src = this.replaceStage(block[row][col], stage);
         if (src) this.setSpriteBlock(col, row, layer, src, false);
       }
