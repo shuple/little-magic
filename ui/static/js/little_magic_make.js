@@ -164,26 +164,8 @@ window.addEventListener('load', function () {
     // call after this.setMeta() and this.setSprite()
     //
     init() {
-      // find stage src from layer1
-      const src = this.stageBlock('layer1');
-      const stage = /stage\/(\d{2})/.exec(src)[1];
-      this.crntState['stage'] = parseInt(stage);
-      this.updateItembox(this.crntState['stage']);
-      // set block on menu
-      const [ col, row ] = [ this.position['block']['col'], this.position['block']['row'] ];
-      this.setSpriteBlock(col, row, this.layers['menu'], `layer1/stage/${stage}/field/00`);
+      this.setStageBlock();
     }  // init()
-
-    stageBlock(layer) {
-      for (let row = 0; row < this.row; row++) {
-        for (let col = 1; col < this.col - 2; col++) {
-          const src = this.blocks[layer][row][col];
-          if (/stage/.exec(src)) return src;
-        }
-      }
-      // default block
-      return 'layer1/stage/00/field/00';
-    }  // stageBlock()
 
     leftClick(col, row, event) {
       switch (this.crntState['layer']) {
@@ -282,6 +264,28 @@ window.addEventListener('load', function () {
         this.canvas[this.layers[layer]].style.display = 'inline';
       }
     }  // selectItembox()
+
+    setStageBlock() {
+      // find stage src from layer1
+      const src = this.findStageBlock('layer1');
+      const stage = /stage\/(\d{2})/.exec(src)[1];
+      this.crntState['stage'] = parseInt(stage);
+      this.updateItembox(this.crntState['stage']);
+      // set block on menu
+      const [ col, row ] = [ this.position['block']['col'], this.position['block']['row'] ];
+      this.setSpriteBlock(col, row, this.layers['menu'], `layer1/stage/${stage}/field/00`);
+    }
+
+    findStageBlock(layer) {
+      for (let row = 0; row < this.row; row++) {
+        for (let col = 1; col < this.col - 2; col++) {
+          const src = this.blocks[layer][row][col];
+          if (/stage/.exec(src)) return src;
+        }
+      }
+      // default block
+      return 'layer1/stage/00/field/00';
+    }  // stageBlock()
 
     selectItem(col, row) {
       this.crntState['item'] = this.blocks[this.layers['system']][row][col]
