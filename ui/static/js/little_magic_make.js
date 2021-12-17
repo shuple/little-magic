@@ -102,7 +102,7 @@ window.addEventListener('load', function () {
       context.textBaseline = 'middle';
       const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
       context.fillText(desc, iconWidth + (this.imageSize / 2), iconHeight + (this.imageSize / 2));
-    }  // initIcon
+    }  // setIcon
 
     mouseDebug() {
       const imageSize = this.imageSize
