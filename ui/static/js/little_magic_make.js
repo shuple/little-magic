@@ -24,10 +24,12 @@ window.addEventListener('load', function () {
         'layer' : 'layer1'
       };
 
+      // layer alias
+      this.stageLayers = [ 'layer1', 'layer2', 'layer3' ];
       this.layers  = {
-        'menu'  : 'layer4',
-        'system': 'layer5',
-        'grid'  : 'layer6'
+        'menu'  : 'layer5',
+        'system': 'layer6',
+        'grid'  : 'layer7'
       };
 
       this.canvas = {};
@@ -165,7 +167,7 @@ window.addEventListener('load', function () {
     // call after this.setMeta() and this.setSprite()
     //
     init() {
-      this.setStageBlock();
+      this.setBlock();
       this.canvas[this.layers['menu']].style.display = 'inline';
     }  // init()
 
@@ -215,7 +217,7 @@ window.addEventListener('load', function () {
           this.removeSpriteBlock(col, row, this.crntState['layer']);
           this.rotateItemReset();
         } else if (this.areaBlock(col, row, 'item')) {
-          this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/01');
+          this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/00');
           this.crntState['item'] = ''
         } else if (this.areaBlock(col, row, 'block')) {
           this.selectBlock(col, row, -1);
@@ -254,7 +256,7 @@ window.addEventListener('load', function () {
     }  // itemLayer()
 
     activeLayer(col, row) {
-      for (const layer of [ 'layer3', 'layer2', 'layer1' ]) {
+      for (const layer of [ ...this.stageLayers ].reverse()) {
         if (this.blocks[layer][row][col]) return layer;
       }
       return this.crntState['layer'];
@@ -267,26 +269,26 @@ window.addEventListener('load', function () {
       }
     }  // selectItembox()
 
-    setStageBlock() {
-      // find stage src from layer1
-      const src = this.findStageBlock('layer1');
-      const stage = /stage\/(\d{2})/.exec(src)[1];
-      this.crntState['block'] = parseInt(stage);
+    setBlock() {
+      // find block src from layer1
+      const src = this.findBlock('layer1');
+      const block = /\/block\/(\d{2})/.exec(src)[1];
+      this.crntState['block'] = parseInt(block);
       this.updateItembox(this.crntState['block']);
       // set block on menu
       const [ col, row ] = [ this.position['block']['col'], this.position['block']['row'] ];
-      this.setSpriteBlock(col, row, this.layers['menu'], `layer1/stage/${stage}/field/00`);
-    }
+      this.setSpriteBlock(col, row, this.layers['menu'], `layer1/block/${block}/field/00`);
+    }  // findBlock()
 
-    findStageBlock(layer) {
+    findBlock(layer) {
       for (let row = 0; row < this.row; row++) {
         for (let col = 1; col < this.col - 2; col++) {
           const src = this.blocks[layer][row][col];
-          if (/stage/.exec(src)) return src;
+          if (/\/block/.exec(src)) return src;
         }
       }
       // default block
-      return 'layer1/stage/00/field/00';
+      return 'layer1/block/00/field/00';
     }  // stageBlock()
 
     selectItem(col, row) {
@@ -307,21 +309,21 @@ window.addEventListener('load', function () {
     }  // closeItembox()
 
     selectBlock(col, row, rotate) {
-      let stage = this.crntState['block'] + rotate;
-      const lastStage = 5;
-      stage = stage < 0 ? lastStage : stage %= lastStage + 1;
-      this.crntState['block'] = stage;
-      const src = `layer1/stage/0${stage}/field/00`;
+      let block = this.crntState['block'] + rotate;
+      const lastBlock = 5;
+      block = block < 0 ? lastBlock : block %= lastBlock + 1;
+      this.crntState['block'] = block;
+      const src = `layer1/block/0${block}/field/00`;
       this.setSpriteBlock(col, row, this.layers['menu'], src);
       // update sprite
-      this.updateStage(stage);
-      this.updateItem(stage);
-      this.updateItembox(stage);
+      this.updateStage(block);
+      this.updateItem(block);
+      this.updateItembox(block);
     }  // selectBlock()
 
     itemOnBlock(col ,row) {
       let src = '';
-      for (const layer of [ 'layer3', 'layer2', 'layer1' ]) {
+      for (const layer of [ ...this.stageLayers ].reverse()) {
         if (this.blocks[layer][row][col]) {
           src = this.blocks[layer][row][col];
           const position = this.position['item'];
@@ -344,28 +346,28 @@ window.addEventListener('load', function () {
       }
     }  // rotateItemReset()
 
-    replaceStage(src, stage) {
-      const match = /\/(stage\/\d)/.exec(src);
-      return match ? src.replace(/stage\/\d{2}/, `${match[1]}${stage}`) : '';
+    replaceStage(src, block) {
+      const match = /\/(block\/\d)/.exec(src);
+      return match ? src.replace(/block\/\d{2}/, `${match[1]}${block}`) : '';
     }  // replaceStage()
 
-    updateStage(stage) {
-      for (const layer of [ 'layer1', 'layer2', 'layer3' ]) {
+    updateStage(replaceBlock) {
+      for (const layer of this.stageLayers) {
         const block = this.blocks[layer];
         for (let row = 0; row < block.length; row++) {
           for (let col = 0; col < block[row].length; col++) {
-            const src = this.replaceStage(block[row][col], stage);
+            const src = this.replaceStage(block[row][col], replaceBlock);
             if (src) this.setSpriteBlock(col, row, layer, src);
           }
         }
       }
     }  // updateStage()
 
-    updateItem(stage) {
+    updateItem(replaceBlock) {
       const layer = this.layers['menu'];
       const block = this.blocks[layer];
       const [ col, row ] = [ this.position['item']['col'], this.position['item']['row'] ];
-      const src = this.replaceStage(block[row][col], stage);
+      const src = this.replaceStage(block[row][col], replaceBlock);
       if (src) {
         const context = this.contexts[layer];
         context.fillStyle = 'black';
@@ -376,7 +378,7 @@ window.addEventListener('load', function () {
       }
     }  // updateItem()
 
-    updateItembox(stage) {
+    updateItembox(replaceBlock) {
       const layer = this.layers['system'];
       const block = this.blocks[layer];
       const context = this.contexts[layer];
@@ -384,7 +386,7 @@ window.addEventListener('load', function () {
       context.fillRect(this.imageSize * 2, this.imageSize, this.imageSize * 7, this.imageSize);
       const row = 1;
       for (let col = 2; col < block[row].length - 4; col++) {
-        const src = this.replaceStage(block[row][col], stage);
+        const src = this.replaceStage(block[row][col], replaceBlock);
         if (src) this.setSpriteBlock(col, row, layer, src, false);
       }
     }  // updateItembox()
