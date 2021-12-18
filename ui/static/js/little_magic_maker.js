@@ -32,6 +32,11 @@ window.addEventListener('load', function () {
         'grid'  : 'layer7'
       };
 
+      // static parameter
+      this.static = {
+        'lastBlock': 5
+      };
+
       this.initContext();
 
       // enable debug
@@ -308,7 +313,7 @@ window.addEventListener('load', function () {
 
     selectBlock(col, row, rotate) {
       let block = this.crntState['block'] + rotate;
-      const lastBlock = 5;
+      const lastBlock = this.static['lastBlock'];
       block = block < 0 ? lastBlock : block %= lastBlock + 1;
       this.crntState['block'] = block;
       const src = `layer1/block/0${block}/field/00`;
