@@ -32,8 +32,6 @@ window.addEventListener('load', function () {
         'grid'  : 'layer7'
       };
 
-      this.canvas = {};
-      this.contexts = {};
       this.initContext();
 
       // enable debug

@@ -25,6 +25,9 @@ class LittleMagic {
     this.crntState = {
       'graphic': 'sfc',
     };
+
+    this.canvas = {};
+    this.contexts = {};
   }  // constructor
 
   initContext() {
