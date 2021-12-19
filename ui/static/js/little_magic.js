@@ -22,7 +22,7 @@ class LittleMagic {
       'medium': `bold ${this.imageSize * 0.375 }px Merio`
     };
 
-    this.crntState = {
+    this.state = {
       'graphic': 'sfc',
     };
 
@@ -89,7 +89,7 @@ class LittleMagic {
   }  // setSpriteBlocks()
 
   imagesrc(src) {
-    return `/static/image/sprite/${this.crntState['graphic']}/${src}.png`;
+    return `/static/image/sprite/${this.state['graphic']}/${src}.png`;
   } // imagesrc()
 
   async rest(url, restData, callback) {

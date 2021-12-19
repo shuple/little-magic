@@ -12,17 +12,14 @@ window.addEventListener('load', function () {
         'block'     : { 'col': 14, 'row':  5 }
       };
 
-      this.crntState = Object.assign(this.crntState, {
+      this.state = Object.assign(this.state, {
+        'prev' : {},
         'item' : '',
         'col'  : 0,
         'row'  : 0,
         'layer': 'layer1',
         'block': 0
       });
-
-      this.prevState = {
-        'layer' : 'layer1'
-      };
 
       // layer alias
       this.stageLayers = [ 'layer1', 'layer2', 'layer3' ];
@@ -129,7 +126,7 @@ window.addEventListener('load', function () {
       const imageSize = this.imageSize
       const [ x, y ] = [  imageSize * 15, imageSize * 0.6 ];
       const context = this.contexts[this.layers['menu']];
-      const ctx = /(\d)/.exec(this.crntState['layer'])[1];
+      const ctx = /(\d)/.exec(this.state['layer'])[1];
       context.clearRect(x, 0, imageSize, imageSize * 4);
       context.fillText(`: ${xAxis}`, x, y);
       context.fillText(`: ${yAxis}`, x, y * 2);
@@ -175,23 +172,23 @@ window.addEventListener('load', function () {
     }  // init()
 
     leftClick(col, row, event) {
-      switch (this.crntState['layer']) {
+      switch (this.state['layer']) {
       case 'layer1':
       case 'layer2':
       case 'layer3':
         if (this.areaRange(col, row, 'stage')) {
           if (event.ctrlKey) {
-            this.crntState['layer'] = this.activeLayer(col, row);
-            this.removeSpriteBlock(col, row, this.crntState['layer']);
+            this.state['layer'] = this.activeLayer(col, row);
+            this.removeSpriteBlock(col, row, this.state['layer']);
             this.rotateItemReset();
           } else if (event.altKey) {
-            this.crntState['item'] = this.itemOnBlock(col, row);
-            this.crntState['layer'] = this.itemLayer(this.crntState['item']);
-          } else if (this.crntState['item']) {
-            const layer = this.itemLayer(this.crntState['item']);
-            const src = this.rotateItem(col, row, layer, this.crntState['item']);
-            this.crntState['item'] = src;
-            this.crntState['layer'] = this.itemLayer(src);
+            this.state['item'] = this.itemOnBlock(col, row);
+            this.state['layer'] = this.itemLayer(this.state['item']);
+          } else if (this.state['item']) {
+            const layer = this.itemLayer(this.state['item']);
+            const src = this.rotateItem(col, row, layer, this.state['item']);
+            this.state['item'] = src;
+            this.state['layer'] = this.itemLayer(src);
             this.setSpriteBlock(col, row, layer, src);
           }
         } else if (this.areaBlock(col, row, 'item')) {
@@ -211,28 +208,28 @@ window.addEventListener('load', function () {
     }  // leftClick()
 
     rightClick(col, row) {
-      switch (this.crntState['layer']) {
+      switch (this.state['layer']) {
       case 'layer1':
       case 'layer2':
       case 'layer3':
         if (this.areaRange(col, row, 'stage')) {
-          this.crntState['layer'] = this.activeLayer(col, row);
-          this.removeSpriteBlock(col, row, this.crntState['layer']);
+          this.state['layer'] = this.activeLayer(col, row);
+          this.removeSpriteBlock(col, row, this.state['layer']);
           this.rotateItemReset();
         } else if (this.areaBlock(col, row, 'item')) {
           this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/00');
-          this.crntState['item'] = ''
+          this.state['item'] = ''
         } else if (this.areaBlock(col, row, 'block')) {
           this.selectBlock(col, row, -1);
         }
         break;
       case this.layers['system']:
         if (this.areaRange(col, row, 'stage')) {
-          this.crntState['layer'] = this.prevState['layer']
+          this.state['layer'] = this.state['prev']['layer']
           this.closeItembox();
         } else if (this.areaBlock(col, row, 'item')) {
-          this.crntState['layer'] = this.prevState['layer']
-          this.crntState['item'] = ''
+          this.state['layer'] = this.state['prev']['layer']
+          this.state['item'] = ''
           this.closeItembox();
         } else if (this.areaBlock(col, row, 'block')) {
           this.selectBlock(col, row, -1);
@@ -262,11 +259,11 @@ window.addEventListener('load', function () {
       for (const layer of [ ...this.stageLayers ].reverse()) {
         if (this.blocks[layer][row][col]) return layer;
       }
-      return this.crntState['layer'];
+      return this.state['layer'];
     }  // activeBlock()
 
     selectItembox() {
-      this.crntState['layer'] = this.layers['system'];
+      this.state['layer'] = this.layers['system'];
       for (const layer of [ 'system', 'grid']) {
         this.canvas[this.layers[layer]].style.display = 'inline';
       }
@@ -276,8 +273,8 @@ window.addEventListener('load', function () {
       // find block src from layer1
       const src = this.findBlock('layer1');
       const block = /\/block\/(\d{2})/.exec(src)[1];
-      this.crntState['block'] = parseInt(block);
-      this.updateItembox(this.crntState['block']);
+      this.state['block'] = parseInt(block);
+      this.updateItembox(this.state['block']);
       // set block on menu
       const [ col, row ] = [ this.position['block']['col'], this.position['block']['row'] ];
       this.setSpriteBlock(col, row, this.layers['menu'], `layer1/block/${block}/field/00`);
@@ -295,12 +292,12 @@ window.addEventListener('load', function () {
     }  // stageBlock()
 
     selectItem(col, row) {
-      this.crntState['item'] = this.blocks[this.layers['system']][row][col]
-      if (this.crntState['item']) {
-        const layer = /^(layer\d)/.exec(this.crntState['item']);
+      this.state['item'] = this.blocks[this.layers['system']][row][col]
+      if (this.state['item']) {
+        const layer = /^(layer\d)/.exec(this.state['item']);
         const position = this.position['item'];
-        this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], this.crntState['item']);
-        [ this.crntState['layer'], this.prevState['layer'] ] = [ layer[1], layer[1] ];
+        this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], this.state['item']);
+        [ this.state['layer'], this.state['prev']['layer'] ] = [ layer[1], layer[1] ];
         this.closeItembox();
       }
     }  // selectItem()
@@ -312,10 +309,10 @@ window.addEventListener('load', function () {
     }  // closeItembox()
 
     selectBlock(col, row, rotate) {
-      let block = this.crntState['block'] + rotate;
+      let block = this.state['block'] + rotate;
       const lastBlock = this.static['lastBlock'];
       block = block < 0 ? lastBlock : block %= lastBlock + 1;
-      this.crntState['block'] = block;
+      this.state['block'] = block;
       const src = `layer1/block/0${block}/field/00`;
       this.setSpriteBlock(col, row, this.layers['menu'], src);
       // update sprite
@@ -343,9 +340,9 @@ window.addEventListener('load', function () {
     }  // rotateItem
 
     rotateItemReset() {
-      if (this.crntState['item'] && 'rotateItem' in this.metaData[this.crntState['item']]) {
+      if (this.state['item'] && 'rotateItem' in this.metaData[this.state['item']]) {
         const [ col, row ] = [ this.position['item']['col'], this.position['item']['row'] ];
-        this.crntState['item'] = this.blocks[this.layers['menu']][row][col]
+        this.state['item'] = this.blocks[this.layers['menu']][row][col]
       }
     }  // rotateItemReset()
 
@@ -376,7 +373,7 @@ window.addEventListener('load', function () {
         context.fillStyle = 'black';
         context.fillRect(
           this.imageSize * col, this.imageSize * row, this.imageSize, this.imageSize);
-          this.crntState['item'] = src;
+          this.state['item'] = src;
           this.setSpriteBlock(col, row, layer, src, false);
       }
     }  // updateItem()
