@@ -18,7 +18,8 @@ window.addEventListener('load', function () {
         'col'  : 0,
         'row'  : 0,
         'layer': 'layer1',
-        'block': 0
+        'block': 0,
+        'lastBlock' : 0
       });
 
       // layer alias
@@ -168,6 +169,7 @@ window.addEventListener('load', function () {
     //
     init() {
       this.setBlock();
+      this.setLastBlock();
       this.canvas[this.layers['menu']].style.display = 'inline';
     }  // init()
 
@@ -291,6 +293,12 @@ window.addEventListener('load', function () {
       return 'layer1/block/00/field/00';
     }  // stageBlock()
 
+    setLastBlock() {
+      while (`layer1/block/${this.state['lastBlock']}/field/00` in this.metaData) {
+        this.state['lastBlock']++;
+      }
+    }  // lastBlock
+
     selectItem(col, row) {
       this.state['item'] = this.blocks[this.layers['system']][row][col]
       if (this.state['item']) {
@@ -310,8 +318,7 @@ window.addEventListener('load', function () {
 
     selectBlock(col, row, rotate) {
       let block = this.state['block'] + rotate;
-      const lastBlock = this.static['lastBlock'];
-      block = block < 0 ? lastBlock : block %= lastBlock + 1;
+      block = block < 0 ? this.state['lastBlock'] : block %= this.state['lastBlock'] + 1;
       this.state['block'] = block;
       const src = `layer1/block/0${block}/field/00`;
       this.setSpriteBlock(col, row, this.layers['menu'], src);
