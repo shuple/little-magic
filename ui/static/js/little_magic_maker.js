@@ -13,7 +13,7 @@ window.addEventListener('load', function () {
       };
 
       this.state = Object.assign(this.state, {
-        'prev' : {},
+        'prev' : { 'layer': 'layer1' },
         'item' : '',
         'col'  : 0,
         'row'  : 0,
