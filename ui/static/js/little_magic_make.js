@@ -1,7 +1,7 @@
 import { LittleMagic, setSprite, setMeta } from './little_magic.js';
 
 window.addEventListener('load', function () {
-  class LittleMagicMaker extends LittleMagic {
+  class LittleMagicMake extends LittleMagic {
     constructor() {
       super();
 
@@ -397,9 +397,9 @@ window.addEventListener('load', function () {
         if (src) this.setSpriteBlock(col, row, layer, src, false);
       }
     }  // updateItembox()
-  }  // class LittleMagicMaker
+  }  // class LittleMagicMake
 
-  const littleMagic = new LittleMagicMaker();
+  const littleMagic = new LittleMagicMake();
   const init = async function() {
     await littleMagic.rest('/post/read',
       { 'file': [ 'meta/make' ], 'graphic': 'sfc', 'returnData': {} }, setMeta);
