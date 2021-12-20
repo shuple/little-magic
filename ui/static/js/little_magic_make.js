@@ -129,6 +129,7 @@ class LittleMagicMake extends LittleMagic {
     const context = this.contexts[this.layers['menu']];
     const ctx = /(\d)/.exec(this.state['layer'])[1];
     context.clearRect(x, 0, imageSize, imageSize * 4);
+    context.fillStyle = 'white';
     context.fillText(`: ${xAxis}`, x, y);
     context.fillText(`: ${yAxis}`, x, y * 2);
     context.fillText(`: ${col}`  , x, y * 3);
