@@ -234,6 +234,7 @@ class LittleMagicMake extends LittleMagic {
         this.closeItembox();
       } else if (this.areaBlock(col, row, 'item')) {
         this.state['layer'] = this.state['prev']['layer']
+        this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/00');
         this.state['item'] = ''
         this.closeItembox();
       } else if (this.areaBlock(col, row, 'block')) {
