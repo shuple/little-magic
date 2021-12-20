@@ -202,6 +202,9 @@ class LittleMagicMake extends LittleMagic {
     case this.layers['system']:
       if (this.areaRange(col, row, 'stage')) {
         this.selectItem(col, row);
+      } else if (this.areaBlock(col, row, 'item')) {
+        this.state['layer'] = this.state['prev']['layer']
+        this.closeItembox();
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectBlock(col, row, 1);
       }
