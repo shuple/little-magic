@@ -294,7 +294,7 @@ window.addEventListener('load', function () {
     }  // stageBlock()
 
     setLastBlock() {
-      while (`layer1/block/${this.state['lastBlock']}/field/00` in this.metaData) {
+      while (`layer1/block/0${this.state['lastBlock']}/field/00` in this.metaData) {
         this.state['lastBlock']++;
       }
     }  // lastBlock
