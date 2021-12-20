@@ -60,7 +60,7 @@ class LittleMagicMake extends LittleMagic {
 
   systemContext() {
     const context = this.contexts[this.layers['system']];
-    context.fillStyle = 'black';
+    context.fillStyle = '#222';
     context.fillRect(this.imageSize, 0, this.gameWidth - this.imageSize * 3, this.gameHeight);
     this.canvas[this.layers['system']].style.display = 'none';
   }  // systemContext()
