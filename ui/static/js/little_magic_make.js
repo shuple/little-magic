@@ -113,9 +113,9 @@ class LittleMagicMake extends LittleMagic {
     const [ x, y ] = [ (imageSize * 14) + (imageSize / 8), imageSize * 0.6 ];
     const context = this.contexts[this.layers['menu']];
     context.font = this.font['medium'];
-    context.fillStyle = 'white';
     context.textAlign = 'start';
     context.textBaseline = 'alphabetic';
+    context.fillStyle = 'white';
     context.fillText('X'  , x, y);
     context.fillText('Y'  , x, y * 2);
     context.fillText('COL', x, y * 3);
