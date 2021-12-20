@@ -37,7 +37,7 @@ class LittleMagic {
 
   setGameSize() {
     this.scrollWidth = this.canvas['layer0'].scrollWidth / this.col;
-    this.font= { 'medium': `bold ${this.imageSize * 0.375 }px Merio` };
+    this.font= { 'medium': `bold ${this.imageSize * 0.35 }px Merio` };
   }  // setGameSize()
 
   setSprite(restData) {
