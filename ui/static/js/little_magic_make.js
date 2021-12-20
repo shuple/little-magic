@@ -35,19 +35,19 @@ class LittleMagicMake extends LittleMagic {
       'lastBlock': 5
     };
 
-    this.initContext();
+    // initialize context
+    this.makeContext();
 
     // enable debug
     this.mouseDebug();
   }  // constructor()
 
-  initContext() {
-    super.initContext();
+  makeContext() {
     this.menuContext();
     this.systemContext();
     this.gridContext();
     this.canvas[this.layers['menu']].style.display = 'none';
-  }  // initContext()
+  }
 
   menuContext() {
     const context = this.contexts[this.layers['menu']];
@@ -159,7 +159,7 @@ class LittleMagicMake extends LittleMagic {
   }  // mousePosition()
 
   mousePositionToIndex(x, y) {
-    const [ col, row ] = [ parseInt(x / this.imageSize), parseInt(y / this.imageSize) ];
+    const [ col, row ] = [ parseInt(x / this.scrollWidth), parseInt(y / this.scrollWidth) ];
     if (isNaN(col)) col = 0;
     if (isNaN(row)) row = 0;
     return [ col, row ];

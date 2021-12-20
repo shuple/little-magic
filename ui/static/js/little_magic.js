@@ -8,28 +8,22 @@ class LittleMagic {
     // object[sprite]: {}
     this.metaData = {};
 
-    // default size
-    const [ gameWidth, gameHeight ] = [ 512, 448 ];
-    const imageSize = 32;
-    [ this.col, this.row ] = [ gameWidth / imageSize, gameHeight / imageSize ]
-
-    // adjust scale
-    const [ clientWidth, clientHeight ] =
-      [ document.documentElement.clientWidth, document.documentElement.clientHeight ];
-    this.scale = (clientWidth > gameWidth && clientHeight > gameHeight) ? 1 : 0.75;
-    this.imageSize = this.scale * imageSize;
-    [this.gameWidth, this.gameHeight] = [ this.imageSize * this.col, this.imageSize * this.row ];
-
-    this.font = {
-      'medium': `bold ${this.imageSize * 0.375 }px Merio`
-    };
-
+    // game state
     this.state = {
       'graphic': 'sfc',
     };
 
+    // static game size
+    this.imageSize = 32;
+    [ this.col, this.row ] = [ 16, 14 ];
+    [ this.gameWidth, this.gameHeight ] =
+      [ this.col * this.imageSize, this.row * this.imageSize ];
+
     this.canvas = {};
     this.contexts = {};
+
+    this.initContext();
+    this.setGameSize();
   }  // constructor
 
   initContext() {
@@ -40,6 +34,11 @@ class LittleMagic {
       this.contexts[canvas.id] = canvas.getContext('2d');
     }
   }   // initContext()
+
+  setGameSize() {
+    this.scrollWidth = this.canvas['layer0'].scrollWidth / this.col;
+    this.font= { 'medium': `bold ${this.imageSize * 0.375 }px Merio` };
+  }  // setGameSize()
 
   setSprite(restData) {
     for (const data of restData) {
@@ -76,9 +75,7 @@ class LittleMagic {
   }  // removeSpriteBlock()
 
   setSpriteBlocks(layer, layerData) {
-    const [ colSize, rowSize ] =
-      [ this.gameWidth / this.imageSize, this.gameHeight / this.imageSize ];
-    this.blocks[layer] = [...Array(rowSize)].map(x=>Array(colSize).fill(''));
+    this.blocks[layer] = [...Array(this.row)].map(x=>Array(this.col).fill(''));
     const context = this.contexts[layer];
     context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     for (let row = 0; row < layerData.length; row++) {
