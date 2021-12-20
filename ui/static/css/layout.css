@@ -14,20 +14,18 @@ div.game {
 
 div.game canvas {
   position: absolute;
-  width: 50%;
 }
 
 /* responsive design
  * -------------------------------------------------- */
-@media (max-width: 599px) {
-  div.game canvas { width: 100%; }
+@media (orientation: landscape) {
+  div.game canvas {
+    height: 100%;
+  }
 }
 
-@media (min-width: 600px) and (max-width: 767px) {
-}
-
-@media (min-width: 768px) {
-}
-
-@media(min-width: 1040px) {
+@media (orientation: portrait) {
+  div.game canvas {
+    width: 100%;
+  }
 }
