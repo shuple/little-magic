@@ -1,3 +1,5 @@
+export { LittleMagic, setSprite, setMeta };
+
 class LittleMagic {
   constructor() {
     // object[layer]: array[row][col]
@@ -118,5 +120,3 @@ const setSprite = function(littleMagic, restData) {
 const setMeta = function(littleMagic, restData) {
   littleMagic.metaData = restData;
 }  // setMeta()
-
-export { LittleMagic, setSprite, setMeta };
