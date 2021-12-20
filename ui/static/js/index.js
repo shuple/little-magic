@@ -22,4 +22,9 @@ window.addEventListener('load', function () {
       littleMagic.mouseEvent(canvas, event);
     });
   }
+
+  // resize event
+  window.addEventListener('resize', function() {
+    littleMagic.setGameSize();
+  });
 });
