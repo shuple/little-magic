@@ -356,10 +356,9 @@ class LittleMagicMake extends LittleMagic {
     if (src) {
       const context = this.contexts[layer];
       context.fillStyle = 'black';
-      context.fillRect(
-        this.imageSize * col, this.imageSize * row, this.imageSize, this.imageSize);
-        this.state['item'] = src;
-        this.setSpriteBlock(col, row, layer, src, false);
+      context.fillRect(this.imageSize * col, this.imageSize * row, this.imageSize, this.imageSize);
+      this.state['item'] = src;
+      this.setSpriteBlock(col, row, layer, src, false);
     }
   }  // updateItem()
 
