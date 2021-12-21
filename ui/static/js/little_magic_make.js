@@ -192,6 +192,8 @@ class LittleMagicMake extends LittleMagic {
         this.closeItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectBlock(col, row, 1);
+      } else if (this.areaRange(col, row, 'menu')) {
+        this.closeItembox(this.state['prev']['layer']);
       }
       break;
     }
@@ -222,6 +224,8 @@ class LittleMagicMake extends LittleMagic {
         this.closeItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectBlock(col, row, -1);
+      } else if (this.areaRange(col, row, 'menu')) {
+        this.closeItembox(this.state['prev']['layer']);
       }
       break;
     default:
