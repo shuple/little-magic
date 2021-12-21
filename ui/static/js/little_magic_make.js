@@ -128,8 +128,9 @@ class LittleMagicMake extends LittleMagic {
     case 0:
       this.leftClick(col, row, event);
       break;
-    // right click
-    case 2:
+    // contextmenu
+    case -1:
+    case  2:
       this.rightClick(col, row);
       break;
     default:
