@@ -6,10 +6,12 @@ class LittleMagicMake extends LittleMagic {
     super();
 
     this.position = {
-      'stageEnd'  : { 'col': 13, 'row': 13 },
-      'stageStart': { 'col':  1, 'row':  0 },
-      'item'      : { 'col': 14, 'row':  4 },
-      'block'     : { 'col': 14, 'row':  5 }
+      'stageEnd'    : { 'col': 13, 'row': 13 },
+      'stageStart'  : { 'col':  1, 'row':  0 },
+      'itemboxStart': { 'col':  6, 'row':  0 },
+      'itemboxEnd'  : { 'col': 13, 'row':  6 },
+      'item'        : { 'col': 14, 'row':  4 },
+      'block'       : { 'col': 14, 'row':  5 }
     };
 
     this.state = Object.assign(this.state, {
@@ -176,8 +178,11 @@ class LittleMagicMake extends LittleMagic {
       }
       break;
     case this.layers['system']:
-      if (this.areaRange(col, row, 'stage')) {
+      if (this.areaRange(col, row, 'itembox')) {
         this.selectItem(col, row);
+      } else if (this.areaRange(col, row, 'stage')) {
+        this.state['layer'] = this.state['prev']['layer'];
+        this.closeItembox();
       } else if (this.areaBlock(col, row, 'item')) {
         this.state['layer'] = this.state['prev']['layer']
         this.closeItembox();
