@@ -26,8 +26,7 @@ class LittleMagicMake extends LittleMagic {
     this.stageLayers = [ 'layer1', 'layer2', 'layer3' ];
     this.layers  = {
       'menu'  : 'layer5',
-      'system': 'layer6',
-      'grid'  : 'layer7'
+      'system': 'layer6'
     };
 
     // static parameter
@@ -45,7 +44,6 @@ class LittleMagicMake extends LittleMagic {
   makeContext() {
     this.menuContext();
     this.systemContext();
-    this.gridContext();
     this.canvas[this.layers['menu']].style.display = 'none';
   }
 
@@ -61,34 +59,11 @@ class LittleMagicMake extends LittleMagic {
   systemContext() {
     const context = this.contexts[this.layers['system']];
     context.fillStyle = '#222';
-    context.fillRect(this.imageSize, 0, this.gameWidth - this.imageSize * 3, this.gameHeight);
+    context.fillRect(
+      this.imageSize * 6, 0,
+      this.gameWidth - this.imageSize * 8, this.gameHeight - this.imageSize * 7);
     this.canvas[this.layers['system']].style.display = 'none';
   }  // systemContext()
-
-  gridContext() {
-    const context = this.contexts[this.layers['grid']];
-    const imageSize = this.imageSize
-    const [ col, row ] = [ 1, 1 ];
-    const [ colEnd, rowEnd ] = [ this.col - 3, this.row - 1];
-    const color = 'red';
-    for (let i = 0; i < colEnd; i++) {
-      // col line
-      this.drawLine(
-        context,
-        [ imageSize * 2, imageSize * (row + i)],
-        [ imageSize * colEnd, imageSize * (row + i)], color
-      );
-      // row line
-      if (i > 0) {
-        this.drawLine(
-          context,
-          [ imageSize * (col + i), imageSize ],
-          [ imageSize * (col + i), imageSize * rowEnd ], color
-        );
-      }
-    }
-    this.canvas[this.layers['grid']].style.display = 'none';
-  }  // gridContext()
 
   drawLine(context, begin, end, stroke = 'black', width = 1) {
     context.strokeStyle = stroke;
@@ -270,10 +245,9 @@ class LittleMagicMake extends LittleMagic {
   }  // activeBlock()
 
   selectItembox() {
-    this.state['layer'] = this.layers['system'];
-    for (const layer of [ 'system', 'grid']) {
-      this.canvas[this.layers[layer]].style.display = 'inline';
-    }
+    const layer = this.layers['system'];
+    this.state['layer'] = layer;
+    this.canvas[layer].style.display = 'inline';
   }  // selectItembox()
 
   setBlock() {
@@ -317,9 +291,7 @@ class LittleMagicMake extends LittleMagic {
   }  // selectItem()
 
   closeItembox() {
-    for (const layer of [ 'system', 'grid']) {
-      this.canvas[this.layers[layer]].style.display = 'none';
-    }
+    this.canvas[this.layers['system']].style.display = 'none';
   }  // closeItembox()
 
   selectBlock(col, row, rotate) {
@@ -395,10 +367,10 @@ class LittleMagicMake extends LittleMagic {
     const layer = this.layers['system'];
     const block = this.blocks[layer];
     const context = this.contexts[layer];
-    context.fillStyle = 'black';
-    context.fillRect(this.imageSize * 2, this.imageSize, this.imageSize * 7, this.imageSize);
+    context.fillStyle = '#222';
+    context.fillRect(this.imageSize * 9, this.imageSize, this.imageSize * 4, this.imageSize);
     const row = 1;
-    for (let col = 2; col < block[row].length - 4; col++) {
+    for (let col = 2; col < block[row].length - 3; col++) {
       const src = this.replaceStage(block[row][col], replaceBlock);
       if (src) this.setSpriteBlock(col, row, layer, src, false);
     }
