@@ -6,6 +6,8 @@ class LittleMagicMake extends LittleMagic {
     super();
 
     this.position = {
+      'menuEnd'     : { 'col': 14, 'row':  0 },
+      'menuStart'   : { 'col': 15, 'row': 13 },
       'stageEnd'    : { 'col': 13, 'row': 13 },
       'stageStart'  : { 'col':  1, 'row':  0 },
       'itemboxStart': { 'col':  6, 'row':  0 },
@@ -59,11 +61,15 @@ class LittleMagicMake extends LittleMagic {
   }  // menuContext()
 
   systemContext() {
+    const [ x, y ] = [ this.imageSize * this.position['itemboxStart']['col'], 0 ];
+    const width = this.gameWidth - this.imageSize *
+      (this.position['itemboxEnd']['col'] - this.position['itemboxStart']['col'] + 1);
+    const height = this.gameHeight - this.imageSize * this.position['itemboxEnd']['row'];
+    const itemboxStart = this.position['itemboxStart'];
+    const itemboxEnd = this.position['itemboxEnd'];
     const context = this.contexts[this.layers['system']];
     context.fillStyle = '#222';
-    context.fillRect(
-      this.imageSize * 6, 0,
-      this.gameWidth - this.imageSize * 8, this.gameHeight - this.imageSize * 7);
+    context.fillRect( x, y, width, height);
     this.canvas[this.layers['system']].style.display = 'none';
   }  // systemContext()
 
@@ -372,7 +378,9 @@ class LittleMagicMake extends LittleMagic {
     const block = this.blocks[layer];
     const context = this.contexts[layer];
     context.fillStyle = '#222';
-    context.fillRect(this.imageSize * 9, this.imageSize, this.imageSize * 4, this.imageSize);
+    context.fillRect(
+      this.imageSize * (this.col - this.position['itemboxStart']['col']), this.imageSize,
+      this.imageSize * 4, this.imageSize);
     const row = 1;
     for (let col = 2; col < block[row].length - 3; col++) {
       const src = this.replaceStage(block[row][col], replaceBlock);
