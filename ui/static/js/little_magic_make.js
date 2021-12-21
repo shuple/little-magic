@@ -187,11 +187,9 @@ class LittleMagicMake extends LittleMagic {
       if (this.areaRange(col, row, 'itembox')) {
         this.selectItem(col, row);
       } else if (this.areaRange(col, row, 'stage')) {
-        this.state['layer'] = this.state['prev']['layer'];
-        this.closeItembox();
+        this.closeItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'item')) {
-        this.state['layer'] = this.state['prev']['layer']
-        this.closeItembox();
+        this.closeItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectBlock(col, row, 1);
       }
@@ -217,13 +215,11 @@ class LittleMagicMake extends LittleMagic {
       break;
     case this.layers['system']:
       if (this.areaRange(col, row, 'stage')) {
-        this.state['layer'] = this.state['prev']['layer']
-        this.closeItembox();
+        this.closeItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'item')) {
-        this.state['layer'] = this.state['prev']['layer']
         this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/00');
         this.state['item'] = ''
-        this.closeItembox();
+        this.closeItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectBlock(col, row, -1);
       }
@@ -301,7 +297,8 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // selectItem()
 
-  closeItembox() {
+  closeItembox(layer) {
+    if (layer) this.state['layer'] = layer;
     this.canvas[this.layers['system']].style.display = 'none';
   }  // closeItembox()
 
