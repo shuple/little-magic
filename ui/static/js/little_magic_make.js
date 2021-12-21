@@ -6,8 +6,8 @@ class LittleMagicMake extends LittleMagic {
     super();
 
     this.position = {
-      'menuEnd'     : { 'col': 14, 'row':  0 },
-      'menuStart'   : { 'col': 15, 'row': 13 },
+      'menuStart'   : { 'col': 14, 'row':  0 },
+      'menuEnd'     : { 'col': 15, 'row': 13 },
       'stageEnd'    : { 'col': 13, 'row': 13 },
       'stageStart'  : { 'col':  1, 'row':  0 },
       'itemboxStart': { 'col':  6, 'row':  0 },
