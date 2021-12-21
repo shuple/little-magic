@@ -8,8 +8,8 @@ class LittleMagicMake extends LittleMagic {
     this.position = {
       'menuStart'   : { 'col': 14, 'row':  0 },
       'menuEnd'     : { 'col': 15, 'row': 13 },
-      'stageEnd'    : { 'col': 13, 'row': 13 },
       'stageStart'  : { 'col':  1, 'row':  0 },
+      'stageEnd'    : { 'col': 13, 'row': 13 },
       'itemboxStart': { 'col':  6, 'row':  0 },
       'itemboxEnd'  : { 'col': 13, 'row':  6 },
       'item'        : { 'col': 14, 'row':  4 },
