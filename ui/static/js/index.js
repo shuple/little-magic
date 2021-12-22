@@ -12,15 +12,16 @@ window.addEventListener('load', function () {
   }
   init();
 
-  // event listener
   const canvas = document.getElementById('control')
 
   // mouse event
+  const mouseHandler = function(event) {
+    event.preventDefault();
+    littleMagic.mouseEvent(canvas, event);
+  }  // mouseHandler()
+
   for (const type of [ 'click', 'contextmenu' ]) {
-    canvas.addEventListener(type, function(event) {
-      event.preventDefault();
-      littleMagic.mouseEvent(canvas, event);
-    });
+    canvas.addEventListener(type, mouseHandler);
   }
 
   // resize event
