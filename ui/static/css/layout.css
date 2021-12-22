@@ -5,6 +5,12 @@ body {
   overflow: hidden;
   font-family: 'Meiryo', 'Hiragino Kaku Gothic Pro', sans-serif;
   background-color: #000;
+  /* disable text selection */
+  user-select: none;          /* Chrome Opera */
+  -ms-user-select: none;      /* Edge         */
+  -moz-user-select: none;     /* Firefox      */
+  -webkit-user-select:none;   /* Safari       */
+  -webkit-touch-callout:none; /* Safari IOS   */
 }
 
 div.game {
