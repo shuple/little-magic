@@ -16,8 +16,8 @@ window.addEventListener('load', function () {
   const canvas = document.getElementById('control')
 
   // mouse event
-  for (const mouseEvent of [ 'click', 'contextmenu' ]) {
-    canvas.addEventListener(mouseEvent, function(event) {
+  for (const type of [ 'click', 'contextmenu' ]) {
+    canvas.addEventListener(type, function(event) {
       event.preventDefault();
       littleMagic.mouseEvent(canvas, event);
     });
