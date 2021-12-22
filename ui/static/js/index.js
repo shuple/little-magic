@@ -15,7 +15,7 @@ window.addEventListener('load', function () {
   // control canvas layer
   const canvas = document.querySelector('canvas:last-child');
 
-  // mouse event
+  // click event
   const mouseHandler = function(event) {
     event.preventDefault();
     littleMagic.mouseEvent(canvas, event);
@@ -24,20 +24,27 @@ window.addEventListener('load', function () {
     canvas.addEventListener(type, mouseHandler);
   }
 
-  // tap event, emulate right click with tap hold
+  // tap event, hold emulates right click
+  let [ touchTimer, touchDuration ] = [ null, 300 ];
+  let tapLock = false;
   const touchHandler = function(event) {
     event.preventDefault();
-    if (event.touches.length === 1) {
-      let touch = event.touches[0];
-      touch.button = 2;
-      littleMagic.mouseEvent(canvas, touch);
-    }
+    tapLock = true;
+    let touch = event.touches[0];
+    touch.button = 2;
+    littleMagic.mouseEvent(canvas, touch);
   }  // touchHanlder()
-  let [ touchTimer, touchDuration ] = [ null, 300 ];
   const touchStart = function(event) {
-    touchTimer = setTimeout(touchHandler, touchDuration, event);
+    if (event.touches.length === 1)
+      touchTimer = setTimeout(touchHandler, touchDuration, event);
+    else
+      event.preventDefault();
   }
   const touchEnd = function(event) {
+    if (tapLock) {
+      event.preventDefault();
+      tapLock = false;
+    }
     if (touchTimer)
       clearTimeout(touchTimer);
   }
