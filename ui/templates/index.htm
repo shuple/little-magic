@@ -1,9 +1,8 @@
 {% extends 'layout.htm' %}
 {% block content %}
 <div class="game">
-  {% for i in range(8) %}
+  {% for i in range(9) %}
     <canvas id="layer{{i}}"></canvas>
   {% endfor %}
-  <canvas id="control"></canvas>
 </div>
 {% endblock %}

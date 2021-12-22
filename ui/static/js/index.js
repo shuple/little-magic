@@ -12,7 +12,8 @@ window.addEventListener('load', function () {
   }
   init();
 
-  const canvas = document.getElementById('control')
+  // control canvas layer
+  const canvas = document.querySelector('canvas:last-child');
 
   // mouse event
   const mouseHandler = function(event) {
