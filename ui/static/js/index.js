@@ -20,10 +20,29 @@ window.addEventListener('load', function () {
     event.preventDefault();
     littleMagic.mouseEvent(canvas, event);
   }  // mouseHandler()
-
   for (const type of [ 'click', 'contextmenu' ]) {
     canvas.addEventListener(type, mouseHandler);
   }
+
+  // tap event, emulate right click with tap hold
+  const touchHandler = function(event) {
+    event.preventDefault();
+    if (event.touches.length === 1) {
+      let touch = event.touches[0];
+      touch.button = 2;
+      littleMagic.mouseEvent(canvas, touch);
+    }
+  }  // touchHanlder()
+  let [ touchTimer, touchDuration ] = [ null, 300 ];
+  const touchStart = function(event) {
+    touchTimer = setTimeout(touchHandler, touchDuration, event);
+  }
+  const touchEnd = function(event) {
+    if (touchTimer)
+      clearTimeout(touchTimer);
+  }
+  canvas.addEventListener('touchstart', touchStart);
+  canvas.addEventListener('touchend', touchEnd);
 
   // resize event
   window.addEventListener('resize', function() {
