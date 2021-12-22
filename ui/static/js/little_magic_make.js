@@ -144,7 +144,7 @@ class LittleMagicMake extends LittleMagic {
   }  // mousePosition()
 
   mousePositionToIndex(x, y) {
-    const [ col, row ] = [ parseInt(x / this.scrollWidth), parseInt(y / this.scrollWidth) ];
+    let [ col, row ] = [ parseInt(x / this.scrollWidth), parseInt(y / this.scrollWidth) ];
     if (isNaN(col)) col = 0;
     if (isNaN(row)) row = 0;
     return [ col, row ];
