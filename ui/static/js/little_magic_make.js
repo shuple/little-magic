@@ -163,11 +163,7 @@ class LittleMagicMake extends LittleMagic {
     case 'layer2':
     case 'layer3':
       if (this.areaRange(col, row, 'stage')) {
-        if (event.ctrlKey) {
-          this.state['layer'] = this.activeLayer(col, row);
-          this.removeSpriteBlock(col, row, this.state['layer']);
-          this.rotateItemReset();
-        } else if (event.altKey) {
+        if (event.altKey) {
           this.state['item'] = this.itemOnBlock(col, row);
           this.state['layer'] = this.itemLayer(this.state['item']);
         } else if (this.state['item']) {
