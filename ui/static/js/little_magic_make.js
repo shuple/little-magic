@@ -280,7 +280,7 @@ class LittleMagicMake extends LittleMagic {
   }  // stageBlock()
 
   setLastBlock() {
-    while (`layer1/block/0${this.state['lastBlock']}/field/00` in this.metaData)
+    while (`layer1/block/0${this.state['lastBlock']}/field/00` in this.sprite)
       this.state['lastBlock']++;
     // handle overflow
     this.state['lastBlock']--;
@@ -328,12 +328,12 @@ class LittleMagicMake extends LittleMagic {
   }  // itemOnBlock()
 
   rotateItem(col, row, layer, src) {
-    return this.blocks[layer][row][col] == src && 'rotateItem' in this.metaData[src] ?
-      this.metaData[src]['rotateItem'] : src;
+    return this.blocks[layer][row][col] == src && 'rotateItem' in this.sprite[src] ?
+      this.sprite[src]['rotateItem'] : src;
   }  // rotateItem
 
   rotateItemReset() {
-    if (this.state['item'] && 'rotateItem' in this.metaData[this.state['item']]) {
+    if (this.state['item'] && 'rotateItem' in this.sprite[this.state['item']]) {
       const [ col, row ] = [ this.position['item']['col'], this.position['item']['row'] ];
       this.state['item'] = this.blocks[this.layers['menu']][row][col]
     }

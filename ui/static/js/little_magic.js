@@ -6,7 +6,7 @@ class LittleMagic {
     this.blocks = {};
 
     // object[sprite]: {}
-    this.metaData = {};
+    this.sprite = {};
 
     // object[component]: { 'col':, 'row': }
     this.position = {}
@@ -58,7 +58,7 @@ class LittleMagic {
   }  // setSprite()
 
   setMeta(restData) {
-    this.metaData = restData['sprite']
+    this.sprite = restData['sprite']
   }  // setMeta
 
   setSpriteBlock(col, row, layer, src, overwrite = true) {
