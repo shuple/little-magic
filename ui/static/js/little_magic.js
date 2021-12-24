@@ -8,6 +8,9 @@ class LittleMagic {
     // object[sprite]: {}
     this.metaData = {};
 
+    // object[component]: { 'col':, 'row': }
+    this.position = {}
+
     // game state
     this.state = {
       'graphic': 'sfc',
@@ -53,6 +56,10 @@ class LittleMagic {
       }
     }
   }  // setSprite()
+
+  setMeta(restData) {
+    this.metaData = restData['sprite']
+  }  // setMeta
 
   setSpriteBlock(col, row, layer, src, overwrite = true) {
     if (src === this.blocks[layer][row][col]) return;
@@ -115,5 +122,5 @@ const setSprite = function(littleMagic, restData) {
 };  // const setSprite()
 
 const setMeta = function(littleMagic, restData) {
-  littleMagic.metaData = restData;
+  littleMagic.setMeta(restData);
 }  // setMeta()

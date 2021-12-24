@@ -24,7 +24,7 @@ class Sprite:
         }
 
         # dict, key: relative path to image, dict meta data
-        self.image_dict = {}
+        self.image_dict = { 'sprite': {} }
 
         # dict, key: relative path to image, value: PIL Image
         self.image_data = {}
@@ -56,7 +56,7 @@ class Sprite:
             for file in files:
                 content_path = re.sub(f"{self.path['sprite']}/", '', root)
                 content_path += f'/{os.path.splitext(file)[0]}'
-                self.image_dict[content_path] = {}
+                self.image_dict['sprite'][content_path] = {}
             #  for
         #  for
     #  def load_image_dict()
