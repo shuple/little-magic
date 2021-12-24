@@ -5,9 +5,10 @@ window.addEventListener('load', function () {
   const littleMagic = new LittleMagicMake();
   const init = async function() {
     await littleMagic.rest('/post/read',
-      { 'file': [ 'meta/make' ], 'graphic': 'sfc', 'returnData': {} }, setMeta);
+      { 'file': [ 'meta/make', 'meta/make_position' ], 'graphic': 'sfc', 'returnData': {} }, setMeta);
     await littleMagic.rest('/post/read',
       { 'file': [ 'menu/make', 'stage/default' ], 'graphic': 'sfc', 'returnData': [] }, setSprite);
+    littleMagic.makeContext();
     littleMagic.init();
   }
   init();

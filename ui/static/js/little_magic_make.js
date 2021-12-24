@@ -5,17 +5,6 @@ class LittleMagicMake extends LittleMagic {
   constructor() {
     super();
 
-    this.position = {
-      'menuStart'   : { 'col': 14, 'row':  0 },
-      'menuEnd'     : { 'col': 15, 'row': 13 },
-      'stageStart'  : { 'col':  1, 'row':  0 },
-      'stageEnd'    : { 'col': 13, 'row': 13 },
-      'itemboxStart': { 'col':  6, 'row':  0 },
-      'itemboxEnd'  : { 'col': 13, 'row':  6 },
-      'item'        : { 'col': 14, 'row':  4 },
-      'block'       : { 'col': 14, 'row':  5 }
-    };
-
     this.state = Object.assign(this.state, {
       'prev' : { 'layer': 'layer1' },
       'item' : '',
@@ -37,17 +26,13 @@ class LittleMagicMake extends LittleMagic {
     this.static = {
       'lastBlock': 5
     };
-
-    // initialize context
-    this.makeContext();
-
-    // enable debug
-    this.mouseDebug();
   }  // constructor()
 
   makeContext() {
     this.menuContext();
     this.systemContext();
+    // enable debug
+    this.mouseDebug();
     this.canvas[this.layers['menu']].style.display = 'none';
   }
 

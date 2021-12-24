@@ -59,6 +59,7 @@ class LittleMagic {
 
   setMeta(restData) {
     this.sprite = restData['sprite']
+    this.position = restData['position']
   }  // setMeta
 
   setSpriteBlock(col, row, layer, src, overwrite = true) {
