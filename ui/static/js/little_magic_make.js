@@ -77,32 +77,36 @@ class LittleMagicMake extends LittleMagic {
   }  // setIcon
 
   mouseDebug() {
-    const imageSize = this.imageSize
-    const [ x, y ] = [ (imageSize * 14) + (imageSize / 8), imageSize * 0.6 ];
-    const context = this.contexts[this.layers['menu']];
-    context.font = this.font['medium'];
-    context.textAlign = 'start';
-    context.textBaseline = 'alphabetic';
-    context.fillStyle = 'white';
-    context.fillText('X'  , x, y);
-    context.fillText('Y'  , x, y * 2);
-    context.fillText('COL', x, y * 3);
-    context.fillText('ROW', x, y * 4);
-    context.fillText('CTX', x, y * 5);
+    if (this.debug['mouseDebug']) {
+      const imageSize = this.imageSize
+      const [ x, y ] = [ (imageSize * 14) + (imageSize / 8), imageSize * 0.6 ];
+      const context = this.contexts[this.layers['menu']];
+      context.font = this.font['medium'];
+      context.textAlign = 'start';
+      context.textBaseline = 'alphabetic';
+      context.fillStyle = 'white';
+      context.fillText('X'  , x, y);
+      context.fillText('Y'  , x, y * 2);
+      context.fillText('COL', x, y * 3);
+      context.fillText('ROW', x, y * 4);
+      context.fillText('CTX', x, y * 5);
+    }
   }  // mouseDebug()
 
   mouseDebugStatus(xAxis, yAxis, col, row) {
-    const imageSize = this.imageSize
-    const [ x, y ] = [  imageSize * 15, imageSize * 0.6 ];
-    const context = this.contexts[this.layers['menu']];
-    const ctx = /(\d)/.exec(this.state['layer'])[1];
-    context.clearRect(x, 0, imageSize, imageSize * 4);
-    context.fillStyle = 'white';
-    context.fillText(`: ${xAxis}`, x, y);
-    context.fillText(`: ${yAxis}`, x, y * 2);
-    context.fillText(`: ${col}`  , x, y * 3);
-    context.fillText(`: ${row}`  , x, y * 4);
-    context.fillText(`: ${ctx}`  , x, y * 5);
+    if (this.debug['mouseDebug']) {
+      const imageSize = this.imageSize
+      const [ x, y ] = [  imageSize * 15, imageSize * 0.6 ];
+      const context = this.contexts[this.layers['menu']];
+      const ctx = /(\d)/.exec(this.state['layer'])[1];
+      context.clearRect(x, 0, imageSize, imageSize * 4);
+      context.fillStyle = 'white';
+      context.fillText(`: ${xAxis}`, x, y);
+      context.fillText(`: ${yAxis}`, x, y * 2);
+      context.fillText(`: ${col}`  , x, y * 3);
+      context.fillText(`: ${row}`  , x, y * 4);
+      context.fillText(`: ${ctx}`  , x, y * 5);
+    }
   }  // mouseDebug()
 
   mouseEvent(canvas, event) {

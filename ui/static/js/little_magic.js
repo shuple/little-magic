@@ -11,6 +11,9 @@ class LittleMagic {
     // object[component]: { 'col':, 'row': }
     this.position = {}
 
+    // object[component]: bool
+    this.debug = {}
+
     // game state
     this.state = {
       'graphic': 'sfc',
@@ -60,6 +63,7 @@ class LittleMagic {
   setMeta(restData) {
     this.sprite = restData['sprite']
     this.position = restData['position']
+    this.debug = restData['debug']
   }  // setMeta
 
   setSpriteBlock(col, row, layer, src, overwrite = true) {

@@ -4,8 +4,10 @@ import { LittleMagicMake } from './little_magic_make.js';
 window.addEventListener('load', function () {
   const littleMagic = new LittleMagicMake();
   const init = async function() {
+    const path = 'meta/make';
+    const metaData = [ `${path}/sprite`, `${path}/position`, `${path}/debug` ];
     await littleMagic.rest('/post/read',
-      { 'file': [ 'meta/make/sprite', 'meta/make/position' ], 'graphic': 'sfc', 'returnData': {} }, setMeta);
+      { 'file': metaData, 'graphic': 'sfc', 'returnData': {} }, setMeta);
     await littleMagic.rest('/post/read',
       { 'file': [ 'menu/make', 'stage/default' ], 'graphic': 'sfc', 'returnData': [] }, setSprite);
     littleMagic.makeContext();
