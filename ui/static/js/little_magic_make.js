@@ -21,11 +21,6 @@ class LittleMagicMake extends LittleMagic {
       'menu'  : 'layer5',
       'system': 'layer6'
     };
-
-    // static parameter
-    this.static = {
-      'lastBlock': 5
-    };
   }  // constructor()
 
   makeContext() {
