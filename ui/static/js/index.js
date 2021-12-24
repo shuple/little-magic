@@ -52,7 +52,10 @@ window.addEventListener('load', function () {
   canvas.addEventListener('touchend', touchEnd);
 
   // resize event
-  window.addEventListener('resize', function() {
+  const resizeHandler = function() {
     littleMagic.setGameSize();
-  });
+  }
+  for (const type of [ 'orientationchange', 'resize' ]) {
+    window.addEventListener('resize', resizeHandler);
+  }
 });
