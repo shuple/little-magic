@@ -11,6 +11,8 @@ class LittleMagic {
     // game state
     this.state = {
       'graphic': 'sfc',
+      'windowWidth' : window.width,
+      'windowHeigth': window.heigth,
     };
 
     // static game size
@@ -38,7 +40,22 @@ class LittleMagic {
   setGameSize() {
     this.scrollWidth = this.canvas['layer0'].scrollWidth / this.col;
     this.font= { 'medium': `bold ${this.imageSize * 0.35 }px Merio` };
+    this.setCanvasScale();
   }  // setGameSize()
+
+  setCanvasScale() {
+    const [ width, height ] = [ window.width, window.height ];
+    if (this.state['windowWidth'] !== width && this.state['windowHeigth'] !== heigth) {
+      const orientation = window.width > window.heigth ? 'landscape' : 'portrait';
+      for (const canvas of document.querySelectorAll('canvas')) {
+        if (orientation === 'landscape') {
+          canvas.style.heigth = '100%';
+        } else {
+          canvas.style.width = '100%';
+        }
+      }
+    }
+  }  // setCanvasScale()
 
   setSprite(restData) {
     for (const data of restData) {

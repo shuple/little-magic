@@ -58,7 +58,5 @@ window.addEventListener('load', function () {
   const resizeHandler = function() {
     littleMagic.setGameSize();
   }
-  for (const type of [ 'orientationchange', 'resize' ]) {
-    window.addEventListener('resize', resizeHandler);
-  }
+  window.addEventListener('resize', resizeHandler);
 });
