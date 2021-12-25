@@ -35,18 +35,19 @@ class LittleMagicMake extends LittleMagic {
     const context = this.contexts[this.layers['menu']];
     for (const content of [ 'Item', 'Block' ]) {
       const key = content.toLowerCase();
-      const position = this.position[key];
+      const position = this.meta['position'][key];
       this.setIcon(context, position['col'] + 1,  position['row'], content);
     }
   }  // menuContext()
 
   systemContext() {
-    const [ x, y ] = [ this.imageSize * this.position['itemboxStart']['col'], 0 ];
+    const position = this.meta['position'];
+    const [ x, y ] = [ this.imageSize * position['itemboxStart']['col'], 0 ];
     const width = this.gameWidth - this.imageSize *
-      (this.position['itemboxEnd']['col'] - this.position['itemboxStart']['col'] + 1);
-    const height = this.gameHeight - this.imageSize * this.position['itemboxEnd']['row'];
-    const itemboxStart = this.position['itemboxStart'];
-    const itemboxEnd = this.position['itemboxEnd'];
+      (position['itemboxEnd']['col'] - position['itemboxStart']['col'] + 1);
+    const height = this.gameHeight - this.imageSize * position['itemboxEnd']['row'];
+    const itemboxStart = position['itemboxStart'];
+    const itemboxEnd = position['itemboxEnd'];
     const context = this.contexts[this.layers['system']];
     context.fillStyle = '#222';
     context.fillRect( x, y, width, height);
@@ -72,7 +73,7 @@ class LittleMagicMake extends LittleMagic {
   }  // setIcon
 
   mouseDebug() {
-    if (this.debug['mouseDebug']) {
+    if (this.meta['debug']['mouseDebug']) {
       const imageSize = this.imageSize
       const [ x, y ] = [ (imageSize * 14) + (imageSize / 8), imageSize * 0.6 ];
       const context = this.contexts[this.layers['menu']];
@@ -89,7 +90,7 @@ class LittleMagicMake extends LittleMagic {
   }  // mouseDebug()
 
   mouseDebugStatus(xAxis, yAxis, col, row) {
-    if (this.debug['mouseDebug']) {
+    if (this.meta['debug']['mouseDebug']) {
       const imageSize = this.imageSize
       const [ x, y ] = [  imageSize * 15, imageSize * 0.6 ];
       const context = this.contexts[this.layers['menu']];
@@ -213,13 +214,14 @@ class LittleMagicMake extends LittleMagic {
   }  // rightClick()
 
   areaRange(col, row, content) {
-      const start = this.position[`${content}Start`];
-      const end = this.position[`${content}End`];
+      const position = this.meta['position'];
+      const start = position[`${content}Start`];
+      const end = position[`${content}End`];
       return (col >= start['col'] && col <= end['col'] && row >= start['row'] && row <= end['row']);
   }  // areaRange()
 
   areaBlock(col, row, content) {
-    const position = this.position[content];
+    const position = this.meta['position'][content];
     return (col == position['col'] && row == position['row']);
   }  // areaBlock()
 
@@ -248,7 +250,8 @@ class LittleMagicMake extends LittleMagic {
     this.state['block'] = parseInt(block);
     this.updateItembox(this.state['block']);
     // set block on menu
-    const [ col, row ] = [ this.position['block']['col'], this.position['block']['row'] ];
+    const position = this.meta['position'];
+    const [ col, row ] = [ position['block']['col'], position['block']['row'] ];
     this.setSpriteBlock(col, row, this.layers['menu'], `layer1/block/${block}/field/00`);
   }  // findBlock()
 
@@ -264,7 +267,7 @@ class LittleMagicMake extends LittleMagic {
   }  // stageBlock()
 
   setLastBlock() {
-    while (`layer1/block/0${this.state['lastBlock']}/field/00` in this.sprite)
+    while (`layer1/block/0${this.state['lastBlock']}/field/00` in this.meta['sprite'])
       this.state['lastBlock']++;
     // handle overflow
     this.state['lastBlock']--;
@@ -274,7 +277,7 @@ class LittleMagicMake extends LittleMagic {
     this.state['item'] = this.blocks[this.layers['system']][row][col]
     if (this.state['item']) {
       const layer = /^(layer\d)/.exec(this.state['item']);
-      const position = this.position['item'];
+      const position = this.meta['position']['item'];
       this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], this.state['item']);
       [ this.state['layer'], this.state['prev']['layer'] ] = [ layer[1], layer[1] ];
       this.closeItembox();
@@ -303,7 +306,7 @@ class LittleMagicMake extends LittleMagic {
     for (const layer of [ ...this.stageLayers ].reverse()) {
       if (this.blocks[layer][row][col]) {
         src = this.blocks[layer][row][col];
-        const position = this.position['item'];
+        const position = this.meta['position']['item'];
         this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], src);
         break;
       }
@@ -312,13 +315,15 @@ class LittleMagicMake extends LittleMagic {
   }  // itemOnBlock()
 
   rotateItem(col, row, layer, src) {
-    return this.blocks[layer][row][col] == src && 'rotateItem' in this.sprite[src] ?
-      this.sprite[src]['rotateItem'] : src;
+    const sprite = this.meta['sprite'];
+    return this.blocks[layer][row][col] == src && 'rotateItem' in sprite[src] ?
+      sprite[src]['rotateItem'] : src;
   }  // rotateItem
 
   rotateItemReset() {
-    if (this.state['item'] && 'rotateItem' in this.sprite[this.state['item']]) {
-      const [ col, row ] = [ this.position['item']['col'], this.position['item']['row'] ];
+    if (this.state['item'] && 'rotateItem' in this.meta['sprite'][this.state['item']]) {
+      const position = this.meta['position'];
+      const [ col, row ] = [ position['item']['col'], position['item']['row'] ];
       this.state['item'] = this.blocks[this.layers['menu']][row][col]
     }
   }  // rotateItemReset()
@@ -343,7 +348,8 @@ class LittleMagicMake extends LittleMagic {
   updateItem(replaceBlock) {
     const layer = this.layers['menu'];
     const block = this.blocks[layer];
-    const [ col, row ] = [ this.position['item']['col'], this.position['item']['row'] ];
+    const position = this.meta['position'];
+    const [ col, row ] = [ position['item']['col'], position['item']['row'] ];
     const src = this.replaceStage(block[row][col], replaceBlock);
     if (src) {
       const context = this.contexts[layer];
@@ -360,7 +366,7 @@ class LittleMagicMake extends LittleMagic {
     const context = this.contexts[layer];
     context.fillStyle = '#222';
     context.fillRect(
-      this.imageSize * (this.col - this.position['itemboxStart']['col']), this.imageSize,
+      this.imageSize * (this.col - this.meta['position']['itemboxStart']['col']), this.imageSize,
       this.imageSize * 4, this.imageSize);
     const row = 1;
     for (let col = 2; col < block[row].length - 3; col++) {

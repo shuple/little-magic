@@ -5,14 +5,8 @@ class LittleMagic {
     // object[layer]: array[row][col]
     this.blocks = {};
 
-    // object[sprite]: {}
-    this.sprite = {};
-
-    // object[component]: { 'col':, 'row': }
-    this.position = {}
-
-    // object[component]: bool
-    this.debug = {}
+    // read from rest
+    this.meta = {};
 
     // game state
     this.state = {
@@ -61,9 +55,7 @@ class LittleMagic {
   }  // setSprite()
 
   setMeta(restData) {
-    this.sprite = restData['sprite'];
-    this.position = restData['position'];
-    this.debug = restData['debug'];
+    this.meta = restData;
   }  // setMeta
 
   setSpriteBlock(col, row, layer, src, overwrite = true) {
