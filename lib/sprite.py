@@ -66,11 +66,12 @@ class Sprite:
     # image_dict : self.image_dict
     #
     def merge_image_dict(self):
-        file = f"{self.path['root']}/data/system/{self.option['graphic']}/meta/{self.option['file']}"
+        path = f"{self.path['root']}/data/system/{self.option['graphic']}/meta"
+        file = f"{path}/{self.option['file']}.json"
         if os.path.exists(file):
             with open(file, 'r') as f:
                 meta_data = json.loads(f.read())
-                self.image_dict = { **self.image_dict, **meta_data }
+                self.image_dict['sprite'] = { **self.image_dict['sprite'], **meta_data['sprite'] }
             #  with
         #  if
     #  def merge_image_dict
@@ -78,7 +79,8 @@ class Sprite:
     # write self.image_dict to json
     #
     def write_image_dict(self):
-        file = f"{self.path['root']}/data/system/{self.option['graphic']}/meta/{self.option['file']}"
+        path = f"{self.path['root']}/data/system/{self.option['graphic']}/meta"
+        file = f"{path}/{self.option['file']}.json"
         image_dict = { k : self.image_dict[k] for k in sorted(self.image_dict) }
         with open(file, 'w') as f:
             f.write(json.dumps(image_dict, indent=2))
