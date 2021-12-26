@@ -78,6 +78,11 @@ class LittleMagic {
   setSpriteBlock(col, row, layer, src, overwrite = true) {
     if (src === this.blocks[layer][row][col]) return;
     if (overwrite) this.removeSpriteBlock(col, row, layer);
+    this.drawSpriteBlock(col, row, layer, src);
+    this.blocks[layer][row][col] = src;
+  }  // setSpriteBlock();
+
+  drawSpriteBlock(col, row, layer, src) {
     const context = this.contexts[layer];
     const image = new Image();
     const imageSize = this.imageSize;
@@ -85,8 +90,7 @@ class LittleMagic {
       context.drawImage(image, imageSize * col, imageSize * row, imageSize, imageSize);
     };
     image.src = this.imagesrc(src);
-    this.blocks[layer][row][col] = src;
-  }  // setSpriteBlock();
+  }  // drawSpriteBlock();
 
   removeSpriteBlock(col, row, layer) {
     const x = col * this.imageSize;
