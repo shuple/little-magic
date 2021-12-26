@@ -75,16 +75,16 @@ class LittleMagic {
     this.meta = restData;
   }  // setMeta
 
-  setSpriteBlock(col, row, layer, src, overwrite = true, prerender = true) {
+  async setSpriteBlock(col, row, layer, src, overwrite = true, prerender = true) {
     if (src === this.blocks[layer][row][col]) return;
     const render = `render${/layer(\d)\//.exec(src)[1]}`
     if (prerender) {
       this.removeSpriteBlock(col, row, render);
-      this.drawSpriteBlock(col, row, render, src);
+      await this.drawSpriteBlock(col, row, render, src);
       this.canvas[render].style.display = 'inline';
     }
     if (overwrite) this.removeSpriteBlock(col, row, layer);
-    this.drawSpriteBlock(col, row, layer, src);
+    await this.drawSpriteBlock(col, row, layer, src);
     this.blocks[layer][row][col] = src;
     // remove prerender
     this.removeSpriteBlock(col, row, render);
@@ -92,13 +92,16 @@ class LittleMagic {
   }  // setSpriteBlock();
 
   drawSpriteBlock(col, row, layer, src) {
-    const context = this.contexts[layer];
-    const image = new Image();
-    const imageSize = this.imageSize;
-    image.onload = function() {
-      context.drawImage(image, imageSize * col, imageSize * row, imageSize, imageSize);
-    };
-    image.src = this.imagesrc(src);
+    return new Promise((resolve, reject) => {
+      const context = this.contexts[layer];
+      const image = new Image();
+      const imageSize = this.imageSize;
+      image.onload = () => {
+        resolve(context.drawImage(image, imageSize * col, imageSize * row, imageSize, imageSize));
+      };
+      image.src = this.imagesrc(src);
+      image.onerror = (error) => reject(error);
+    });
   }  // drawSpriteBlock();
 
   removeSpriteBlock(col, row, layer) {
