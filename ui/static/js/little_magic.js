@@ -75,7 +75,7 @@ class LittleMagic {
     this.meta = restData;
   }  // setMeta
 
-  async setSpriteBlock(col, row, layer, src, overwrite = true, prerender = true) {
+  async setSpriteBlock(col, row, layer, src, overwrite = true, prerender = false) {
     if (src === this.blocks[layer][row][col]) return;
     const render = `render${/layer(\d)\//.exec(src)[1]}`
     if (prerender) {

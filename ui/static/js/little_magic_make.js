@@ -156,7 +156,8 @@ class LittleMagicMake extends LittleMagic {
           const src = this.rotateItem(col, row, layer, this.state['item']);
           this.state['item'] = src;
           this.state['layer'] = this.itemLayer(src);
-          this.setSpriteBlock(col, row, layer, src);
+          // prerender
+          this.setSpriteBlock(col, row, layer, src, true, true);
         }
       } else if (this.areaBlock(col, row, 'item')) {
         this.selectItembox();
