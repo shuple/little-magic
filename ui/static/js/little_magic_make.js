@@ -366,14 +366,19 @@ class LittleMagicMake extends LittleMagic {
     const context = this.contexts[layer];
     context.fillStyle = '#222';
     const position = this.meta['position'];
-    context.fillRect(
-      this.imageSize * (this.col - position['itemboxStart']['col']), this.imageSize,
-      this.imageSize * 3, this.imageSize
-    );
-    let [ col, row ] = [ position['itemboxStart']['col'], 1 ];
-    for (; col < block[row].length - 3; col++) {
-      const src = this.replaceStage(block[row][col], replaceBlock);
-      if (src) this.setSpriteBlock(col, row, layer, src, false);
+    const [ colStart, colEnd ] =
+      [ position['itemboxStart']['col'], position['itemboxEnd']['col'] ];
+    const [ rowStart, rowEnd ] =
+      [ position['itemboxStart']['row'], position['itemboxEnd']['row'] ];
+    for (let row = rowStart + 1; row < rowEnd; row++) {
+      for (let col = colStart + 1; col < colEnd; col++) {
+        const src = this.replaceStage(block[row][col], replaceBlock);
+        if (src) {
+          context.fillRect(this.imageSize * col, this.imageSize * row,
+            this.imageSize, this.imageSize);
+          this.setSpriteBlock(col, row, layer, src, false);
+        }
+      }
     }
   }  // updateItembox()
 }  // class LittleMagicMake
