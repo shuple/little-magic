@@ -61,7 +61,7 @@ class LittleMagic {
     for (const data of restData) {
       for (const [layer, layerData] of Object.entries(data)) {
         if (layerData[0].constructor === Array) {
-          this.setSpriteBlocks(layer, layerData);
+          this.setSpriteBlocks(layer, layerData, false, false);
         } else if (typeof layerData[0] === 'object') {
           for (const d of layerData) {
             this.setSpriteBlock(d['col'], d['row'], layer, d['sprite']);
@@ -75,12 +75,28 @@ class LittleMagic {
     this.meta = restData;
   }  // setMeta
 
-  setSpriteBlock(col, row, layer, src, overwrite = true) {
+  setSpriteBlock(col, row, layer, src, overwrite = true, render = true) {
     if (src === this.blocks[layer][row][col]) return;
+    if (render) {
+      this.renderSpriteBlock(col, row, layer, src, overwrite);
+    } else {
+      if (overwrite) this.removeSpriteBlock(col, row, layer);
+      this.drawSpriteBlock(col, row, layer, src);
+      this.blocks[layer][row][col] = src;
+    }
+  }  // setSpriteBlock();
+
+  renderSpriteBlock(col, row, layer, src, overwrite) {
+    const render = `render${/layer(\d)\//.exec(src)[1]}`
+    this.removeSpriteBlock(col, row, render);
+    this.drawSpriteBlock(col, row, render, src);
+    this.canvas[render].style.display = 'inline';
     if (overwrite) this.removeSpriteBlock(col, row, layer);
     this.drawSpriteBlock(col, row, layer, src);
     this.blocks[layer][row][col] = src;
-  }  // setSpriteBlock();
+    this.removeSpriteBlock(col, row, render);
+    this.canvas[render].style.display = 'none';
+  }  // renderSpriteBlock()
 
   drawSpriteBlock(col, row, layer, src) {
     const context = this.contexts[layer];
@@ -96,7 +112,7 @@ class LittleMagic {
     const x = col * this.imageSize;
     const y = row * this.imageSize;
     this.contexts[layer].clearRect(x, y, this.imageSize, this.imageSize);
-    this.blocks[layer][row][col] = '';
+    if (/layer\d/.exec(layer)) this.blocks[layer][row][col] = '';
   }  // removeSpriteBlock()
 
   setSpriteBlocks(layer, layerData) {
@@ -106,7 +122,7 @@ class LittleMagic {
     for (let row = 0; row < layerData.length; row++) {
       for (let col = 0; col < layerData[row].length; col++) {
         if (layerData[row][col]) {
-          this.setSpriteBlock(col, row, layer, layerData[row][col], false);
+          this.setSpriteBlock(col, row, layer, layerData[row][col], false, false);
         }
       }
     }
