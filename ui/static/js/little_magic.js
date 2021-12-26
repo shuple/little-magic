@@ -94,8 +94,8 @@ class LittleMagic {
   drawSpriteBlock(col, row, layer, src) {
     return new Promise((resolve, reject) => {
       const context = this.contexts[layer];
-      const image = new Image();
       const imageSize = this.imageSize;
+      const image = new Image();
       image.onload = () => {
         resolve(context.drawImage(image, imageSize * col, imageSize * row, imageSize, imageSize));
       };
