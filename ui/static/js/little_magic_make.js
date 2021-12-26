@@ -356,7 +356,7 @@ class LittleMagicMake extends LittleMagic {
       context.fillStyle = 'black';
       context.fillRect(this.imageSize * col, this.imageSize * row, this.imageSize, this.imageSize);
       this.state['item'] = src;
-      this.setSpriteBlock(col, row, layer, src, false);
+      this.setSpriteBlock(col, row, layer, src);
     }
   }  // updateItem()
 

@@ -75,28 +75,21 @@ class LittleMagic {
     this.meta = restData;
   }  // setMeta
 
-  setSpriteBlock(col, row, layer, src, overwrite = true, render = true) {
+  setSpriteBlock(col, row, layer, src, overwrite = true, prerender = true) {
     if (src === this.blocks[layer][row][col]) return;
-    if (render) {
-      this.renderSpriteBlock(col, row, layer, src, overwrite);
-    } else {
-      if (overwrite) this.removeSpriteBlock(col, row, layer);
-      this.drawSpriteBlock(col, row, layer, src);
-      this.blocks[layer][row][col] = src;
-    }
-  }  // setSpriteBlock();
-
-  renderSpriteBlock(col, row, layer, src, overwrite) {
     const render = `render${/layer(\d)\//.exec(src)[1]}`
-    this.removeSpriteBlock(col, row, render);
-    this.drawSpriteBlock(col, row, render, src);
-    this.canvas[render].style.display = 'inline';
+    if (prerender) {
+      this.removeSpriteBlock(col, row, render);
+      this.drawSpriteBlock(col, row, render, src);
+      this.canvas[render].style.display = 'inline';
+    }
     if (overwrite) this.removeSpriteBlock(col, row, layer);
     this.drawSpriteBlock(col, row, layer, src);
     this.blocks[layer][row][col] = src;
+    // remove prerender
     this.removeSpriteBlock(col, row, render);
     this.canvas[render].style.display = 'none';
-  }  // renderSpriteBlock()
+  }  // setSpriteBlock();
 
   drawSpriteBlock(col, row, layer, src) {
     const context = this.contexts[layer];
