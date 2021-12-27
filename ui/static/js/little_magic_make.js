@@ -338,8 +338,11 @@ class LittleMagicMake extends LittleMagic {
       const block = this.blocks[layer];
       for (let row = 0; row < block.length; row++) {
         for (let col = 0; col < block[row].length; col++) {
-          const src = this.replaceStage(block[row][col], replaceBlock);
-          if (src) this.setSpriteBlock(col, row, layer, src, false);
+          let src = block[row][col];
+          if (replaceBlock !== undefined)
+            src = this.replaceStage(block[row][col], replaceBlock);
+          if (src)
+            this.setSpriteBlock(col, row, layer, src, false);
         }
       }
     }
@@ -378,7 +381,8 @@ class LittleMagicMake extends LittleMagic {
     const block = this.blocks[layer];
     const position = this.meta['position'];
     const [ col, row ] = [ position['item']['col'], position['item']['row'] ];
-    const src = this.replaceStage(block[row][col], replaceBlock);
+    const src = replaceBlock == undefined ?
+      block[row][col] : this.replaceStage(block[row][col], replaceBlock);
     if (src) {
       const context = this.contexts[layer];
       context.fillStyle = 'black';
@@ -400,7 +404,8 @@ class LittleMagicMake extends LittleMagic {
       [ position['itemboxStart']['row'], position['itemboxEnd']['row'] ];
     for (let row = rowStart + 1; row < rowEnd; row++) {
       for (let col = colStart + 1; col < colEnd; col++) {
-        const src = this.replaceStage(block[row][col], replaceBlock);
+        const src = replaceBlock == undefined ?
+          block[row][col] : this.replaceStage(block[row][col], replaceBlock);
         if (src) {
           context.fillRect(this.imageSize * col, this.imageSize * row,
             this.imageSize, this.imageSize);
