@@ -156,8 +156,7 @@ class LittleMagicMake extends LittleMagic {
           const src = this.rotateItem(col, row, layer, this.state['item']);
           this.state['item'] = src;
           this.state['layer'] = this.itemLayer(src);
-          // prerender
-          this.setSpriteBlock(col, row, layer, src, true, true);
+          this.setSpriteBlock(col, row, layer, src);
         }
       } else if (this.areaBlock(col, row, 'item')) {
         this.selectItembox();
@@ -340,7 +339,7 @@ class LittleMagicMake extends LittleMagic {
       for (let row = 0; row < block.length; row++) {
         for (let col = 0; col < block[row].length; col++) {
           const src = this.replaceStage(block[row][col], replaceBlock);
-          if (src) this.setSpriteBlock(col, row, layer, src);
+          if (src) this.setSpriteBlock(col, row, layer, src, false);
         }
       }
     }
@@ -377,7 +376,7 @@ class LittleMagicMake extends LittleMagic {
         if (src) {
           context.fillRect(this.imageSize * col, this.imageSize * row,
             this.imageSize, this.imageSize);
-          this.setSpriteBlock(col, row, layer, src, false);
+          this.setSpriteBlock(col, row, layer, src, false, true);
         }
       }
     }

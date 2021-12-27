@@ -75,7 +75,7 @@ class LittleMagic {
     this.meta = restData;
   }  // setMeta
 
-  async setSpriteBlock(col, row, layer, src, overwrite = true, prerender = false) {
+  async setSpriteBlock(col, row, layer, src, prerender = true, clearSprite = true) {
     if (src === this.blocks[layer][row][col]) return;
     const render = `render${/layer(\d)\//.exec(src)[1]}`
     if (prerender) {
@@ -83,7 +83,7 @@ class LittleMagic {
       await this.drawSpriteBlock(col, row, render, src);
       this.canvas[render].style.display = 'inline';
     }
-    if (overwrite) this.removeSpriteBlock(col, row, layer);
+    if (clearSprite) this.removeSpriteBlock(col, row, layer);
     await this.drawSpriteBlock(col, row, layer, src);
     this.blocks[layer][row][col] = src;
     // remove prerender
