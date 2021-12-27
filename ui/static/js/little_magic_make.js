@@ -296,7 +296,7 @@ class LittleMagicMake extends LittleMagic {
     const src = `layer1/block/0${block}/field/00`;
     this.setSpriteBlock(col, row, this.layers['menu'], src);
     // update sprite
-    this.updateStage(block);
+    this.updateStagePrerender(block);
     this.updateItem(block);
     this.updateItembox(block);
   }  // selectBlock()
@@ -344,6 +344,34 @@ class LittleMagicMake extends LittleMagic {
       }
     }
   }  // updateStage()
+
+  async updateStagePrerender(replaceBlock) {
+    for (const layer of this.stageLayers) {
+      const render = `render${/(\d)/.exec(layer)[1]}`
+      const block = this.blocks[layer];
+      for (let row = 0; row < block.length; row++) {
+        for (let col = 0; col < block[row].length; col++) {
+          block[layer] = this.replaceStage(block[row][col], replaceBlock, true);
+          if (block[layer]) await this.drawSpriteBlock(col, row, render, block[layer]);
+        }
+      }
+      this.copyCanvas(render, layer);
+    }
+  }  // updateStagePrerender()
+
+  copyCanvas(render, layer) {
+    const canvas  = this.canvas;
+    const context = this.contexts;
+    // display prerender
+    canvas[render].style.display = 'inline';
+    canvas[layer].style.display  = 'none';
+    // copy prerender to layer
+    context[layer].drawImage(canvas[render], 0, 0);
+    // display layer
+    canvas[render].style.display = 'none';
+    canvas[layer].style.display  = 'inline';
+  }  // copyCanvas
+
 
   updateItem(replaceBlock) {
     const layer = this.layers['menu'];
