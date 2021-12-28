@@ -347,11 +347,11 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // updateStage()
 
-  async updateLayerPrerender(layer, startCol, endCol, startRow, endRow, replaceBlock) {
+  async updateLayerPrerender(layer, colStart, colEnd, rowStart, rowEnd, replaceBlock) {
     const render = `render${/(\d)/.exec(layer)[1]}`
     const block = this.blocks[layer];
-    for (let row = startRow; row < endRow; row++) {
-      for (let col = startCol; col < endCol; col++) {
+    for (let row = rowStart; row < rowEnd; row++) {
+      for (let col = colStart; col < colEnd; col++) {
         const src = replaceBlock == undefined ?
           block[row][col] : this.replaceStage(block[row][col], replaceBlock);
         if (src) {
