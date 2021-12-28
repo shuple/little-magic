@@ -352,8 +352,7 @@ class LittleMagicMake extends LittleMagic {
         if (opt['replaceBlock'] !== undefined)
           src = this.replaceBlock(block[row][col], opt['replaceBlock']);
         if (src) {
-          const opt = { 'clearSprite': true };
-          this.setSpriteBlock(col, row, layer, src, opt);
+          this.setSpriteBlock(col, row, layer, src, { 'clearSprite': true });
         }
       }
     }
