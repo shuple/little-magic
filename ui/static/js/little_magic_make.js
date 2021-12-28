@@ -299,7 +299,10 @@ class LittleMagicMake extends LittleMagic {
     for (const layer of this.stageLayers)
       this.updateLayerPrerender(layer, 0, this.col, 0, this.row, block);
     this.updateItem(block);
-    this.updateItembox(block);
+    if (this.state['layer'] === this.layers['system'])
+      this.updateItemboxPrerender(block);
+    else
+      this.updateItembox(block);
   }  // selectBlock()
 
   itemOnBlock(col ,row) {
@@ -376,7 +379,6 @@ class LittleMagicMake extends LittleMagic {
     canvas[render].style.display = 'none';
   }  // copyCanvas
 
-
   updateItem(replaceBlock) {
     const layer = this.layers['menu'];
     const block = this.blocks[layer];
@@ -415,4 +417,29 @@ class LittleMagicMake extends LittleMagic {
       }
     }
   }  // updateItembox()
+
+    updateItemboxPrerender(replaceBlock) {
+    const layer  = this.layers['system'];
+    const render = layer.replace('layer', 'render');
+    const contexts = this.contexts;
+    this.copyCanvas(render, layer);
+    // copy layer canvas to render canvas
+    if (replaceBlock !== undefined)
+      contexts[render].drawImage(this.canvas[layer], 0, 0);
+    // overwrite dynamic item
+    const imageSize = this.imageSize;
+    const position = this.meta['position'];
+    const [ x, y ] = [ imageSize * position['itemboxStart']['col'], imageSize ];
+    const width = this.gameWidth - imageSize *
+      (position['itemboxEnd']['col'] - position['itemboxStart']['col'] + 1);
+    const height = imageSize * 2;
+    contexts[render].fillStyle = '#222';
+    contexts[render].fillRect(x, y, width, height);
+    // prerender
+    const [ colStart, colEnd ] =
+      [ position['itemboxStart']['col'], position['itemboxEnd']['col'] ];
+    const [ rowStart, rowEnd ] =
+      [ position['itemboxStart']['row'], position['itemboxEnd']['row'] ];
+    this.updateLayerPrerender(layer, colStart, colEnd, rowStart, rowEnd, replaceBlock);
+  }  // updateItemboxPrerender()
 }  // class LittleMagicMake
