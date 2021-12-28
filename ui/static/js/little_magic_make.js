@@ -334,17 +334,15 @@ class LittleMagicMake extends LittleMagic {
     return match ? src.replace(/block\/\d{2}/, `${match[1]}${block}`) : '';
   }  // replaceStage()
 
-  updateStage(replaceBlock) {
-    for (const layer of this.stageLayers) {
-      const block = this.blocks[layer];
-      for (let row = 0; row < block.length; row++) {
-        for (let col = 0; col < block[row].length; col++) {
-          let src = block[row][col];
-          if (replaceBlock !== undefined)
-            src = this.replaceStage(block[row][col], replaceBlock);
-          if (src)
-            this.setSpriteBlock(col, row, layer, src, false);
-        }
+  updateStage(layer, replaceBlock) {
+    const block = this.blocks[layer];
+    for (let row = 0; row < block.length; row++) {
+      for (let col = 0; col < block[row].length; col++) {
+        let src = block[row][col];
+        if (replaceBlock !== undefined)
+          src = this.replaceStage(block[row][col], replaceBlock);
+        if (src)
+          this.setSpriteBlock(col, row, layer, src, false);
       }
     }
   }  // updateStage()
