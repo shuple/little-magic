@@ -372,8 +372,8 @@ class LittleMagicMake extends LittleMagic {
     // copy prerender to layer
     context[layer].drawImage(canvas[render], 0, 0);
     // display layer
-    canvas[render].style.display = 'none';
     canvas[layer].style.display  = 'inline';
+    canvas[render].style.display = 'none';
   }  // copyCanvas
 
 
