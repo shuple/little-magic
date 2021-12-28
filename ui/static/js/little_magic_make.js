@@ -339,10 +339,10 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // rotateItemReset()
 
-  replaceStage(src, block) {
+  replaceBlock(src, block) {
     const match = /\/(block\/\d)/.exec(src);
     return match ? src.replace(/block\/\d{2}/, `${match[1]}${block}`) : '';
-  }  // replaceStage()
+  }  // replaceBlock()
 
   async updateLayer(layer, colStart, colEnd, rowStart, rowEnd, replaceBlock) {
     const block = this.blocks[layer];
@@ -350,7 +350,7 @@ class LittleMagicMake extends LittleMagic {
       for (let col = colStart; col < colEnd; col++) {
         let src = block[row][col];
         if (replaceBlock !== undefined)
-          src = this.replaceStage(block[row][col], replaceBlock);
+          src = this.replaceBlock(block[row][col], replaceBlock);
         if (src) {
           const opt = { 'clearSprite': true };
           this.setSpriteBlock(col, row, layer, src, opt);
@@ -365,7 +365,7 @@ class LittleMagicMake extends LittleMagic {
     for (let row = rowStart; row < rowEnd; row++) {
       for (let col = colStart; col < colEnd; col++) {
         const src = replaceBlock === undefined ?
-          block[row][col] : this.replaceStage(block[row][col], replaceBlock);
+          block[row][col] : this.replaceBlock(block[row][col], replaceBlock);
         if (src) {
           block[row][col] = src;
           await this.drawSpriteBlock(col, row, render, src);
@@ -394,7 +394,7 @@ class LittleMagicMake extends LittleMagic {
     const position = this.meta['position'];
     const [ col, row ] = [ position['item']['col'], position['item']['row'] ];
     const src = replaceBlock === undefined ?
-      block[row][col] : this.replaceStage(block[row][col], replaceBlock);
+      block[row][col] : this.replaceBlock(block[row][col], replaceBlock);
     if (src) {
       const context = this.contexts[layer];
       context.fillStyle = 'black';
@@ -418,7 +418,7 @@ class LittleMagicMake extends LittleMagic {
     for (let row = rowStart + 1; row < rowEnd; row++) {
       for (let col = colStart + 1; col < colEnd; col++) {
         const src = replaceBlock === undefined ?
-          block[row][col] : this.replaceStage(block[row][col], replaceBlock);
+          block[row][col] : this.replaceBlock(block[row][col], replaceBlock);
         if (src) {
           context.fillRect(this.imageSize * col, this.imageSize * row,
             this.imageSize, this.imageSize);
