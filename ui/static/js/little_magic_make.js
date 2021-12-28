@@ -344,13 +344,13 @@ class LittleMagicMake extends LittleMagic {
     return match ? src.replace(/block\/\d{2}/, `${match[1]}${block}`) : '';
   }  // replaceBlock()
 
-  async updateLayer(layer, colStart, colEnd, rowStart, rowEnd, replaceBlock) {
+  async updateLayer(layer, opt) {
     const block = this.blocks[layer];
-    for (let row = rowStart; row < rowEnd; row++) {
-      for (let col = colStart; col < colEnd; col++) {
+    for (let row = opt['rowStart'] || 0; row < opt['rowEnd'] || this.row; row++) {
+      for (let col = opt['colStart']; col < opt['colEnd'] || this.col; col++) {
         let src = block[row][col];
-        if (replaceBlock !== undefined)
-          src = this.replaceBlock(block[row][col], replaceBlock);
+        if (opt['replaceBlock'] !== undefined)
+          src = this.replaceBlock(block[row][col], opt['replaceBlock']);
         if (src) {
           const opt = { 'clearSprite': true };
           this.setSpriteBlock(col, row, layer, src, opt);
