@@ -344,10 +344,10 @@ class LittleMagicMake extends LittleMagic {
     return match ? src.replace(/block\/\d{2}/, `${match[1]}${block}`) : '';
   }  // replaceStage()
 
-  updateStage(layer, replaceBlock) {
+  async updateLayer(layer, colStart, colEnd, rowStart, rowEnd, replaceBlock) {
     const block = this.blocks[layer];
-    for (let row = 0; row < block.length; row++) {
-      for (let col = 0; col < block[row].length; col++) {
+    for (let row = rowStart; row < rowEnd; row++) {
+      for (let col = colStart; col < colEnd; col++) {
         let src = block[row][col];
         if (replaceBlock !== undefined)
           src = this.replaceStage(block[row][col], replaceBlock);
@@ -357,7 +357,7 @@ class LittleMagicMake extends LittleMagic {
         }
       }
     }
-  }  // updateStage()
+  }  // updateLayer()
 
   async updateLayerPrerender(layer, colStart, colEnd, rowStart, rowEnd, replaceBlock) {
     const render = `render${/(\d)/.exec(layer)[1]}`
