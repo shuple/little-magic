@@ -156,7 +156,8 @@ class LittleMagicMake extends LittleMagic {
           const src = this.rotateItem(col, row, layer, this.state['item']);
           this.state['item'] = src;
           this.state['layer'] = this.itemLayer(src);
-          this.setSpriteBlock(col, row, layer, src);
+          const opt = { 'prerender': true, 'clearSprite': true };
+          this.setSpriteBlock(col, row, layer, src, opt);
         }
       } else if (this.areaBlock(col, row, 'item')) {
         this.selectItembox();
@@ -190,7 +191,8 @@ class LittleMagicMake extends LittleMagic {
         this.removeSpriteBlock(col, row, this.state['layer']);
         this.rotateItemReset();
       } else if (this.areaBlock(col, row, 'item')) {
-        this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/00');
+        const opt = { 'prerender': true, 'clearSprite': true };
+        this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/00', opt);
         this.state['item'] = ''
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectBlock(col, row, -1);
@@ -200,7 +202,8 @@ class LittleMagicMake extends LittleMagic {
       if (this.areaRange(col, row, 'stage')) {
         this.closeItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'item')) {
-        this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/00');
+        const opt = { 'prerender': true, 'clearSprite': true };
+        this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/00', opt);
         this.state['item'] = ''
         this.closeItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'block')) {
@@ -252,7 +255,8 @@ class LittleMagicMake extends LittleMagic {
     // set block on menu
     const position = this.meta['position'];
     const [ col, row ] = [ position['block']['col'], position['block']['row'] ];
-    this.setSpriteBlock(col, row, this.layers['menu'], `layer1/block/${block}/field/00`);
+    const opt = { 'prerender': true, 'clearSprite': true };
+    this.setSpriteBlock(col, row, this.layers['menu'], `layer1/block/${block}/field/00`, opt);
   }  // findBlock()
 
   findBlock(layer) {
@@ -278,7 +282,8 @@ class LittleMagicMake extends LittleMagic {
     if (this.state['item']) {
       const layer = /^(layer\d)/.exec(this.state['item']);
       const position = this.meta['position']['item'];
-      this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], this.state['item']);
+      const opt = { 'prerender': true, 'clearSprite': true };
+      this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], this.state['item'], opt);
       [ this.state['layer'], this.state['prev']['layer'] ] = [ layer[1], layer[1] ];
       this.closeItembox();
     }
@@ -294,7 +299,8 @@ class LittleMagicMake extends LittleMagic {
     block = block < 0 ? this.state['lastBlock'] : block %= this.state['lastBlock'] + 1;
     this.state['block'] = block;
     const src = `layer1/block/0${block}/field/00`;
-    this.setSpriteBlock(col, row, this.layers['menu'], src);
+    const opt = { 'prerender': true, 'clearSprite': true };
+    this.setSpriteBlock(col, row, this.layers['menu'], src, opt);
     // update sprite
     for (const layer of this.stageLayers)
       this.updateLayerPrerender(layer, 0, this.col, 0, this.row, block);
@@ -311,7 +317,8 @@ class LittleMagicMake extends LittleMagic {
       if (this.blocks[layer][row][col]) {
         src = this.blocks[layer][row][col];
         const position = this.meta['position']['item'];
-        this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], src);
+        const opt = { 'prerender': true, 'clearSprite': true };
+        this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], src, opt);
         break;
       }
     }
@@ -344,8 +351,10 @@ class LittleMagicMake extends LittleMagic {
         let src = block[row][col];
         if (replaceBlock !== undefined)
           src = this.replaceStage(block[row][col], replaceBlock);
-        if (src)
-          this.setSpriteBlock(col, row, layer, src, false);
+        if (src) {
+          const opt = { 'clearSprite': true };
+          this.setSpriteBlock(col, row, layer, src, opt);
+        }
       }
     }
   }  // updateStage()
@@ -391,7 +400,8 @@ class LittleMagicMake extends LittleMagic {
       context.fillStyle = 'black';
       context.fillRect(this.imageSize * col, this.imageSize * row, this.imageSize, this.imageSize);
       this.state['item'] = src;
-      this.setSpriteBlock(col, row, layer, src);
+      const opt = { 'prerender': true, 'clearSprite': true };
+      this.setSpriteBlock(col, row, layer, src, opt);
     }
   }  // updateItem()
 
@@ -412,7 +422,8 @@ class LittleMagicMake extends LittleMagic {
         if (src) {
           context.fillRect(this.imageSize * col, this.imageSize * row,
             this.imageSize, this.imageSize);
-          this.setSpriteBlock(col, row, layer, src, false, true);
+          const opt = { 'clearSprite': true };
+          this.setSpriteBlock(col, row, layer, src, false, opt);
         }
       }
     }
