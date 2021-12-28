@@ -354,8 +354,10 @@ class LittleMagicMake extends LittleMagic {
     const block = this.blocks[layer];
     for (let row = startRow; row < endRow; row++) {
       for (let col = startCol; col < endCol; col++) {
-        block[layer] = this.replaceStage(block[row][col], replaceBlock, true);
-        if (block[layer]) await this.drawSpriteBlock(col, row, render, block[layer]);
+        const src = replaceBlock == undefined ?
+          block[row][col] : this.replaceStage(block[row][col], replaceBlock);
+        if (src)
+          await this.drawSpriteBlock(col, row, render, src);
       }
     }
     this.copyCanvas(render, layer);
