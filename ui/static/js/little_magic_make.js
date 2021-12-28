@@ -418,7 +418,7 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // updateItembox()
 
-    updateItemboxPrerender(replaceBlock) {
+  updateItemboxPrerender(replaceBlock) {
     const layer  = this.layers['system'];
     const render = layer.replace('layer', 'render');
     const contexts = this.contexts;
