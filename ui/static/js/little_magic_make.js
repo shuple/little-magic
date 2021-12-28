@@ -222,7 +222,7 @@ class LittleMagicMake extends LittleMagic {
 
   areaBlock(col, row, content) {
     const position = this.meta['position'][content];
-    return (col == position['col'] && row == position['row']);
+    return (col === position['col'] && row === position['row']);
   }  // areaBlock()
 
   itemLayer(item) {
@@ -317,7 +317,7 @@ class LittleMagicMake extends LittleMagic {
 
   rotateItem(col, row, layer, src) {
     const sprite = this.meta['sprite'];
-    return this.blocks[layer][row][col] == src && 'rotateItem' in sprite[src] ?
+    return this.blocks[layer][row][col] === src && 'rotateItem' in sprite[src] ?
       sprite[src]['rotateItem'] : src;
   }  // rotateItem
 
@@ -352,7 +352,7 @@ class LittleMagicMake extends LittleMagic {
     const block = this.blocks[layer];
     for (let row = rowStart; row < rowEnd; row++) {
       for (let col = colStart; col < colEnd; col++) {
-        const src = replaceBlock == undefined ?
+        const src = replaceBlock === undefined ?
           block[row][col] : this.replaceStage(block[row][col], replaceBlock);
         if (src) {
           block[row][col] = src;
@@ -382,7 +382,7 @@ class LittleMagicMake extends LittleMagic {
     const block = this.blocks[layer];
     const position = this.meta['position'];
     const [ col, row ] = [ position['item']['col'], position['item']['row'] ];
-    const src = replaceBlock == undefined ?
+    const src = replaceBlock === undefined ?
       block[row][col] : this.replaceStage(block[row][col], replaceBlock);
     if (src) {
       const context = this.contexts[layer];
@@ -405,7 +405,7 @@ class LittleMagicMake extends LittleMagic {
       [ position['itemboxStart']['row'], position['itemboxEnd']['row'] ];
     for (let row = rowStart + 1; row < rowEnd; row++) {
       for (let col = colStart + 1; col < colEnd; col++) {
-        const src = replaceBlock == undefined ?
+        const src = replaceBlock === undefined ?
           block[row][col] : this.replaceStage(block[row][col], replaceBlock);
         if (src) {
           context.fillRect(this.imageSize * col, this.imageSize * row,
