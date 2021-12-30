@@ -34,6 +34,8 @@ class LittleMagic {
       canvas.height = this.gameHeight;
       this.canvas[canvas.id] = canvas;
       this.contexts[canvas.id] = canvas.getContext('2d');
+      if (/render/.exec(canvas.id))
+        this.canvas[canvas.id].style.display = 'none';
     }
   }   // initContext()
 
