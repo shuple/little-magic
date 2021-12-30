@@ -10,8 +10,6 @@ window.addEventListener('load', function () {
       { 'file': metaData, 'graphic': 'sfc', 'returnData': {} }, setMeta);
     await littleMagic.rest('/post/read',
       { 'file': [ 'menu/make', 'stage/default' ], 'graphic': 'sfc', 'returnData': [] }, setSprite);
-    littleMagic.makeContext();
-    littleMagic.init();
   }
   init();
 

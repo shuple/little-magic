@@ -5,6 +5,10 @@ class LittleMagicMake extends LittleMagic {
   constructor() {
     super();
 
+    // initial load
+    setTimeout(this.startLoad, this.state['timeout'], this);
+    this.loadScreen(true);
+
     this.state = Object.assign(this.state, {
       'prev' : { 'layer': 'layer1' },
       'item' : '',
@@ -16,23 +20,31 @@ class LittleMagicMake extends LittleMagic {
     });
 
     // layer alias
-    this.layers  = {
+    this.layers  = Object.assign(this.layers, {
       'menu'  : 'layer5',
       'effect': 'layer6',
       'system': 'layer7'
-    };
-    this.layerAlias = {
+    });
+
+    this.layerAlias = Object.assign(this.layerAlias, {
       'stage' : [ 'layer1', 'layer2', 'layer3' ],
       'system': [ this.layers['effect'], this.layers['system'] ]
-    };
+    });
   }  // constructor()
 
+  startLoad(littleMagic) {
+    if (littleMagic.flag['load']) {
+      setTimeout(littleMagic.startLoad, littleMagic.state['timeout'], littleMagic);
+    } else {
+      for (const layer of littleMagic.layerAlias['system']) {
+        littleMagic.canvas[layer].style.display = 'none';
+      }
+      littleMagic.init();
+      littleMagic.loadScreen(false);
+    }
+  }  // startLoad()
+
   makeContext() {
-    this.menuContext();
-    this.systemContext();
-    // enable debug
-    this.mouseDebug();
-    this.canvas[this.layers['menu']].style.display = 'none';
   }
 
   menuContext() {
@@ -56,9 +68,6 @@ class LittleMagicMake extends LittleMagic {
     const context = this.contexts[layer];
     context.fillStyle = '#222';
     context.fillRect( x, y, width, height);
-    for (const layer of this.layerAlias['system']) {
-      this.canvas[layer].style.display = 'none';
-    }
   }  // systemContext()
 
   drawLine(context, begin, end, stroke = 'black', width = 1) {
@@ -144,10 +153,50 @@ class LittleMagicMake extends LittleMagic {
   // call after this.setMeta() and this.setSprite()
   //
   init() {
+    this.menuContext();
+    this.systemContext();
     this.setBlock();
     this.setLastBlock();
-    this.canvas[this.layers['menu']].style.display = 'inline';
+    // debug option
+    this.mouseDebug();
   }  // init()
+
+  async setSpriteBlock(col, row, layer, src) {
+    if (src === this.blocks[layer][row][col]) return;
+    // add render
+    const render = `render${/layer(\d)\//.exec(src)[1]}`
+    this.removeSpriteBlock(col, row, render);
+    await this.drawSpriteBlock(col, row, render, src);
+    this.canvas[render].style.display = 'inline';
+    // add layer
+    this.removeSpriteBlock(col, row, layer);
+    await this.drawSpriteBlock(col, row, layer, src);
+    // remove prerender
+    this.removeSpriteBlock(col, row, render);
+    this.canvas[render].style.display = 'none';
+    // update blocks
+    this.blocks[layer][row][col] = src;
+  }  // setSpriteBlock();
+
+  drawSpriteBlock(col, row, layer, src) {
+    return new Promise((resolve, reject) => {
+      const context = this.contexts[layer];
+      const imageSize = this.imageSize;
+      const image = new Image();
+      image.onload = () => {
+        resolve(context.drawImage(image, imageSize * col, imageSize * row, imageSize, imageSize));
+      };
+      image.src = this.imagesrc(src);
+      image.onerror = (error) => reject(error);
+    });
+  }  // drawSpriteBlock();
+
+  removeSpriteBlock(col, row, layer) {
+    const x = col * this.imageSize;
+    const y = row * this.imageSize;
+    this.contexts[layer].clearRect(x, y, this.imageSize, this.imageSize);
+    if (/layer\d/.exec(layer)) this.blocks[layer][row][col] = '';
+  }  // removeSpriteBlock()
 
   leftClick(col, row, event) {
     switch (this.state['layer']) {
@@ -413,80 +462,6 @@ class LittleMagicMake extends LittleMagic {
       }
     }
   }  // renderLayer()
-
-  async setSpriteLayer(layers) {
-    let images = [];
-    for (const layer of layers) {
-      const render = layer.replace('render', 'layer');
-      this.setLayerImage(images, layer);
-    }
-    if (images.length > 0) await this.drawSpriteImages(images);
-    this.copyRender(this.layerAlias['stage']);
-  }  // setSpriteImage
-
-  setLayerImage(images, layer) {
-    const block = this.blocks[layer];
-    const imageSize = this.imageSize;
-    for (let row = 0; row < this.row; row++) {
-      for (let col = 0; col < this.col; col++) {
-        if (block[row][col]) {
-          images.push({
-            'src'   : this.imagesrc(block[row][col]),
-            'layer' : layer,
-            'x'     : col * imageSize,
-            'y'     : row * imageSize,
-            'width' : imageSize,
-            'height': imageSize
-          });
-        }
-      }
-    }
-  }  // setLayerImage()
-
-  drawSpriteImages(images) {
-    return new Promise((resolve, reject) => {
-      const data = images.shift();
-      const render = data['layer'].replace('layer', 'render');
-      const context = this.contexts[render];
-      const image = new Image();
-      image.onload = () => {
-        context.drawImage(image, data['x'], data['y'], data['width'], data['height']);
-        if (images.length > 0) {
-          // recursion to await iteration
-          resolve(this.drawSpriteImages(images));
-        } else {
-          // complete
-          resolve();
-        }
-      };
-      image.src = data.src;
-      image.onerror = (error) => reject(error);
-    });
-  }  // drawSpriteImages()
-
-  copyRender(layers) {
-    if (typeof layers == 'string') layers = layers.split(' ');
-    const canvas  = this.canvas;
-    const context = this.contexts;
-    // display prerender
-    for (const layer of layers) {
-      const render = layer.replace('layer', 'render');
-      canvas[render].style.display = 'inline';
-      canvas[layer].style.display = 'none';
-      // copy render to layer
-      context[layer].clearRect(0, 0, this.gameWidth, this.gameHeight);
-      context[layer].drawImage(canvas[render], 0, 0);
-      // display layer
-      canvas[layer].style.display  = 'inline';
-      canvas[render].style.display = 'none';
-      // clear render
-      this.clearContext(render);
-    }
-  }  // copyRender()
-
-  clearContext(layer) {
-    this.contexts[layer].clearRect(0, 0, this.gameWidth, this.gameHeight);
-  }
 
   updateItem(replaceBlock) {
     const layer = this.layers['menu'];

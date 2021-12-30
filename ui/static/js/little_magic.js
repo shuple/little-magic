@@ -10,10 +10,15 @@ class LittleMagic {
 
     // game state
     this.state = {
+      'timeout': 100,
       'graphic': 'sfc',
       'windowWidth' : window.width,
       'windowHeigth': window.heigth,
     };
+
+    // layer alias
+    this.layers = {};
+    this.layerAlias = {};
 
     // static game size
     this.imageSize = 32;
@@ -26,6 +31,10 @@ class LittleMagic {
 
     this.initContext();
     this.setGameSize();
+
+    this.flag = {
+      'load': true
+    };
   }  // constructor
 
   initContext() {
@@ -34,8 +43,9 @@ class LittleMagic {
       canvas.height = this.gameHeight;
       this.canvas[canvas.id] = canvas;
       this.contexts[canvas.id] = canvas.getContext('2d');
-      if (/render/.exec(canvas.id))
+      if (/render/.exec(canvas.id)) {
         this.canvas[canvas.id].style.display = 'none';
+      }
     }
   }   // initContext()
 
@@ -59,74 +69,106 @@ class LittleMagic {
     }
   }  // setCanvasScale()
 
-  setSprite(restData) {
-    for (const data of restData) {
-      for (const [layer, layerData] of Object.entries(data)) {
-        if (layerData[0].constructor === Array) {
-          this.setSpriteBlocks(layer, layerData);
-        } else if (typeof layerData[0] === 'object') {
-          for (const d of layerData) {
-            const opt = { 'prerender': true };
-            this.setSpriteBlock(d['col'], d['row'], layer, d['sprite'], opt);
-          }
-        }
-      }
+  loadScreen(flag) {
+    const layer = document.querySelector('canvas:last-child').id
+    const context = this.contexts[layer];
+    if (flag) {
+      context.fillStyle = '#222';
+      context.fillRect(0, 0, this.gameWidth, this.gameHeight);
+    } else {
+      context.clearRect(0, 0, this.gameWidth, this.gameHeight);
     }
-  }  // setSprite()
+  }  // loadScreen()
 
   setMeta(restData) {
     this.meta = restData;
   }  // setMeta
 
-  async setSpriteBlock(col, row, layer, src) {
-    if (src === this.blocks[layer][row][col]) return;
-    // add render
-    const render = `render${/layer(\d)\//.exec(src)[1]}`
-    this.removeSpriteBlock(col, row, render);
-    await this.drawSpriteBlock(col, row, render, src);
-    this.canvas[render].style.display = 'inline';
-    // add layer
-    this.removeSpriteBlock(col, row, layer);
-    await this.drawSpriteBlock(col, row, layer, src);
-    // remove prerender
-    this.removeSpriteBlock(col, row, render);
-    this.canvas[render].style.display = 'none';
-    // update blocks
-    this.blocks[layer][row][col] = src;
-  }  // setSpriteBlock();
+  setSprite(restData) {
+    let layers = [];
+    for (const data of restData) {
+      for (const [layer, layerData] of Object.entries(data)) {
+        layers.push(layer);
+        this.blocks[layer] = layerData;
+      }
+    }
+    this.setSpriteLayer(layers);
+  }  // setSprite()
 
-  drawSpriteBlock(col, row, layer, src) {
-    return new Promise((resolve, reject) => {
-      const context = this.contexts[layer];
-      const imageSize = this.imageSize;
-      const image = new Image();
-      image.onload = () => {
-        resolve(context.drawImage(image, imageSize * col, imageSize * row, imageSize, imageSize));
-      };
-      image.src = this.imagesrc(src);
-      image.onerror = (error) => reject(error);
-    });
-  }  // drawSpriteBlock();
+  async setSpriteLayer(layers) {
+    let images = [];
+    for (const layer of layers) {
+      const render = layer.replace('render', 'layer');
+      this.setLayerImage(images, layer);
+    }
+    if (images.length > 0) await this.drawSpriteImages(images);
+    this.copyRender(layers);
+    this.flag['load'] = false;
+  }  // setSpriteImage
 
-  removeSpriteBlock(col, row, layer) {
-    const x = col * this.imageSize;
-    const y = row * this.imageSize;
-    this.contexts[layer].clearRect(x, y, this.imageSize, this.imageSize);
-    if (/layer\d/.exec(layer)) this.blocks[layer][row][col] = '';
-  }  // removeSpriteBlock()
-
-  setSpriteBlocks(layer, layerData) {
-    this.blocks[layer] = [...Array(this.row)].map(x=>Array(this.col).fill(''));
-    const context = this.contexts[layer];
-    context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    for (let row = 0; row < layerData.length; row++) {
-      for (let col = 0; col < layerData[row].length; col++) {
-        if (layerData[row][col]) {
-          this.setSpriteBlock(col, row, layer, layerData[row][col]);
+  setLayerImage(images, layer) {
+    const block = this.blocks[layer];
+    const imageSize = this.imageSize;
+    for (let row = 0; row < this.row; row++) {
+      for (let col = 0; col < this.col; col++) {
+        if (block[row][col]) {
+          images.push({
+            'src'   : this.imagesrc(block[row][col]),
+            'layer' : layer,
+            'x'     : col * imageSize,
+            'y'     : row * imageSize,
+            'width' : imageSize,
+            'height': imageSize
+          });
         }
       }
     }
-  }  // setSpriteBlocks()
+  }  // setLayerImage()
+
+  drawSpriteImages(images) {
+    return new Promise((resolve, reject) => {
+      const data = images.shift();
+      const render = data['layer'].replace('layer', 'render');
+      const context = this.contexts[render];
+      const image = new Image();
+      image.onload = () => {
+        context.drawImage(image, data['x'], data['y'], data['width'], data['height']);
+        if (images.length > 0) {
+          // recursion to await iteration
+          resolve(this.drawSpriteImages(images));
+        } else {
+          // complete
+          resolve();
+        }
+      };
+      image.src = data.src;
+      image.onerror = (error) => reject(error);
+    });
+  }  // drawSpriteImages()
+
+  copyRender(layers) {
+    if (typeof layers == 'string') layers = layers.split(' ');
+    const canvas  = this.canvas;
+    const context = this.contexts;
+    // display prerender
+    for (const layer of layers) {
+      const render = layer.replace('layer', 'render');
+      canvas[render].style.display = 'inline';
+      canvas[layer].style.display = 'none';
+      // copy render to layer
+      context[layer].clearRect(0, 0, this.gameWidth, this.gameHeight);
+      context[layer].drawImage(canvas[render], 0, 0);
+      // display layer
+      canvas[layer].style.display = 'inline';
+      // clear render
+      canvas[render].style.display = 'none';
+      this.clearContext(render);
+    }
+  }  // copyRender()
+
+  clearContext(layer) {
+    this.contexts[layer].clearRect(0, 0, this.gameWidth, this.gameHeight);
+  }
 
   imagesrc(src) {
     return `/static/image/sprite/${this.state['graphic']}/${src}.png`;
