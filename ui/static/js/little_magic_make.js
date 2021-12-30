@@ -312,14 +312,30 @@ class LittleMagicMake extends LittleMagic {
     const opt = { 'prerender': true, 'clearSprite': true };
     this.setSpriteBlock(col, row, this.layers['menu'], src, opt);
     // update sprite
-    for (const layer of this.layerAlias['stage'])
-      this.updateLayerPrerender(layer, 0, this.col, 0, this.row, block);
+    this.updateBlock(this.layerAlias['stage'], block);
+    this.setSpriteLayer(this.layerAlias['stage']);
     this.updateItem(block);
     if (this.state['layer'] === this.layers['system'])
       this.updateItemboxPrerender(block);
     else
       this.updateItembox(block);
   }  // selectBlock()
+
+  updateBlock(layers, replaceBlock) {
+    if (typeof layers == 'string') layers = layers.split(' ');
+    for (const layer of layers) {
+    const block = this.blocks[layer];
+      for (let row = 0; row < this.row; row++) {
+        for (let col = 0; col < this.col; col++) {
+          const src = block[row][col];
+          const match = /\/(block\/\d)/.exec(src);
+          if (match) {
+            block[row][col] = src.replace(/block\/\d{2}/, `${match[1]}${replaceBlock}`);
+          }
+        }
+      }
+    }
+  }  // updateBlock()
 
   itemOnBlock(col ,row) {
     let src = '';
