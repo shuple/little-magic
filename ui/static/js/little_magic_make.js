@@ -354,20 +354,6 @@ class LittleMagicMake extends LittleMagic {
     return match ? src.replace(/block\/\d{2}/, `${match[1]}${block}`) : '';
   }  // replaceBlock()
 
-  async updateLayer(layer, opt) {
-    const block = this.blocks[layer];
-    for (let row = opt['rowStart'] || 0; row < (opt['rowEnd'] || this.row); row++) {
-      for (let col = opt['colStart'] || 0; col < (opt['colEnd'] || this.col); col++) {
-        let src = block[row][col];
-        if (opt['block'] !== undefined)
-          src = this.replaceBlock(block[row][col], opt['block']);
-        if (src) {
-          this.setSpriteBlock(col, row, layer, src, opt);
-        }
-      }
-    }
-  }  // updateLayer()
-
   async updateLayerPrerender(layer, colStart, colEnd, rowStart, rowEnd, replaceBlock) {
     const render = `render${/(\d)/.exec(layer)[1]}`
     const block = this.blocks[layer];
