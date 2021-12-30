@@ -356,8 +356,8 @@ class LittleMagicMake extends LittleMagic {
 
   async updateLayer(layer, opt) {
     const block = this.blocks[layer];
-    for (let row = opt['rowStart'] || 0; row < opt['rowEnd'] || this.row; row++) {
-      for (let col = opt['colStart']; col < opt['colEnd'] || this.col; col++) {
+    for (let row = opt['rowStart'] || 0; row < (opt['rowEnd'] || this.row); row++) {
+      for (let col = opt['colStart'] || 0; col < (opt['colEnd'] || this.col); col++) {
         let src = block[row][col];
         if (opt['replaceBlock'] !== undefined)
           src = this.replaceBlock(block[row][col], opt['replaceBlock']);
