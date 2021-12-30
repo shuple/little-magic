@@ -71,15 +71,6 @@ class LittleMagicMake extends LittleMagic {
     context.fillRect( x, y, width, height);
   }  // systemContext()
 
-  drawLine(context, begin, end, stroke = 'black', width = 1) {
-    context.strokeStyle = stroke;
-    context.lineWidth = width;
-    context.beginPath();
-    context.moveTo(...begin);
-    context.lineTo(...end);
-    context.stroke();
-  }  // drawLine()
-
   setIcon(context, col, row, desc) {
     context.font = this.font['medium'];
     context.fillStyle = 'white';
@@ -413,35 +404,6 @@ class LittleMagicMake extends LittleMagic {
     return match ? src.replace(/block\/\d{2}/, `${match[1]}${block}`) : '';
   }  // replaceBlock()
 
-  async updateLayerPrerender(layer, colStart, colEnd, rowStart, rowEnd, replaceBlock) {
-    const render = `render${/(\d)/.exec(layer)[1]}`
-    const block = this.blocks[layer];
-    for (let row = rowStart; row < rowEnd; row++) {
-      for (let col = colStart; col < colEnd; col++) {
-        const src = replaceBlock === undefined ?
-          block[row][col] : this.replaceBlock(block[row][col], replaceBlock);
-        if (src) {
-          block[row][col] = src;
-          await this.drawSpriteBlock(col, row, render, src);
-        }
-      }
-    }
-    this.copyCanvas(render, layer);
-  }  // updateLayerPrerender()
-
-  copyCanvas(render, layer) {
-    const canvas  = this.canvas;
-    const context = this.contexts;
-    // display prerender
-    canvas[render].style.display = 'inline';
-    canvas[layer].style.display  = 'none';
-    // copy prerender to layer
-    context[layer].drawImage(canvas[render], 0, 0);
-    // display layer
-    canvas[layer].style.display  = 'inline';
-    canvas[render].style.display = 'none';
-  }  // copyCanvas
-
   updateLayer(layers, opt) {
     if (typeof layers === 'string') layers = layers.split(' ');
     for (const layer of layers) {
@@ -496,29 +458,4 @@ class LittleMagicMake extends LittleMagic {
     });
     this.updateLayer(this.layers['system'], opt);
   }  // updateItembox()
-
-  updateItemboxPrerender(replaceBlock) {
-    const layer  = this.layers['system'];
-    const render = layer.replace('layer', 'render');
-    const contexts = this.contexts;
-    this.copyCanvas(render, layer);
-    // copy layer canvas to render canvas
-    if (replaceBlock !== undefined)
-      contexts[render].drawImage(this.canvas[layer], 0, 0);
-    // overwrite dynamic item
-    const imageSize = this.imageSize;
-    const position = this.meta['position'];
-    const [ x, y ] = [ imageSize * position['itemboxStart']['col'], imageSize ];
-    const width = this.gameWidth - imageSize *
-      (position['itemboxEnd']['col'] - position['itemboxStart']['col'] + 1);
-    const height = imageSize * 2;
-    contexts[render].fillStyle = '#222';
-    contexts[render].fillRect(x, y, width, height);
-    // prerender
-    const [ colStart, colEnd ] =
-      [ position['itemboxStart']['col'], position['itemboxEnd']['col'] ];
-    const [ rowStart, rowEnd ] =
-      [ position['itemboxStart']['row'], position['itemboxEnd']['row'] ];
-    this.updateLayerPrerender(layer, colStart, colEnd, rowStart, rowEnd, replaceBlock);
-  }  // updateItemboxPrerender()
 }  // class LittleMagicMake
