@@ -16,11 +16,14 @@ class LittleMagicMake extends LittleMagic {
     });
 
     // layer alias
-    this.stageLayers = [ 'layer1', 'layer2', 'layer3' ];
     this.layers  = {
       'menu'  : 'layer5',
       'effect': 'layer6',
       'system': 'layer7'
+    };
+    this.layerAlias = {
+      'stage' : [ 'layer1', 'layer2', 'layer3' ],
+      'system': [ this.layers['effect'], this.layers['system'] ]
     };
   }  // constructor()
 
@@ -42,6 +45,7 @@ class LittleMagicMake extends LittleMagic {
   }  // menuContext()
 
   systemContext() {
+    const layer = this.layers['effect'];
     const position = this.meta['position'];
     const [ x, y ] = [ this.imageSize * position['itemboxStart']['col'], 0 ];
     const width = this.gameWidth - this.imageSize *
@@ -49,10 +53,12 @@ class LittleMagicMake extends LittleMagic {
     const height = this.gameHeight - this.imageSize * position['itemboxEnd']['row'];
     const itemboxStart = position['itemboxStart'];
     const itemboxEnd = position['itemboxEnd'];
-    const context = this.contexts[this.layers['system']];
+    const context = this.contexts[layer];
     context.fillStyle = '#222';
     context.fillRect( x, y, width, height);
-    this.canvas[this.layers['system']].style.display = 'none';
+    for (const layer of this.layerAlias['system']) {
+      this.canvas[layer].style.display = 'none';
+    }
   }  // systemContext()
 
   drawLine(context, begin, end, stroke = 'black', width = 1) {
@@ -235,7 +241,7 @@ class LittleMagicMake extends LittleMagic {
   }  // itemLayer()
 
   activeLayer(col, row) {
-    for (const layer of [ ...this.stageLayers ].reverse()) {
+    for (const layer of [ ...this.layerAlias['stage'] ].reverse()) {
       if (this.blocks[layer][row][col]) return layer;
     }
     return this.state['layer'];
@@ -244,6 +250,7 @@ class LittleMagicMake extends LittleMagic {
   selectItembox() {
     const layer = this.layers['system'];
     this.state['layer'] = layer;
+    this.canvas[this.layers['effect']].style.display = 'inline';
     this.canvas[layer].style.display = 'inline';
   }  // selectItembox()
 
@@ -292,7 +299,9 @@ class LittleMagicMake extends LittleMagic {
 
   closeItembox(layer) {
     if (layer) this.state['layer'] = layer;
-    this.canvas[this.layers['system']].style.display = 'none';
+    for (const layer of this.layerAlias['system']) {
+      this.canvas[layer].style.display = 'none';
+    }
   }  // closeItembox()
 
   selectBlock(col, row, rotate) {
@@ -303,7 +312,7 @@ class LittleMagicMake extends LittleMagic {
     const opt = { 'prerender': true, 'clearSprite': true };
     this.setSpriteBlock(col, row, this.layers['menu'], src, opt);
     // update sprite
-    for (const layer of this.stageLayers)
+    for (const layer of this.layerAlias['stage'])
       this.updateLayerPrerender(layer, 0, this.col, 0, this.row, block);
     this.updateItem(block);
     if (this.state['layer'] === this.layers['system'])
@@ -314,7 +323,7 @@ class LittleMagicMake extends LittleMagic {
 
   itemOnBlock(col ,row) {
     let src = '';
-    for (const layer of [ ...this.stageLayers ].reverse()) {
+    for (const layer of [ ...this.layerAlias['stage'] ].reverse()) {
       if (this.blocks[layer][row][col]) {
         src = this.blocks[layer][row][col];
         const position = this.meta['position']['item'];
