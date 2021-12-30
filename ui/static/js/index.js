@@ -34,7 +34,7 @@ window.addEventListener('load', function () {
     let touch = event.touches[0];
     touch.button = 2;
     littleMagic.mouseEvent(canvas, touch);
-  }  // touchHanlder()
+  }  // touchHandler()
   const touchStart = function(event) {
     if (event.touches.length === 1)
       touchTimer = setTimeout(touchHandler, touchDuration, event);
