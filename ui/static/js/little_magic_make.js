@@ -19,7 +19,8 @@ class LittleMagicMake extends LittleMagic {
     this.stageLayers = [ 'layer1', 'layer2', 'layer3' ];
     this.layers  = {
       'menu'  : 'layer5',
-      'system': 'layer6'
+      'effect': 'layer6',
+      'system': 'layer7'
     };
   }  // constructor()
 
