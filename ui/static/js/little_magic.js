@@ -96,6 +96,7 @@ class LittleMagic {
   }  // setSprite()
 
   async setSpriteLayer(layers) {
+    if (typeof layers == 'string') layers = layers.split(' ');
     let images = [];
     for (const layer of layers) {
       const render = layer.replace('render', 'layer');

@@ -28,7 +28,8 @@ class LittleMagicMake extends LittleMagic {
 
     this.layerAlias = Object.assign(this.layerAlias, {
       'stage' : [ 'layer1', 'layer2', 'layer3' ],
-      'system': [ this.layers['effect'], this.layers['system'] ]
+      'system': [ this.layers['effect'], this.layers['system'] ],
+      'make'  : [ 'layer1', 'layer2', 'layer3', this.layers['system'] ]
     });
   }  // constructor()
 
@@ -358,16 +359,16 @@ class LittleMagicMake extends LittleMagic {
     this.updateBlock(this.layerAlias['stage'], block);
     this.setSpriteLayer(this.layerAlias['stage']);
     this.updateItem(block);
-    if (this.state['layer'] === this.layers['system'])
-      this.updateItemboxPrerender(block);
-    else
-      this.updateItembox(block);
+    if (this.state['layer'] === this.layers['system']) {
+      this.updateBlock(this.layers['system'], block);
+      this.setSpriteLayer(this.layers['system']);
+    }
   }  // selectBlock()
 
   updateBlock(layers, replaceBlock) {
     if (typeof layers == 'string') layers = layers.split(' ');
     for (const layer of layers) {
-    const block = this.blocks[layer];
+      const block = this.blocks[layer];
       for (let row = 0; row < this.row; row++) {
         for (let col = 0; col < this.col; col++) {
           const src = block[row][col];
