@@ -131,20 +131,24 @@ class LittleMagic {
   updateLayer(layers, opt) {
     if (typeof layers === 'string') layers = layers.split(' ');
     for (const layer of layers) {
-      const block = this.blocks[layer];
-      for (let row = opt['rowStart'] || 0; row < (opt['rowEnd'] || this.row); row++) {
-        for (let col = opt['colStart'] || 0; col < (opt['colEnd'] || this.col); col++) {
-          let src = block[row][col];
-          if (opt['block'] !== undefined) {
-            src = this.replaceBlock(block[row][col], opt['block']);
-          }
-          if (src) {
-            this.setSpriteBlock(col, row, layer, src, opt);
-          }
+      this.renderLayer(layer, opt);
+    }
+  }  // updateLayer()
+
+  renderLayer(layer, opt) {
+    const block = this.blocks[layer];
+    for (let row = opt['rowStart'] || 0; row < (opt['rowEnd'] || this.row); row++) {
+      for (let col = opt['colStart'] || 0; col < (opt['colEnd'] || this.col); col++) {
+        let src = block[row][col];
+        if (opt['block'] !== undefined) {
+          src = this.replaceBlock(block[row][col], opt['block']);
+        }
+        if (src) {
+          this.setSpriteBlock(col, row, layer, src, opt);
         }
       }
     }
-  }  // updateLayer()
+  }  // renderLayer()
 
   imagesrc(src) {
     return `/static/image/sprite/${this.state['graphic']}/${src}.png`;
