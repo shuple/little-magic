@@ -1,4 +1,4 @@
-export { LittleMagic, setSprite, setMeta };
+export { LittleMagic };
 
 class LittleMagic {
   constructor() {
@@ -80,19 +80,19 @@ class LittleMagic {
     }
   }  // loadScreen()
 
-  setMeta(restData) {
-    this.meta = restData;
+  setMeta(littleMagic, restData) {
+    littleMagic.meta = restData;
   }  // setMeta
 
-  setSprite(restData) {
+  setSprite(littleMagic, restData) {
     let layers = [];
     for (const data of restData) {
       for (const [layer, layerData] of Object.entries(data)) {
         layers.push(layer);
-        this.blocks[layer] = layerData;
+        littleMagic.blocks[layer] = layerData;
       }
     }
-    this.setSpriteLayer(layers);
+    littleMagic.setSpriteLayer(layers);
   }  // setSprite()
 
   async setSpriteLayer(layers) {
@@ -190,13 +190,3 @@ class LittleMagic {
     });
   };  // rest()
 };  // class LittleMagic
-
-// callback for /post/read rest
-//
-const setSprite = function(littleMagic, restData) {
-  littleMagic.setSprite(restData);
-};  // const setSprite()
-
-const setMeta = function(littleMagic, restData) {
-  littleMagic.setMeta(restData);
-}  // setMeta()
