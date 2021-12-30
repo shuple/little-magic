@@ -128,7 +128,7 @@ class LittleMagic {
     }
   }  // setSpriteBlocks()
 
-  async updateLayer(layer, opt) {
+  updateLayer(layer, opt) {
     const block = this.blocks[layer];
     for (let row = opt['rowStart'] || 0; row < (opt['rowEnd'] || this.row); row++) {
       for (let col = opt['colStart'] || 0; col < (opt['colEnd'] || this.col); col++) {
