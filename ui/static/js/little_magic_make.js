@@ -359,10 +359,10 @@ class LittleMagicMake extends LittleMagic {
     for (let row = opt['rowStart'] || 0; row < (opt['rowEnd'] || this.row); row++) {
       for (let col = opt['colStart'] || 0; col < (opt['colEnd'] || this.col); col++) {
         let src = block[row][col];
-        if (opt['replaceBlock'] !== undefined)
-          src = this.replaceBlock(block[row][col], opt['replaceBlock']);
+        if (opt['block'] !== undefined)
+          src = this.replaceBlock(block[row][col], opt['block']);
         if (src) {
-          this.setSpriteBlock(col, row, layer, src, { 'clearSprite': true });
+          this.setSpriteBlock(col, row, layer, src, opt);
         }
       }
     }
@@ -414,28 +414,20 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // updateItem()
 
-  updateItembox(replaceBlock) {
-    const layer = this.layers['system'];
-    const block = this.blocks[layer];
-    const context = this.contexts[layer];
-    context.fillStyle = '#222';
+  updateItembox(block, opt = {}) {
     const position = this.meta['position'];
     const [ colStart, colEnd ] =
       [ position['itemboxStart']['col'], position['itemboxEnd']['col'] ];
     const [ rowStart, rowEnd ] =
       [ position['itemboxStart']['row'], position['itemboxEnd']['row'] ];
-    for (let row = rowStart + 1; row < rowEnd; row++) {
-      for (let col = colStart + 1; col < colEnd; col++) {
-        const src = replaceBlock === undefined ?
-          block[row][col] : this.replaceBlock(block[row][col], replaceBlock);
-        if (src) {
-          context.fillRect(this.imageSize * col, this.imageSize * row,
-            this.imageSize, this.imageSize);
-          const opt = { 'clearSprite': true };
-          this.setSpriteBlock(col, row, layer, src, false, opt);
-        }
-      }
-    }
+    opt = Object.assign(opt, {
+      'colStart': colStart,
+      'colEnd'  : colEnd,
+      'rowStart': rowStart,
+      'rowEnd'  : rowEnd,
+      'block'   : block
+    });
+    this.updateLayer(this.layers['system'], opt);
   }  // updateItembox()
 
   updateItemboxPrerender(replaceBlock) {
