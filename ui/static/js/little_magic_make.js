@@ -328,7 +328,7 @@ class LittleMagicMake extends LittleMagic {
       this.state['lastBlock']++;
     // handle overflow
     this.state['lastBlock']--;
-  }  // lastBlock
+  }  // setLastBlock()
 
   selectItem(col, row) {
     this.state['item'] = this.blocks[this.layers['system']][row][col]
