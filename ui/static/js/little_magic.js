@@ -66,7 +66,7 @@ class LittleMagic {
           this.setSpriteBlocks(layer, layerData);
         } else if (typeof layerData[0] === 'object') {
           for (const d of layerData) {
-            const opt = { 'prerender': true, 'clearSprite': true };
+            const opt = { 'prerender': true };
             this.setSpriteBlock(d['col'], d['row'], layer, d['sprite'], opt);
           }
         }
@@ -78,21 +78,21 @@ class LittleMagic {
     this.meta = restData;
   }  // setMeta
 
-  async setSpriteBlock(col, row, layer, src, opt = {}) {
+  async setSpriteBlock(col, row, layer, src) {
     if (src === this.blocks[layer][row][col]) return;
+    // add render
     const render = `render${/layer(\d)\//.exec(src)[1]}`
-    if (opt['prerender']) {
-      this.removeSpriteBlock(col, row, render);
-      await this.drawSpriteBlock(col, row, render, src);
-      this.canvas[render].style.display = 'inline';
-    }
-    if (opt['clearSprite'])
-      this.removeSpriteBlock(col, row, layer);
+    this.removeSpriteBlock(col, row, render);
+    await this.drawSpriteBlock(col, row, render, src);
+    this.canvas[render].style.display = 'inline';
+    // add layer
+    this.removeSpriteBlock(col, row, layer);
     await this.drawSpriteBlock(col, row, layer, src);
-    this.blocks[layer][row][col] = src;
     // remove prerender
     this.removeSpriteBlock(col, row, render);
     this.canvas[render].style.display = 'none';
+    // update blocks
+    this.blocks[layer][row][col] = src;
   }  // setSpriteBlock();
 
   drawSpriteBlock(col, row, layer, src) {
