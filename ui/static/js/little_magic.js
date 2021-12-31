@@ -96,7 +96,7 @@ class LittleMagic {
   }  // setSprite()
 
   async setSpriteLayer(layers) {
-    if (typeof layers == 'string') layers = layers.split(' ');
+    if (typeof layers === 'string') layers = layers.split(' ');
     let images = [];
     for (const layer of layers) {
       const render = layer.replace('render', 'layer');
@@ -137,7 +137,7 @@ class LittleMagic {
   }  // setLayerImage()
 
   setCanvasImage(images, layers) {
-    if (typeof layers == 'string') layers = layers.split(' ');
+    if (typeof layers === 'string') layers = layers.split(' ');
     const canvas = this.canvas;
     for (const layer of layers) {
       const render = layer.replace('layer', 'render');
@@ -175,7 +175,7 @@ class LittleMagic {
   }  // drawSpriteImages()
 
   showPrerender(layers) {
-    if (typeof layers == 'string') layers = layers.split(' ');
+    if (typeof layers === 'string') layers = layers.split(' ');
     const canvas = this.canvas;
     for (const layer of layers) {
       const render = layer.replace('layer', 'render');
