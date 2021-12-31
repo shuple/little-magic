@@ -25,6 +25,11 @@ class LittleMagicMake extends LittleMagic {
       'system': 'layer7'
     });
 
+    this.color  = Object.assign(this.color, {
+      'menu'  : '#fff',
+      'system': '#222'
+    });
+
     this.layerGroup = Object.assign(this.layerGroup, {
       'stage' : [ 'layer1', 'layer2', 'layer3' ],
       'system': [ this.layers['effect'], this.layers['system'] ],
@@ -43,7 +48,7 @@ class LittleMagicMake extends LittleMagic {
 
   setMenuIcon(context, col, row, desc) {
     context.font = this.font['medium'];
-    context.fillStyle = 'white';
+    context.fillStyle = this.color['menu'];
     context.textAlign='center';
     context.textBaseline = 'middle';
     const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
@@ -60,7 +65,7 @@ class LittleMagicMake extends LittleMagic {
     const itemboxStart = position['itemboxStart'];
     const itemboxEnd = position['itemboxEnd'];
     const context = this.contexts[layer];
-    context.fillStyle = '#222';
+    context.fillStyle = this.color['system'];
     context.fillRect( x, y, width, height);
   }  // systemContext()
 
@@ -72,7 +77,7 @@ class LittleMagicMake extends LittleMagic {
       context.font = this.font['medium'];
       context.textAlign = 'start';
       context.textBaseline = 'alphabetic';
-      context.fillStyle = 'white';
+      context.fillStyle = this.color['menu'];
       context.fillText('X'  , x, y);
       context.fillText('Y'  , x, y * 2);
       context.fillText('COL', x, y * 3);
@@ -88,7 +93,7 @@ class LittleMagicMake extends LittleMagic {
       const context = this.contexts[this.layers['menu']];
       const ctx = /(\d)/.exec(this.state['layer'])[1];
       context.clearRect(x, 0, imageSize, imageSize * 4);
-      context.fillStyle = 'white';
+      context.fillStyle = this.color['menu'];
       context.fillText(`: ${xAxis}`, x, y);
       context.fillText(`: ${yAxis}`, x, y * 2);
       context.fillText(`: ${col}`  , x, y * 3);
@@ -347,7 +352,7 @@ class LittleMagicMake extends LittleMagic {
     const src = this.nextBlock(block[row][col], nextBlock);
     if (src) {
       const context = this.contexts[layer];
-      context.fillStyle = 'black';
+      context.fillStyle = this.color['blank'];
       context.fillRect(this.imageSize * col, this.imageSize * row, this.imageSize, this.imageSize);
       this.state['item'] = src;
       this.setSpriteBlock(col, row, layer, src);

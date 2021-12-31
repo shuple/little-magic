@@ -19,6 +19,10 @@ class LittleMagic {
     this.layers = {};
     this.layerGroup = {};
 
+    this.color = {
+      'blank': '#000'
+    };
+
     // static game size
     this.imageSize = 32;
     [ this.col, this.row ] = [ 16, 14 ];
@@ -68,7 +72,7 @@ class LittleMagic {
     const layer = document.querySelector('canvas:last-child').id
     const context = this.contexts[layer];
     if (on) {
-      context.fillStyle = 'black';
+      context.fillStyle = this.color['blank'];
       context.fillRect(0, 0, this.gameWidth, this.gameHeight);
     } else {
       context.clearRect(0, 0, this.gameWidth, this.gameHeight);
