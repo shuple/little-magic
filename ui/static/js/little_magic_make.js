@@ -365,7 +365,6 @@ class LittleMagicMake extends LittleMagic {
       'colEnd'  : colEnd,
       'rowStart': rowStart,
       'rowEnd'  : rowEnd,
-      'block'   : block
     };
     this.updateBlock(this.layers['system'], block);
     this.setSpriteLayer(this.layers['system'], opt);
