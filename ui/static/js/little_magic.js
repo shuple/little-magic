@@ -171,6 +171,43 @@ class LittleMagic {
     this.contexts[layer].clearRect(0, 0, this.gameWidth, this.gameHeight);
   }
 
+  async setSpriteBlock(col, row, layer, src) {
+    if (src === this.blocks[layer][row][col]) return;
+    // add render
+    const render = `render${/layer(\d)\//.exec(src)[1]}`
+    this.removeSpriteBlock(col, row, render);
+    await this.drawSpriteBlock(col, row, render, src);
+    this.canvas[render].style.display = 'inline';
+    // add layer
+    this.removeSpriteBlock(col, row, layer);
+    await this.drawSpriteBlock(col, row, layer, src);
+    // remove prerender
+    this.removeSpriteBlock(col, row, render);
+    this.canvas[render].style.display = 'none';
+    // update blocks
+    this.blocks[layer][row][col] = src;
+  }  // setSpriteBlock();
+
+  drawSpriteBlock(col, row, layer, src) {
+    return new Promise((resolve, reject) => {
+      const context = this.contexts[layer];
+      const imageSize = this.imageSize;
+      const image = new Image();
+      image.onload = () => {
+        resolve(context.drawImage(image, imageSize * col, imageSize * row, imageSize, imageSize));
+      };
+      image.src = this.imagesrc(src);
+      image.onerror = (error) => reject(error);
+    });
+  }  // drawSpriteBlock();
+
+  removeSpriteBlock(col, row, layer) {
+    const x = col * this.imageSize;
+    const y = row * this.imageSize;
+    this.contexts[layer].clearRect(x, y, this.imageSize, this.imageSize);
+    if (/layer\d/.exec(layer)) this.blocks[layer][row][col] = '';
+  }  // removeSpriteBlock()
+
   imagesrc(src) {
     return `/static/image/sprite/${this.state['graphic']}/${src}.png`;
   } // imagesrc()
