@@ -18,7 +18,7 @@ class LittleMagic {
 
     // layer alias
     this.layers = {};
-    this.layerAlias = {};
+    this.layerGroup = {};
 
     // static game size
     this.imageSize = 32;

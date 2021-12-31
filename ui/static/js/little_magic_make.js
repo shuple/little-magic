@@ -25,7 +25,7 @@ class LittleMagicMake extends LittleMagic {
       'system': 'layer7'
     });
 
-    this.layerAlias = Object.assign(this.layerAlias, {
+    this.layerGroup = Object.assign(this.layerGroup, {
       'stage' : [ 'layer1', 'layer2', 'layer3' ],
       'system': [ this.layers['effect'], this.layers['system'] ],
       'make'  : [ 'layer1', 'layer2', 'layer3', this.layers['system'] ]
@@ -215,7 +215,7 @@ class LittleMagicMake extends LittleMagic {
   }  // itemLayer()
 
   activeLayer(col, row) {
-    for (const layer of [ ...this.layerAlias['stage'] ].reverse()) {
+    for (const layer of [ ...this.layerGroup['stage'] ].reverse()) {
       if (this.blocks[layer][row][col]) return layer;
     }
     return this.state['layer'];
@@ -270,7 +270,7 @@ class LittleMagicMake extends LittleMagic {
 
   closeSystemItembox(layer) {
     if (layer) this.state['layer'] = layer;
-    for (const layer of this.layerAlias['system']) {
+    for (const layer of this.layerGroup['system']) {
       this.canvas[layer].style.display = 'none';
     }
   }  // closeSystemItembox()
@@ -282,8 +282,8 @@ class LittleMagicMake extends LittleMagic {
     const src = `layer1/block/0${block}/field/00`;
     this.setSpriteBlock(col, row, this.layers['menu'], src);
     // update sprite
-    this.updateBlock(this.layerAlias['make'], block);
-    this.setSpriteLayer(this.layerAlias['stage']);
+    this.updateBlock(this.layerGroup['make'], block);
+    this.setSpriteLayer(this.layerGroup['stage']);
     this.updateMenuItem(block);
     this.updateSystemItembox(block);
     if (this.state['layer'] === this.layers['system']) {
@@ -309,7 +309,7 @@ class LittleMagicMake extends LittleMagic {
 
   itemOnStageBlock(col ,row) {
     let src = '';
-    for (const layer of [ ...this.layerAlias['stage'] ].reverse()) {
+    for (const layer of [ ...this.layerGroup['stage'] ].reverse()) {
       if (this.blocks[layer][row][col]) {
         src = this.blocks[layer][row][col];
         const position = this.meta['position']['item'];
@@ -384,7 +384,7 @@ class LittleMagicMake extends LittleMagic {
     // debug option
     littleMagic.mouseDebug();
     // hide system layer
-    for (const layer of littleMagic.layerAlias['system']) {
+    for (const layer of littleMagic.layerGroup['system']) {
       littleMagic.canvas[layer].style.display = 'none';
     }
     // show game screen
