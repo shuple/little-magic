@@ -159,6 +159,7 @@ class LittleMagic {
       const context = this.contexts[data['render']];
       const image = new Image();
       image.onload = () => {
+        context.clearRect(data['x'], data['y'], data['width'], data['height']);
         context.drawImage(image, data['x'], data['y'], data['width'], data['height']);
         if (images.length > 0) {
           // recursion to await iteration
