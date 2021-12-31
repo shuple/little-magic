@@ -391,8 +391,7 @@ class LittleMagicMake extends LittleMagic {
     const block = this.blocks[layer];
     const position = this.meta['position'];
     const [ col, row ] = [ position['item']['col'], position['item']['row'] ];
-    const src = replaceBlock === undefined ?
-      block[row][col] : this.replaceBlock(block[row][col], replaceBlock);
+    const src = this.replaceBlock(block[row][col], replaceBlock);
     if (src) {
       const context = this.contexts[layer];
       context.fillStyle = 'black';
