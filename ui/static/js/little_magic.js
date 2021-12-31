@@ -73,7 +73,7 @@ class LittleMagic {
     const layer = document.querySelector('canvas:last-child').id
     const context = this.contexts[layer];
     if (on) {
-      context.fillStyle = '#222';
+      context.fillStyle = 'black';
       context.fillRect(0, 0, this.gameWidth, this.gameHeight);
     } else {
       context.clearRect(0, 0, this.gameWidth, this.gameHeight);
