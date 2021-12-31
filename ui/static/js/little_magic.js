@@ -84,17 +84,6 @@ class LittleMagic {
     littleMagic.meta = restData;
   }  // setMeta
 
-  setSprite(littleMagic, restData) {
-    let layers = [];
-    for (const data of restData) {
-      for (const [layer, layerData] of Object.entries(data)) {
-        layers.push(layer);
-        littleMagic.blocks[layer] = layerData;
-      }
-    }
-    littleMagic.setSpriteLayer(layers);
-  }  // setSprite()
-
   async setSpriteLayer(layers, opt = {}) {
     if (typeof layers === 'string') layers = layers.split(' ');
     let images = [];
@@ -111,7 +100,6 @@ class LittleMagic {
       // hide render and display layer
       this.showPrerender(layers);
     }
-    this.flag['load'] = false;
   }  // setSpriteImage
 
   setLayerImage(images, layer, opt) {
