@@ -262,7 +262,7 @@ class LittleMagicMake extends LittleMagic {
     const position = this.meta['position'];
     const [ col, row ] = [ position['block']['col'], position['block']['row'] ];
     this.setSpriteBlock(col, row, this.layers['menu'], `layer1/block/${block}/field/00`);
-  }  // findBlock()
+  }  // setBlock()
 
   findBlock(layer) {
     for (let row = 0; row < this.row; row++) {
