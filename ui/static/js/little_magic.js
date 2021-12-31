@@ -29,6 +29,12 @@ class LittleMagic {
     [ this.gameWidth, this.gameHeight ] =
       [ this.col * this.imageSize, this.row * this.imageSize ];
 
+    // static game system parameter
+    this.system = {
+      'load'   : false,
+      'timeout': 200  // millisecond
+    };
+
     this.canvas = {};
     this.contexts = {};
 
@@ -213,6 +219,12 @@ class LittleMagic {
   imagesrc(src) {
     return `/static/image/sprite/${this.state['graphic']}/${src}.png`;
   } // imagesrc()
+
+  // callback for SetTimeout
+  //
+  loading(littleMagic) {
+    littleMagic.load = false;
+  }
 
   async rest(url, restData, callback) {
     await fetch(url, {

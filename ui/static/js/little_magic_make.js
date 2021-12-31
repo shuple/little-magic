@@ -285,6 +285,10 @@ class LittleMagicMake extends LittleMagic {
   }  // closeSystemItembox()
 
   selectMenuBlock(col, row, rotate) {
+    // prevent click bashing
+    if (this.load) return;
+    this.load = true;
+    setTimeout(this.loading, this.system['timeout'], this);
     let block = this.state['block'] + rotate;
     block = block < 0 ? this.state['lastBlock'] : block %= this.state['lastBlock'] + 1;
     this.state['block'] = block;
