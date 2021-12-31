@@ -282,11 +282,12 @@ class LittleMagicMake extends LittleMagic {
     const src = `layer1/block/0${block}/field/00`;
     this.setSpriteBlock(col, row, this.layers['menu'], src);
     // update sprite
-    this.updateBlock(this.layerAlias['stage'], block);
+    this.updateBlock(this.layerAlias['make'], block);
     this.setSpriteLayer(this.layerAlias['stage']);
     this.updateMenuItem(block);
+    this.updateSystemItembox(block);
     if (this.state['layer'] === this.layers['system']) {
-      this.updateSystemItembox(block);
+      this.showPrerender(this.layers['system']);
     }
   }  // selectMenuBlock()
 
@@ -381,7 +382,6 @@ class LittleMagicMake extends LittleMagic {
     littleMagic.systemContext();
     littleMagic.setStateLastBlock();
     // hide system layer
-    const canvas = littleMagic.canvas;
     for (const layer of littleMagic.layerAlias['system']) {
       littleMagic.canvas[layer].style.display = 'none';
     }

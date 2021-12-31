@@ -97,8 +97,6 @@ class LittleMagic {
       images = [];
       this.setCanvasImage(images, layers);
       await this.drawSpriteImages(images);
-      // hide render and display layer
-      this.showPrerender(layers);
     }
   }  // setSpriteImage
 
