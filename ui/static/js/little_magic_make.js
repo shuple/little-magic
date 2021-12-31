@@ -257,7 +257,6 @@ class LittleMagicMake extends LittleMagic {
     const src = this.findStageBlock('layer1');
     const block = /\/block\/(\d{2})/.exec(src)[1];
     this.state['block'] = parseInt(block);
-    this.updateSystemItembox(this.state['block']);
     // set block on menu
     const position = this.meta['position'];
     const [ col, row ] = [ position['block']['col'], position['block']['row'] ];
@@ -311,8 +310,7 @@ class LittleMagicMake extends LittleMagic {
     this.setSpriteLayer(this.layerAlias['stage']);
     this.updateMenuItem(block);
     if (this.state['layer'] === this.layers['system']) {
-      this.updateBlock(this.layers['system'], block);
-      this.setSpriteLayer(this.layers['system']);
+      this.updateSystemItembox(block);
     }
   }  // selectMenuBlock()
 
@@ -364,28 +362,6 @@ class LittleMagicMake extends LittleMagic {
     return match ? src.replace(/block\/\d{2}/, `${match[1]}${block}`) : '';
   }  // replaceBlock()
 
-  updateLayer(layers, opt) {
-    if (typeof layers === 'string') layers = layers.split(' ');
-    for (const layer of layers) {
-      this.renderLayer(layer, opt);
-    }
-  }  // updateLayer()
-
-  renderLayer(layer, opt) {
-    const block = this.blocks[layer];
-    for (let row = opt['rowStart'] || 0; row < (opt['rowEnd'] || this.row); row++) {
-      for (let col = opt['colStart'] || 0; col < (opt['colEnd'] || this.col); col++) {
-        let src = block[row][col];
-        if (opt['block'] !== undefined) {
-          src = this.replaceBlock(block[row][col], opt['block']);
-        }
-        if (src) {
-          this.setSpriteBlock(col, row, layer, src);
-        }
-      }
-    }
-  }  // renderLayer()
-
   updateMenuItem(replaceBlock) {
     const layer = this.layers['menu'];
     const block = this.blocks[layer];
@@ -401,19 +377,20 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // updateMenuItem()
 
-  updateSystemItembox(block, opt = {}) {
+  updateSystemItembox(block) {
     const position = this.meta['position'];
     const [ colStart, colEnd ] =
       [ position['itemboxStart']['col'], position['itemboxEnd']['col'] ];
     const [ rowStart, rowEnd ] =
       [ position['itemboxStart']['row'], position['itemboxEnd']['row'] ];
-    opt = Object.assign(opt, {
+    const opt = {
       'colStart': colStart,
       'colEnd'  : colEnd,
       'rowStart': rowStart,
       'rowEnd'  : rowEnd,
       'block'   : block
-    });
-    this.updateLayer(this.layers['system'], opt);
+    };
+    this.updateBlock(this.layers['system'], block);
+    this.setSpriteLayer(this.layers['system'], opt);
   }  // updateSystemItembox()
 }  // class LittleMagicMake

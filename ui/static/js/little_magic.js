@@ -95,11 +95,11 @@ class LittleMagic {
     littleMagic.setSpriteLayer(layers);
   }  // setSprite()
 
-  async setSpriteLayer(layers) {
+  async setSpriteLayer(layers, opt = {}) {
     if (typeof layers === 'string') layers = layers.split(' ');
     let images = [];
     for (const layer of layers) {
-      this.setLayerImage(images, layer);
+      this.setLayerImage(images, layer, opt);
     }
     if (images.length > 0) {
       // draw on render
@@ -114,12 +114,12 @@ class LittleMagic {
     this.flag['load'] = false;
   }  // setSpriteImage
 
-  setLayerImage(images, layer) {
+  setLayerImage(images, layer, opt) {
     const block = this.blocks[layer];
     const imageSize = this.imageSize;
     const render = layer.replace('layer', 'render');
-    for (let row = 0; row < this.row; row++) {
-      for (let col = 0; col < this.col; col++) {
+    for (let row = opt['rowStart'] || 0; row < (opt['rowEnd'] || this.row); row++) {
+      for (let col = opt['colStart'] || 0; col < (opt['colEnd'] || this.col); col++) {
         if (block[row][col]) {
           images.push({
             'src'   : this.imagesrc(block[row][col]),
