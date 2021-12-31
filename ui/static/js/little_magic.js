@@ -99,7 +99,6 @@ class LittleMagic {
     if (typeof layers === 'string') layers = layers.split(' ');
     let images = [];
     for (const layer of layers) {
-      const render = layer.replace('render', 'layer');
       this.setLayerImage(images, layer);
     }
     if (images.length > 0) {
