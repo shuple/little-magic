@@ -23,7 +23,7 @@ class LittleMagic {
       'blank': '#000'
     };
 
-    // static game size
+    // static game sprite parameter
     this.imageSize = 32;
     [ this.col, this.row ] = [ 16, 14 ];
     [ this.gameWidth, this.gameHeight ] =
