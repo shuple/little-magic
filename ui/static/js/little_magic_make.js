@@ -280,8 +280,8 @@ class LittleMagicMake extends LittleMagic {
     block = block < 0 ? this.state['lastBlock'] : block %= this.state['lastBlock'] + 1;
     this.state['block'] = block;
     const src = `layer1/block/0${block}/field/00`;
-    this.setSpriteBlock(col, row, this.layers['menu'], src);
     // update sprite
+    this.setSpriteBlock(col, row, this.layers['menu'], src);
     this.updateBlock(this.layerGroup['make'], block);
     this.setSpriteLayer(this.layerGroup['stage']);
     this.updateMenuItem(block);
