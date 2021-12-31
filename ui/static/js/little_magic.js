@@ -98,7 +98,7 @@ class LittleMagic {
       this.setCanvasImage(images, layers);
       await this.drawSpriteImages(images);
     }
-  }  // setSpriteImage
+  }  // setSpriteLayer
 
   setLayerImage(images, layer, opt) {
     const block = this.blocks[layer];
