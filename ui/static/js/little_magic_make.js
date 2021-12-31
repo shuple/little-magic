@@ -45,9 +45,6 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // startLoad()
 
-  makeContext() {
-  }
-
   menuContext() {
     const context = this.contexts[this.layers['menu']];
     for (const content of [ 'Item', 'Block' ]) {
