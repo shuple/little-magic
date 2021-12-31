@@ -102,20 +102,30 @@ class LittleMagic {
       const render = layer.replace('render', 'layer');
       this.setLayerImage(images, layer);
     }
-    if (images.length > 0) await this.drawSpriteImages(images);
-    this.copyRender(layers);
+    if (images.length > 0) {
+      // draw on render
+      await this.drawSpriteImages(images);
+      // copy render to layer
+      images = [];
+      this.setCanvasImage(images, layers);
+      await this.drawSpriteImages(images);
+      // hide render and display layer
+      this.showPrerender(layers);
+    }
     this.flag['load'] = false;
   }  // setSpriteImage
 
   setLayerImage(images, layer) {
     const block = this.blocks[layer];
     const imageSize = this.imageSize;
+    const render = layer.replace('layer', 'render');
     for (let row = 0; row < this.row; row++) {
       for (let col = 0; col < this.col; col++) {
         if (block[row][col]) {
           images.push({
             'src'   : this.imagesrc(block[row][col]),
             'layer' : layer,
+            'render': render,
             'x'     : col * imageSize,
             'y'     : row * imageSize,
             'width' : imageSize,
@@ -126,11 +136,28 @@ class LittleMagic {
     }
   }  // setLayerImage()
 
+  setCanvasImage(images, layers) {
+    if (typeof layers == 'string') layers = layers.split(' ');
+    const canvas = this.canvas;
+    for (const layer of layers) {
+      const render = layer.replace('layer', 'render');
+      const src = canvas[render].toDataURL('image/png');
+      images.push({
+        'src'   : src,
+        'layer' : render,
+        'render': layer,
+        'x'     : 0,
+        'y'     : 0,
+        'width' : this.gameWidth,
+        'height': this.gameHeight
+      });
+    }
+  }  // setCanvasImage
+
   drawSpriteImages(images) {
     return new Promise((resolve, reject) => {
       const data = images.shift();
-      const render = data['layer'].replace('layer', 'render');
-      const context = this.contexts[render];
+      const context = this.contexts[data['render']];
       const image = new Image();
       image.onload = () => {
         context.drawImage(image, data['x'], data['y'], data['width'], data['height']);
@@ -147,25 +174,15 @@ class LittleMagic {
     });
   }  // drawSpriteImages()
 
-  copyRender(layers) {
+  showPrerender(layers) {
     if (typeof layers == 'string') layers = layers.split(' ');
-    const canvas  = this.canvas;
-    const context = this.contexts;
-    // display prerender
+    const canvas = this.canvas;
     for (const layer of layers) {
       const render = layer.replace('layer', 'render');
-      canvas[render].style.display = 'inline';
-      canvas[layer].style.display = 'none';
-      // copy render to layer
-      context[layer].clearRect(0, 0, this.gameWidth, this.gameHeight);
-      context[layer].drawImage(canvas[render], 0, 0);
-      // display layer
       canvas[layer].style.display = 'inline';
-      // clear render
       canvas[render].style.display = 'none';
-      this.clearContext(render);
     }
-  }  // copyRender()
+  }  // showPrerender()
 
   clearContext(layer) {
     this.contexts[layer].clearRect(0, 0, this.gameWidth, this.gameHeight);
