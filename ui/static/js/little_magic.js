@@ -10,7 +10,6 @@ class LittleMagic {
 
     // game state
     this.state = {
-      'timeout': 100,
       'graphic': 'sfc',
       'windowWidth' : window.width,
       'windowHeigth': window.heigth,
@@ -31,10 +30,6 @@ class LittleMagic {
 
     this.initContext();
     this.setGameSize();
-
-    this.flag = {
-      'load': true
-    };
   }  // constructor
 
   initContext() {
