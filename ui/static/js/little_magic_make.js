@@ -291,7 +291,7 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // selectMenuBlock()
 
-  updateBlock(layers, replaceBlock) {
+  updateBlock(layers, nextBlock) {
     if (typeof layers == 'string') layers = layers.split(' ');
     for (const layer of layers) {
       const block = this.blocks[layer];
@@ -300,7 +300,7 @@ class LittleMagicMake extends LittleMagic {
           const src = block[row][col];
           const match = /\/(block\/\d)/.exec(src);
           if (match) {
-            block[row][col] = src.replace(/block\/\d{2}/, `${match[1]}${replaceBlock}`);
+            block[row][col] = src.replace(/block\/\d{2}/, `${match[1]}${nextBlock}`);
           }
         }
       }
@@ -334,17 +334,17 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // rotateItemReset()
 
-  replaceBlock(src, block) {
+  nextBlock(src, block) {
     const match = /\/(block\/\d)/.exec(src);
     return match ? src.replace(/block\/\d{2}/, `${match[1]}${block}`) : '';
-  }  // replaceBlock()
+  }  // nextBlock()
 
-  updateMenuItem(replaceBlock) {
+  updateMenuItem(nextBlock) {
     const layer = this.layers['menu'];
     const block = this.blocks[layer];
     const position = this.meta['position'];
     const [ col, row ] = [ position['item']['col'], position['item']['row'] ];
-    const src = this.replaceBlock(block[row][col], replaceBlock);
+    const src = this.nextBlock(block[row][col], nextBlock);
     if (src) {
       const context = this.contexts[layer];
       context.fillStyle = 'black';
@@ -354,7 +354,7 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // updateMenuItem()
 
-  updateSystemItembox(block) {
+  updateSystemItembox(nextBlock) {
     const position = this.meta['position'];
     const [ colStart, colEnd ] =
       [ position['itemboxStart']['col'], position['itemboxEnd']['col'] ];
@@ -366,7 +366,7 @@ class LittleMagicMake extends LittleMagic {
       'rowStart': rowStart,
       'rowEnd'  : rowEnd,
     };
-    this.updateBlock(this.layers['system'], block);
+    this.updateBlock(this.layers['system'], nextBlock);
     this.setSpriteLayer(this.layers['system'], opt);
   }  // updateSystemItembox()
 
