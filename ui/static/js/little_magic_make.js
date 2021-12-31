@@ -39,6 +39,10 @@ class LittleMagicMake extends LittleMagic {
 
   menuContext() {
     const context = this.contexts[this.layers['menu']];
+    const imageSize = this.imageSize
+    const item = this.meta['position']['item'];
+    context.fillSytle = this.color['blank'];
+    context.fillRect(item['col'] * imageSize, item['row'] * imageSize, imageSize, imageSize);
     for (const content of [ 'Item', 'Block' ]) {
       const key = content.toLowerCase();
       const position = this.meta['position'][key];
