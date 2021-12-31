@@ -69,10 +69,10 @@ class LittleMagic {
     }
   }  // setCanvasScale()
 
-  loadScreen(flag) {
+  loadScreen(on) {
     const layer = document.querySelector('canvas:last-child').id
     const context = this.contexts[layer];
-    if (flag) {
+    if (on) {
       context.fillStyle = '#222';
       context.fillRect(0, 0, this.gameWidth, this.gameHeight);
     } else {

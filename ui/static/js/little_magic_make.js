@@ -381,12 +381,13 @@ class LittleMagicMake extends LittleMagic {
     littleMagic.menuContext();
     littleMagic.systemContext();
     littleMagic.setStateLastBlock();
+    // debug option
+    littleMagic.mouseDebug();
     // hide system layer
     for (const layer of littleMagic.layerAlias['system']) {
       littleMagic.canvas[layer].style.display = 'none';
     }
-    // debug option
-    littleMagic.mouseDebug();
+    // show game screen
     littleMagic.loadScreen(false);
   }  // setSprite()
 }  // class LittleMagicMake
