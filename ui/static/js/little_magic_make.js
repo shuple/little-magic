@@ -50,9 +50,18 @@ class LittleMagicMake extends LittleMagic {
     for (const content of [ 'Item', 'Block' ]) {
       const key = content.toLowerCase();
       const position = this.meta['position'][key];
-      this.setIcon(context, position['col'] + 1,  position['row'], content);
+      this.setMenuIcon(context, position['col'] + 1,  position['row'], content);
     }
   }  // menuContext()
+
+  setMenuIcon(context, col, row, desc) {
+    context.font = this.font['medium'];
+    context.fillStyle = 'white';
+    context.textAlign='center';
+    context.textBaseline = 'middle';
+    const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
+    context.fillText(desc, iconWidth + (this.imageSize / 2), iconHeight + (this.imageSize / 2));
+  }  // setMenuIcon
 
   systemContext() {
     const layer = this.layers['effect'];
@@ -67,15 +76,6 @@ class LittleMagicMake extends LittleMagic {
     context.fillStyle = '#222';
     context.fillRect( x, y, width, height);
   }  // systemContext()
-
-  setIcon(context, col, row, desc) {
-    context.font = this.font['medium'];
-    context.fillStyle = 'white';
-    context.textAlign='center';
-    context.textBaseline = 'middle';
-    const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
-    context.fillText(desc, iconWidth + (this.imageSize / 2), iconHeight + (this.imageSize / 2));
-  }  // setIcon
 
   mouseDebug() {
     if (this.meta['debug']['mouseDebug']) {
@@ -144,8 +144,8 @@ class LittleMagicMake extends LittleMagic {
   init() {
     this.menuContext();
     this.systemContext();
-    this.setBlock();
-    this.setLastBlock();
+    this.setMenuBlock();
+    this.setMenuLastBlock();
     // debug option
     this.mouseDebug();
   }  // init()
@@ -157,7 +157,7 @@ class LittleMagicMake extends LittleMagic {
     case 'layer3':
       if (this.areaRange(col, row, 'stage')) {
         if (event.altKey) {
-          this.state['item'] = this.itemOnBlock(col, row);
+          this.state['item'] = this.itemOnStageBlock(col, row);
           this.state['layer'] = this.itemLayer(this.state['item']);
         } else if (this.state['item']) {
           const layer = this.itemLayer(this.state['item']);
@@ -167,22 +167,22 @@ class LittleMagicMake extends LittleMagic {
           this.setSpriteBlock(col, row, layer, src);
         }
       } else if (this.areaBlock(col, row, 'item')) {
-        this.selectItembox();
+        this.selectMenuItembox();
       } else if (this.areaBlock(col, row, 'block')) {
-        this.selectBlock(col, row, 1);
+        this.selectMenuBlock(col, row, 1);
       }
       break;
     case this.layers['system']:
       if (this.areaRange(col, row, 'itembox')) {
-        this.selectItem(col, row);
+        this.selectSystemItembox(col, row);
       } else if (this.areaRange(col, row, 'stage')) {
-        this.closeItembox(this.state['prev']['layer']);
+        this.closeSystemItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'item')) {
-        this.closeItembox(this.state['prev']['layer']);
+        this.closeSystemItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'block')) {
-        this.selectBlock(col, row, 1);
+        this.selectMenuBlock(col, row, 1);
       } else if (this.areaRange(col, row, 'menu')) {
-        this.closeItembox(this.state['prev']['layer']);
+        this.closeSystemItembox(this.state['prev']['layer']);
       }
       break;
     }
@@ -201,20 +201,20 @@ class LittleMagicMake extends LittleMagic {
         this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/00');
         this.state['item'] = ''
       } else if (this.areaBlock(col, row, 'block')) {
-        this.selectBlock(col, row, -1);
+        this.selectMenuBlock(col, row, -1);
       }
       break;
     case this.layers['system']:
       if (this.areaRange(col, row, 'stage')) {
-        this.closeItembox(this.state['prev']['layer']);
+        this.closeSystemItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'item')) {
         this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/00');
         this.state['item'] = ''
-        this.closeItembox(this.state['prev']['layer']);
+        this.closeSystemItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'block')) {
-        this.selectBlock(col, row, -1);
+        this.selectMenuBlock(col, row, -1);
       } else if (this.areaRange(col, row, 'menu')) {
-        this.closeItembox(this.state['prev']['layer']);
+        this.closeSystemItembox(this.state['prev']['layer']);
       }
       break;
     default:
@@ -245,26 +245,26 @@ class LittleMagicMake extends LittleMagic {
     return this.state['layer'];
   }  // activeBlock()
 
-  selectItembox() {
+  selectMenuItembox() {
     const layer = this.layers['system'];
     this.state['layer'] = layer;
     this.canvas[this.layers['effect']].style.display = 'inline';
     this.canvas[layer].style.display = 'inline';
-  }  // selectItembox()
+  }  // selectMenuItembox()
 
-  setBlock() {
+  setMenuBlock() {
     // find block src from layer1
-    const src = this.findBlock('layer1');
+    const src = this.findStageBlock('layer1');
     const block = /\/block\/(\d{2})/.exec(src)[1];
     this.state['block'] = parseInt(block);
-    this.updateItembox(this.state['block']);
+    this.updateSystemItembox(this.state['block']);
     // set block on menu
     const position = this.meta['position'];
     const [ col, row ] = [ position['block']['col'], position['block']['row'] ];
     this.setSpriteBlock(col, row, this.layers['menu'], `layer1/block/${block}/field/00`);
-  }  // setBlock()
+  }  // setMenuBlock()
 
-  findBlock(layer) {
+  findStageBlock(layer) {
     for (let row = 0; row < this.row; row++) {
       for (let col = 1; col < this.col - 2; col++) {
         const src = this.blocks[layer][row][col];
@@ -273,34 +273,34 @@ class LittleMagicMake extends LittleMagic {
     }
     // default block
     return 'layer1/block/00/field/00';
-  }  // stageBlock()
+  }  // findStageBlock()
 
-  setLastBlock() {
+  setMenuLastBlock() {
     while (`layer1/block/0${this.state['lastBlock']}/field/00` in this.meta['sprite'])
       this.state['lastBlock']++;
     // handle overflow
     this.state['lastBlock']--;
-  }  // setLastBlock()
+  }  // setMenuLastBlock()
 
-  selectItem(col, row) {
+  selectSystemItembox(col, row) {
     this.state['item'] = this.blocks[this.layers['system']][row][col]
     if (this.state['item']) {
       const layer = /^(layer\d)/.exec(this.state['item']);
       const position = this.meta['position']['item'];
       this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], this.state['item']);
       [ this.state['layer'], this.state['prev']['layer'] ] = [ layer[1], layer[1] ];
-      this.closeItembox();
+      this.closeSystemItembox();
     }
-  }  // selectItem()
+  }  // selectSystemItembox()
 
-  closeItembox(layer) {
+  closeSystemItembox(layer) {
     if (layer) this.state['layer'] = layer;
     for (const layer of this.layerAlias['system']) {
       this.canvas[layer].style.display = 'none';
     }
-  }  // closeItembox()
+  }  // closeSystemItembox()
 
-  selectBlock(col, row, rotate) {
+  selectMenuBlock(col, row, rotate) {
     let block = this.state['block'] + rotate;
     block = block < 0 ? this.state['lastBlock'] : block %= this.state['lastBlock'] + 1;
     this.state['block'] = block;
@@ -309,12 +309,12 @@ class LittleMagicMake extends LittleMagic {
     // update sprite
     this.updateBlock(this.layerAlias['stage'], block);
     this.setSpriteLayer(this.layerAlias['stage']);
-    this.updateItem(block);
+    this.updateMenuItem(block);
     if (this.state['layer'] === this.layers['system']) {
       this.updateBlock(this.layers['system'], block);
       this.setSpriteLayer(this.layers['system']);
     }
-  }  // selectBlock()
+  }  // selectMenuBlock()
 
   updateBlock(layers, replaceBlock) {
     if (typeof layers == 'string') layers = layers.split(' ');
@@ -332,7 +332,7 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // updateBlock()
 
-  itemOnBlock(col ,row) {
+  itemOnStageBlock(col ,row) {
     let src = '';
     for (const layer of [ ...this.layerAlias['stage'] ].reverse()) {
       if (this.blocks[layer][row][col]) {
@@ -343,7 +343,7 @@ class LittleMagicMake extends LittleMagic {
       }
     }
     return src;
-  }  // itemOnBlock()
+  }  // itemOnStageBlock()
 
   rotateItem(col, row, layer, src) {
     const sprite = this.meta['sprite'];
@@ -386,7 +386,7 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // renderLayer()
 
-  updateItem(replaceBlock) {
+  updateMenuItem(replaceBlock) {
     const layer = this.layers['menu'];
     const block = this.blocks[layer];
     const position = this.meta['position'];
@@ -401,9 +401,9 @@ class LittleMagicMake extends LittleMagic {
       const opt = { 'prerender': true };
       this.setSpriteBlock(col, row, layer, src);
     }
-  }  // updateItem()
+  }  // updateMenuItem()
 
-  updateItembox(block, opt = {}) {
+  updateSystemItembox(block, opt = {}) {
     const position = this.meta['position'];
     const [ colStart, colEnd ] =
       [ position['itemboxStart']['col'], position['itemboxEnd']['col'] ];
@@ -417,5 +417,5 @@ class LittleMagicMake extends LittleMagic {
       'block'   : block
     });
     this.updateLayer(this.layers['system'], opt);
-  }  // updateItembox()
+  }  // updateSystemItembox()
 }  // class LittleMagicMake
