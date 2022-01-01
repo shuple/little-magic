@@ -15,7 +15,10 @@ class LittleMagicMake extends LittleMagic {
       'row'  : 0,
       'layer': 'layer1',
       'block': 0,
-      'lastBlock' : 0
+    });
+
+    this.system = Object.assign(this.system, {
+      'lastBlock': 0
     });
 
     // layer alias
@@ -266,11 +269,11 @@ class LittleMagicMake extends LittleMagic {
   }  // findStageBlock()
 
   setStateLastBlock() {
-    while (`layer1/block/0${this.state['lastBlock']}/field/00` in this.meta['sprite'])
-      this.state['lastBlock']++;
+    while (`layer1/block/0${this.system['lastBlock']}/field/00` in this.meta['sprite'])
+      this.system['lastBlock']++;
 
     // handle overflow
-    this.state['lastBlock']--;
+    this.system['lastBlock']--;
   }  // setStateLastBlock()
 
   async setMenuSaveIcon() {
@@ -303,7 +306,7 @@ class LittleMagicMake extends LittleMagic {
     this.load = true;
     setTimeout(this.loading, this.system['timeout'], this);
     let block = this.state['block'] + rotate;
-    block = block < 0 ? this.state['lastBlock'] : block %= this.state['lastBlock'] + 1;
+    block = block < 0 ? this.system['lastBlock'] : block %= this.system['lastBlock'] + 1;
     this.state['block'] = block;
     const src = `layer1/block/0${block}/field/00`;
 
