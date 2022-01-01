@@ -43,7 +43,7 @@ class LittleMagicMake extends LittleMagic {
     const item = this.meta['position']['item'];
     context.fillSytle = this.color['blank'];
     context.fillRect(item['col'] * imageSize, item['row'] * imageSize, imageSize, imageSize);
-    for (const content of [ 'Item', 'Block' ]) {
+    for (const content of [ 'Item', 'Block', 'Save' ]) {
       const key = content.toLowerCase();
       const position = this.meta['position'][key];
       this.setMenuIcon(context, position['col'] + 1,  position['row'], content);
@@ -266,6 +266,12 @@ class LittleMagicMake extends LittleMagic {
     this.state['lastBlock']--;
   }  // setStateLastBlock()
 
+  async setMenuSaveIcon() {
+    const position = this.meta['position']['save'];
+    const src = 'layer0/save/00';
+    await this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], src);
+  }
+
   selectSystemItembox(col, row) {
     this.state['item'] = this.blocks[this.layers['system']][row][col]
     if (this.state['item']) {
@@ -390,6 +396,7 @@ class LittleMagicMake extends LittleMagic {
     littleMagic.blocks = restData;
     await littleMagic.setSpriteLayer(layers);
     await littleMagic.setMenuBlock();
+    await littleMagic.setMenuSaveIcon();
     littleMagic.menuContext();
     littleMagic.systemContext();
     littleMagic.setStateLastBlock();
