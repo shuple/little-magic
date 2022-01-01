@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import argparse, flask, json, os, re, sys
+import argparse, flask, json, os, glob, re, sys
 import logging, traceback
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -49,6 +49,26 @@ def post_read():
     except Exception as e:
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
         d = { 'error': f'{str(e)}' }
+    return json.dumps({ 'data': json.dumps(data) })
+#  def post_read()
+
+# write file
+#
+@app.route('/post/write', methods=['POST'])
+def post_write():
+    try:
+        post = flask.request.json
+        if post['content'] == 'stage':
+            stage_path = f"{path}/../data/system/{post['graphic']}/stage"
+            file_path = max(glob.glob(f"{stage_path}/[0-9][0-9][0-9].json"))
+            stage = '%03i' % (int(os.path.splitext(os.path.basename(file_path))[0]) + 1)
+            with open(f'{stage_path}/{stage}.json', 'w') as fp:
+                fp.write(json.dumps(post['blocks'], indent = 2))
+            data = { 'data': { 'stage': stage } }
+        #  if
+    except Exception as e:
+        logging.error(f'{flask.request.path} {traceback.format_exc()}')
+        data = { 'error': f'{str(e)}' }
     return json.dumps({ 'data': json.dumps(data) })
 #  def post_read()
 

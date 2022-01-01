@@ -157,6 +157,8 @@ class LittleMagicMake extends LittleMagic {
         this.selectMenuItembox();
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectMenuBlock(col, row, 1);
+      } else if (this.areaBlock(col, row, 'save')) {
+        this.selectMenuSave();
       }
       break;
     case this.layers['system']:
@@ -327,6 +329,15 @@ class LittleMagicMake extends LittleMagic {
       }
     }
   }  // updateBlock()
+
+  selectMenuSave() {
+    const restData = {
+      'graphic': this.state['graphic'],
+      'content': 'stage',
+      'blocks' : this.blocks
+    };
+    this.rest('/post/write', restData , this.systemMessage);
+  }  // selectMenuSave()
 
   itemOnStageBlock(col ,row) {
     let src = '';

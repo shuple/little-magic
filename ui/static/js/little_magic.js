@@ -85,10 +85,6 @@ class LittleMagic {
     }
   }  // loadScreen()
 
-  setMeta(littleMagic, restData) {
-    littleMagic.meta = restData;
-  }  // setMeta
-
   async setSpriteLayer(layers, opt = {}) {
     if (typeof layers === 'string') layers = layers.split(' ');
     let images = [];
@@ -241,4 +237,13 @@ class LittleMagic {
       console.log(error);
     });
   };  // rest()
+
+  // rest callback
+
+  setMeta(littleMagic, restData) {
+    littleMagic.meta = restData;
+  }  // setMeta
+
+  systemMessage(littleMagic, restData) {
+  }  // systemMessage
 };  // class LittleMagic
