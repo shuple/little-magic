@@ -246,6 +246,7 @@ class LittleMagicMake extends LittleMagic {
     const src = this.findStageBlock('layer1');
     const block = /\/block\/(\d{2})/.exec(src)[1];
     this.state['block'] = parseInt(block);
+
     // set block on menu
     const position = this.meta['position'];
     const [ col, row ] = [ position['block']['col'], position['block']['row'] ];
@@ -259,6 +260,7 @@ class LittleMagicMake extends LittleMagic {
         if (/\/block/.exec(src)) return src;
       }
     }
+
     // default block
     return 'layer1/block/00/field/00';
   }  // findStageBlock()
@@ -266,6 +268,7 @@ class LittleMagicMake extends LittleMagic {
   setStateLastBlock() {
     while (`layer1/block/0${this.state['lastBlock']}/field/00` in this.meta['sprite'])
       this.state['lastBlock']++;
+
     // handle overflow
     this.state['lastBlock']--;
   }  // setStateLastBlock()
@@ -303,6 +306,7 @@ class LittleMagicMake extends LittleMagic {
     block = block < 0 ? this.state['lastBlock'] : block %= this.state['lastBlock'] + 1;
     this.state['block'] = block;
     const src = `layer1/block/0${block}/field/00`;
+
     // update sprite
     this.setSpriteBlock(col, row, this.layers['menu'], src);
     this.updateBlock(this.layerGroup['make'], block);
@@ -411,12 +415,15 @@ class LittleMagicMake extends LittleMagic {
     await littleMagic.menuContext();
     littleMagic.systemContext();
     littleMagic.setStateLastBlock();
+
     // debug option
     littleMagic.mouseDebug();
+
     // hide system layer
     for (const layer of littleMagic.layerGroup['system']) {
       littleMagic.canvas[layer].style.display = 'none';
     }
+
     // show game screen
     littleMagic.loadScreen(false);
   }  // setSprite()
