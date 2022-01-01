@@ -15,6 +15,7 @@ class LittleMagicMake extends LittleMagic {
       'row'  : 0,
       'layer': 'layer1',
       'block': 0,
+      'stage': ''
     });
 
     this.system = Object.assign(this.system, {
@@ -338,13 +339,22 @@ class LittleMagicMake extends LittleMagic {
   }  // updateBlock()
 
   selectMenuSave() {
+    let stageBlocks = {};
+    for (const layer of this.layerGroup['stage']) {
+      stageBlocks[layer] = this.blocks[layer];
+    }
     const restData = {
-      'graphic': this.state['graphic'],
       'content': 'stage',
-      'blocks' : this.blocks
+      'graphic': this.state['graphic'],
+      'stage'  : this.state['stage'],
+      'blocks' : stageBlocks
     };
-    this.rest('/post/write', restData , this.systemMessage);
+    this.rest('/post/write', restData , this.saveStage);
   }  // selectMenuSave()
+
+  saveStage(littleMagic, restData) {
+    littleMagic.state['stage'] = restData['stage'];
+  }  // restData()
 
   itemOnStageBlock(col ,row) {
     let src = '';

@@ -62,7 +62,8 @@ def post_write():
         if post['content'] == 'stage':
             stage_path = f"{path}/../data/system/{post['graphic']}/stage"
             file_path = max(glob.glob(f"{stage_path}/[0-9][0-9][0-9].json"))
-            stage = '%03i' % (int(os.path.splitext(os.path.basename(file_path))[0]) + 1)
+            stage = post['stage'] if post['stage'] else \
+                '%03i' % (int(os.path.splitext(os.path.basename(file_path))[0]) + 1)
             with open(f'{stage_path}/{stage}.json', 'w') as fp:
                 fp.write(json.dumps(post['blocks']))
             data = { 'data': { 'stage': stage } }
