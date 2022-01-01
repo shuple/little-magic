@@ -37,7 +37,7 @@ class LittleMagicMake extends LittleMagic {
     });
   }  // constructor()
 
-  menuContext() {
+  async menuContext() {
     const context = this.contexts[this.layers['menu']];
     const imageSize = this.imageSize
     const item = this.meta['position']['item'];
@@ -46,18 +46,20 @@ class LittleMagicMake extends LittleMagic {
     for (const content of [ 'Item', 'Block', 'Save' ]) {
       const key = content.toLowerCase();
       const position = this.meta['position'][key];
-      this.setMenuIcon(context, position['col'] + 1,  position['row'], content);
+      this.setMenuText(context, position['col'] + 1,  position['row'], content);
     }
+    await this.setMenuBlockIcon();
+    await this.setMenuSaveIcon();
   }  // menuContext()
 
-  setMenuIcon(context, col, row, desc) {
+  setMenuText(context, col, row, desc) {
     context.font = this.font['medium'];
     context.fillStyle = this.color['menu'];
     context.textAlign='center';
     context.textBaseline = 'middle';
     const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
     context.fillText(desc, iconWidth + (this.imageSize / 2), iconHeight + (this.imageSize / 2));
-  }  // setMenuIcon
+  }  // setMenuText
 
   systemContext() {
     const layer = this.layers['fill'];
@@ -237,7 +239,7 @@ class LittleMagicMake extends LittleMagic {
     this.canvas[layer].style.display = 'inline';
   }  // selectMenuItembox()
 
-  async setMenuBlock() {
+  async setMenuBlockIcon() {
     // find block src from layer1
     const src = this.findStageBlock('layer1');
     const block = /\/block\/(\d{2})/.exec(src)[1];
@@ -246,7 +248,7 @@ class LittleMagicMake extends LittleMagic {
     const position = this.meta['position'];
     const [ col, row ] = [ position['block']['col'], position['block']['row'] ];
     await this.setSpriteBlock(col, row, this.layers['menu'], `layer1/block/${block}/field/00`);
-  }  // setMenuBlock()
+  }  // setMenuBlockIcon()
 
   findStageBlock(layer) {
     for (let row = 0; row < this.row; row++) {
@@ -395,9 +397,7 @@ class LittleMagicMake extends LittleMagic {
     const layers = Object.keys(restData);
     littleMagic.blocks = restData;
     await littleMagic.setSpriteLayer(layers);
-    await littleMagic.setMenuBlock();
-    await littleMagic.setMenuSaveIcon();
-    littleMagic.menuContext();
+    await littleMagic.menuContext();
     littleMagic.systemContext();
     littleMagic.setStateLastBlock();
     // debug option
