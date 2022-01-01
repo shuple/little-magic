@@ -229,9 +229,8 @@ class LittleMagic {
       headers: { 'Content-Type': 'application/json' },
     })
     .then(response => response.json())
-    .then(data => {
-      data = JSON.parse(data['data']);
-      callback(this, data);
+    .then(json => {
+      callback(this, json['data']);
     })
     .catch(error => {
       console.log(error);

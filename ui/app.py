@@ -46,10 +46,11 @@ def post_read():
                 elif isinstance(data, dict):
                     data = { **data, **d }
         #  for
+        data = { 'data': data }
     except Exception as e:
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
-        d = { 'error': f'{str(e)}' }
-    return json.dumps({ 'data': json.dumps(data) })
+        data = { 'error': f'{str(e)}' }
+    return data
 #  def post_read()
 
 # write file
@@ -63,13 +64,13 @@ def post_write():
             file_path = max(glob.glob(f"{stage_path}/[0-9][0-9][0-9].json"))
             stage = '%03i' % (int(os.path.splitext(os.path.basename(file_path))[0]) + 1)
             with open(f'{stage_path}/{stage}.json', 'w') as fp:
-                fp.write(json.dumps(post['blocks'], indent = 2))
+                fp.write(json.dumps(post['blocks']))
             data = { 'data': { 'stage': stage } }
         #  if
     except Exception as e:
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
         data = { 'error': f'{str(e)}' }
-    return json.dumps({ 'data': json.dumps(data) })
+    return data
 #  def post_read()
 
 # parse command line argument
