@@ -21,7 +21,7 @@ class LittleMagicMake extends LittleMagic {
     // layer alias
     this.layers  = Object.assign(this.layers, {
       'menu'  : 'layer5',
-      'effect': 'layer6',
+      'fill'  : 'layer6',
       'system': 'layer7'
     });
 
@@ -32,7 +32,7 @@ class LittleMagicMake extends LittleMagic {
 
     this.layerGroup = Object.assign(this.layerGroup, {
       'stage' : [ 'layer1', 'layer2', 'layer3' ],
-      'system': [ this.layers['effect'], this.layers['system'] ],
+      'system': [ this.layers['fill'], this.layers['system'] ],
       'make'  : [ 'layer1', 'layer2', 'layer3', this.layers['system'] ]
     });
   }  // constructor()
@@ -60,7 +60,7 @@ class LittleMagicMake extends LittleMagic {
   }  // setMenuIcon
 
   systemContext() {
-    const layer = this.layers['effect'];
+    const layer = this.layers['fill'];
     const position = this.meta['position'];
     const [ x, y ] = [ this.imageSize * position['itemboxStart']['col'], 0 ];
     const width = this.gameWidth - this.imageSize *
@@ -233,7 +233,7 @@ class LittleMagicMake extends LittleMagic {
   selectMenuItembox() {
     const layer = this.layers['system'];
     this.state['layer'] = layer;
-    this.canvas[this.layers['effect']].style.display = 'inline';
+    this.canvas[this.layers['fill']].style.display = 'inline';
     this.canvas[layer].style.display = 'inline';
   }  // selectMenuItembox()
 
