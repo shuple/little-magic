@@ -418,7 +418,7 @@ class LittleMagicMake extends LittleMagic {
   }  // updateSystemItembox()
 
   // rest callback
-  //
+
   async setSprite(littleMagic, restData) {
     const layers = Object.keys(restData);
     littleMagic.blocks = restData;
