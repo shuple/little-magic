@@ -24,9 +24,9 @@ class LittleMagicMake extends LittleMagic {
 
     // layer alias
     this.layers  = Object.assign(this.layers, {
-      'menu'  : 'layer6',
-      'fill'  : 'layer7',
-      'system': 'layer8'
+      'menu'  : 'layer5',
+      'fill'  : 'layer6',
+      'system': 'layer7'
     });
 
     this.color  = Object.assign(this.color, {
