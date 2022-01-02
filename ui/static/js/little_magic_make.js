@@ -350,10 +350,6 @@ class LittleMagicMake extends LittleMagic {
     this.rest('/post/write', restData , this.saveStage);
   }  // selectMenuSave()
 
-  saveStage(littleMagic, restData) {
-    littleMagic.state['stage'] = restData['stage'];
-  }  // restData()
-
   itemOnStageBlock(col ,row) {
     let src = '';
     for (const layer of [ ...this.layerGroup['stage'] ].reverse()) {
@@ -438,4 +434,25 @@ class LittleMagicMake extends LittleMagic {
     // show game screen
     littleMagic.loadScreen(false);
   }  // setSprite()
+
+  saveStage(littleMagic, restData) {
+    const layer = littleMagic.layers['menu'];
+    const position = littleMagic.meta['position']['save'];
+    const imageSize = littleMagic.imageSize
+    const [ x, y ] = [
+      (imageSize * (littleMagic.col - 2)) + (imageSize / 8), imageSize * (position['row'] + 1.4) ];
+    const context = littleMagic.contexts[layer];
+    context.font = littleMagic.font['medium'];
+    context.textAlign = 'start';
+    context.textBaseline = 'alphabetic';
+    context.fillStyle = littleMagic.color['menu'];
+    context.fillText(`Saved ${restData['stage']}!!`, x, y);
+    setTimeout(function() {
+      context.clearRect(
+        imageSize * position['col'], imageSize * (position['row'] + 1), imageSize * 2, imageSize
+      );
+    }, 2000);
+    // save state
+    littleMagic.state['stage'] = restData['stage'];
+  }  // restData()
 }  // class LittleMagicMake
