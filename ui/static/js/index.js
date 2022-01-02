@@ -9,7 +9,7 @@ window.addEventListener('load', function () {
       { 'file': metaData, 'graphic': 'sfc', 'returnData': {} }, littleMagic.setMeta);
     await littleMagic.rest('/post/read',
       { 'file': [ 'menu/make', `stage/${littleMagic.state['stage']}` ],
-        'graphic': 'sfc', 'returnData': {} }, littleMagic.setSprite);
+        'graphic': 'sfc', 'returnData': {} }, littleMagic.setGame);
   }
   init();
 

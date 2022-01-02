@@ -425,7 +425,7 @@ class LittleMagicMake extends LittleMagic {
 
   // rest callback
 
-  async setSprite(littleMagic, restData) {
+  async setGame(littleMagic, restData) {
     const layers = Object.keys(restData);
     littleMagic.blocks = restData;
     await littleMagic.setSpriteLayer(layers);
@@ -443,7 +443,7 @@ class LittleMagicMake extends LittleMagic {
 
     // show game screen
     littleMagic.loadScreen(false);
-  }  // setSprite()
+  }  // setGame()
 
   saveStage(littleMagic, restData) {
     const layer = littleMagic.layers['menu'];
