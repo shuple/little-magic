@@ -327,9 +327,6 @@ class LittleMagicMake extends LittleMagic {
     this.setSpriteLayer(this.layerGroup['stage']);
     this.updateMenuItem(block);
     this.updateSystemItembox(block);
-    if (this.state['layer'] === this.layers['system']) {
-      this.showPrerender(this.layers['system']);
-    }
   }  // selectMenuBlock()
 
   updateBlock(layers, nextBlock) {
@@ -415,11 +412,12 @@ class LittleMagicMake extends LittleMagic {
       [ position['itemboxStart']['col'], position['itemboxEnd']['col'] ];
     const [ rowStart, rowEnd ] =
       [ position['itemboxStart']['row'], position['itemboxEnd']['row'] ];
-    const opt = {
-      'colStart': colStart,
-      'colEnd'  : colEnd,
-      'rowStart': rowStart,
-      'rowEnd'  : rowEnd,
+    let opt = {
+      'colStart'   : colStart,
+      'colEnd'     : colEnd,
+      'rowStart'   : rowStart,
+      'rowEnd'     : rowEnd,
+      'noPrerender': this.state['layer'] !== this.layers['system']
     };
     this.updateBlock(this.layers['system'], nextBlock);
     this.setSpriteLayer(this.layers['system'], opt);

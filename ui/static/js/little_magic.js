@@ -97,10 +97,13 @@ class LittleMagic {
     if (images.length > 0) {
       // draw on render
       await this.drawSpriteImages(images);
+      if (!opt['noPrerender']) this.showLayer(layers, true);
+
       // copy render to layer
       images = [];
       this.setCanvasImage(images, layers);
       await this.drawSpriteImages(images);
+      if (!opt['noPrerender']) this.showLayer(layers);
     }
   }  // setSpriteLayer
 
@@ -164,15 +167,19 @@ class LittleMagic {
     });
   }  // drawSpriteImages()
 
-  showPrerender(layers) {
-    if (typeof layers === 'string') layers = layers.split(' ');
+  showLayer(layers, renderLayer = false) {
     const canvas = this.canvas;
     for (const layer of layers) {
       const render = layer.replace('layer', 'render');
-      canvas[layer].style.display = 'inline';
-      canvas[render].style.display = 'none';
+      if (renderLayer) {
+        canvas[render].style.display = 'inline';
+        canvas[layer].style.display = 'none';
+      } else {
+        canvas[layer].style.display = 'inline';
+        canvas[render].style.display = 'none';
+      }
     }
-  }  // showPrerender()
+  }  // showLayer
 
   clearContext(layer) {
     this.contexts[layer].clearRect(0, 0, this.gameWidth, this.gameHeight);
