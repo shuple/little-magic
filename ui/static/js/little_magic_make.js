@@ -50,20 +50,20 @@ class LittleMagicMake extends LittleMagic {
     for (const content of [ 'Item', 'Block', 'Save' ]) {
       const key = content.toLowerCase();
       const position = this.meta['position'][key];
-      this.setMenuText(context, position['col'] + 1,  position['row'], content);
+      this.setMenuDesc(context, position['col'] + 1,  position['row'], content);
     }
     await this.setMenuBlockIcon();
     await this.setMenuSaveIcon();
   }  // menuContext()
 
-  setMenuText(context, col, row, desc) {
+  setMenuDesc(context, col, row, text) {
     context.font = this.font['medium'];
     context.fillStyle = this.color['menu'];
     context.textAlign='center';
     context.textBaseline = 'middle';
     const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
-    context.fillText(desc, iconWidth + (this.imageSize / 2), iconHeight + (this.imageSize / 2));
-  }  // setMenuText
+    context.fillText(text, iconWidth + (this.imageSize / 2), iconHeight + (this.imageSize / 2));
+  }  // setMenuDesc
 
   systemContext() {
     const layer = this.layers['fill'];
