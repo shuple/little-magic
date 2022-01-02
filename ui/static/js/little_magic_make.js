@@ -453,12 +453,11 @@ class LittleMagicMake extends LittleMagic {
     const position = littleMagic.meta['position']['save'];
     littleMagic.setMenuReplyText(
       context, littleMagic.col, position['row'], `Saved ${restData['stage']}!!`);
-    setTimeout(function() {
-      const imageSize = littleMagic.imageSize;
+    setTimeout(function(imageSize, position) {
       context.clearRect(
         imageSize * position['col'], imageSize * (position['row'] + 1), imageSize * 2, imageSize
       );
-    }, 2000);
+    }, 2000, littleMagic.imageSize, position);
     // save state
     littleMagic.state['stage'] = restData['stage'];
   }  // saveStage()
