@@ -315,7 +315,7 @@ class LittleMagicMake extends LittleMagic {
     this.load = true;
     setTimeout(function(littleMagic) {
       littleMagic.load = false;
-    }, this.system['timeout'], this);
+    }, this.system['timeout'] * 2, this);
     let block = this.state['block'] + rotate;
     block = block < 0 ? this.system['lastBlock'] : block %= this.system['lastBlock'] + 1;
     this.state['block'] = block;
@@ -457,7 +457,7 @@ class LittleMagicMake extends LittleMagic {
       context.clearRect(
         imageSize * position['col'], imageSize * (position['row'] + 1), imageSize * 2, imageSize
       );
-    }, 2000, littleMagic.imageSize, position);
+    }, littleMagic.system['timeout'] * 20, littleMagic.imageSize, position);
     // save state
     littleMagic.state['stage'] = restData['stage'];
   }  // saveStage()

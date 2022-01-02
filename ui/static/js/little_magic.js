@@ -35,7 +35,7 @@ class LittleMagic {
     // static game system parameter
     this.system = {
       'load'   : false,
-      'timeout': 200  // millisecond
+      'timeout': 100
     };
 
     this.canvas = {};
