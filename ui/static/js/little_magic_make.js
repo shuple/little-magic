@@ -65,6 +65,16 @@ class LittleMagicMake extends LittleMagic {
     context.fillText(text, iconWidth + (this.imageSize / 2), iconHeight + (this.imageSize / 2));
   }  // setMenuDesc
 
+  setMenuText(context, col, row, text) {
+    const imageSize = this.imageSize
+    const [ x, y ] = [ (imageSize * (col - 2)) + (imageSize / 8), imageSize * (row + 1.4) ];
+    context.font = this.font['medium'];
+    context.textAlign = 'start';
+    context.textBaseline = 'alphabetic';
+    context.fillStyle = this.color['menu'];
+    context.fillText(text, x, y);
+  }  // setMenuText
+
   systemContext() {
     const layer = this.layers['fill'];
     const position = this.meta['position'];
@@ -437,22 +447,17 @@ class LittleMagicMake extends LittleMagic {
 
   saveStage(littleMagic, restData) {
     const layer = littleMagic.layers['menu'];
-    const position = littleMagic.meta['position']['save'];
-    const imageSize = littleMagic.imageSize
-    const [ x, y ] = [
-      (imageSize * (littleMagic.col - 2)) + (imageSize / 8), imageSize * (position['row'] + 1.4) ];
     const context = littleMagic.contexts[layer];
-    context.font = littleMagic.font['medium'];
-    context.textAlign = 'start';
-    context.textBaseline = 'alphabetic';
-    context.fillStyle = littleMagic.color['menu'];
-    context.fillText(`Saved ${restData['stage']}!!`, x, y);
+    const position = littleMagic.meta['position']['save'];
+    littleMagic.setMenuText(
+      context, littleMagic.col, position['row'], `Saved ${restData['stage']}!!`);
     setTimeout(function() {
+      const imageSize = littleMagic.imageSize;
       context.clearRect(
         imageSize * position['col'], imageSize * (position['row'] + 1), imageSize * 2, imageSize
       );
     }, 2000);
     // save state
     littleMagic.state['stage'] = restData['stage'];
-  }  // restData()
+  }  // saveStage()
 }  // class LittleMagicMake
