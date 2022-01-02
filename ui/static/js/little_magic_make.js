@@ -65,7 +65,7 @@ class LittleMagicMake extends LittleMagic {
     context.fillText(text, iconWidth + (this.imageSize / 2), iconHeight + (this.imageSize / 2));
   }  // setMenuDesc
 
-  setMenuText(context, col, row, text) {
+  setMenuReplyText(context, col, row, text) {
     const imageSize = this.imageSize
     const [ x, y ] = [ (imageSize * (col - 2)) + (imageSize / 8), imageSize * (row + 1.4) ];
     context.font = this.font['medium'];
@@ -73,7 +73,7 @@ class LittleMagicMake extends LittleMagic {
     context.textBaseline = 'alphabetic';
     context.fillStyle = this.color['menu'];
     context.fillText(text, x, y);
-  }  // setMenuText
+  }  // setMenuReplyText
 
   systemContext() {
     const layer = this.layers['fill'];
@@ -449,7 +449,7 @@ class LittleMagicMake extends LittleMagic {
     const layer = littleMagic.layers['menu'];
     const context = littleMagic.contexts[layer];
     const position = littleMagic.meta['position']['save'];
-    littleMagic.setMenuText(
+    littleMagic.setMenuReplyText(
       context, littleMagic.col, position['row'], `Saved ${restData['stage']}!!`);
     setTimeout(function() {
       const imageSize = littleMagic.imageSize;
