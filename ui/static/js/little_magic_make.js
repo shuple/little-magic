@@ -15,7 +15,7 @@ class LittleMagicMake extends LittleMagic {
       'row'  : 0,
       'layer': 'layer1',
       'block': 0,
-      'stage': ''
+      'stage': '001'
     });
 
     this.system = Object.assign(this.system, {
