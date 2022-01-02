@@ -313,7 +313,9 @@ class LittleMagicMake extends LittleMagic {
     // prevent click bashing
     if (this.load) return;
     this.load = true;
-    setTimeout(this.loading, this.system['timeout'], this);
+    setTimeout(function(littleMagic) {
+      littleMagic.load = false;
+    }, this.system['timeout'], this);
     let block = this.state['block'] + rotate;
     block = block < 0 ? this.system['lastBlock'] : block %= this.system['lastBlock'] + 1;
     this.state['block'] = block;

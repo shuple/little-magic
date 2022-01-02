@@ -219,12 +219,6 @@ class LittleMagic {
     return `/static/image/sprite/${this.state['graphic']}/${src}.png`;
   } // imagesrc()
 
-  // callback for SetTimeout
-  //
-  loading(littleMagic) {
-    littleMagic.load = false;
-  }
-
   async rest(url, restData, callback) {
     await fetch(url, {
       method: 'POST',
