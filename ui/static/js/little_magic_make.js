@@ -59,10 +59,10 @@ class LittleMagicMake extends LittleMagic {
   setMenuDesc(context, col, row, text) {
     context.font = this.font['medium'];
     context.fillStyle = this.color['menu'];
-    context.textAlign='center';
+    context.textAlign='start';
     context.textBaseline = 'middle';
     const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
-    context.fillText(text, iconWidth + (this.imageSize / 2), iconHeight + (this.imageSize / 2));
+    context.fillText(text, iconWidth + (this.imageSize / this.col), iconHeight + (this.imageSize / 2));
   }  // setMenuDesc
 
   setMenuReplyText(context, col, row, text) {
