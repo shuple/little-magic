@@ -2,14 +2,15 @@ import { LittleMagicMake } from './little_magic_make.js';
 
 window.addEventListener('load', function () {
   const littleMagic = new LittleMagicMake();
+  const graphic = littleMagic.state['graphic'];
   const init = async function() {
     const path = 'meta/make';
     const metaData = [ `${path}/sprite`, `${path}/position`, `${path}/debug` ];
     await littleMagic.rest('/post/read',
-      { 'file': metaData, 'graphic': 'sfc', 'returnData': {} }, littleMagic.setMeta);
+      { 'file': metaData, 'graphic': graphic }, littleMagic.setMeta);
     await littleMagic.rest('/post/read',
       { 'file': [ 'menu/make', `stage/${littleMagic.state['stage']}` ],
-        'graphic': 'sfc', 'returnData': {} }, littleMagic.setGame);
+        'graphic': graphic, }, littleMagic.setGame);
   }
   init();
 

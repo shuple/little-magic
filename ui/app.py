@@ -36,7 +36,7 @@ def index():
 def post_read():
     try:
         post = flask.request.json
-        data = post['returnData']
+        data = post.get('returnValue', {})
         for file in post['file']:
             file_path = f"{path}/../data/system/{post['graphic']}/{file}.json"
             with open(file_path) as f:
