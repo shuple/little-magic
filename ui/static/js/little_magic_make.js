@@ -120,10 +120,10 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // mouseDebug()
 
-  mouseEvent(canvas, event) {
+  mouseEvent(canvas, event, button) {
     const [x, y] = this.mousePosition(canvas, event);
     const [ col, row ] = this.mousePositionToIndex(x, y);
-    switch (event.button) {
+    switch (button || event.button) {
     // left click
     case 0:
       this.leftClick(col, row, event);
