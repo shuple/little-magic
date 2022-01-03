@@ -47,13 +47,13 @@ class LittleMagicMake extends LittleMagic {
     const item = this.meta['position']['item'];
     context.fillSytle = this.color['blank'];
     context.fillRect(item['col'] * imageSize, item['row'] * imageSize, imageSize, imageSize);
-    for (const content of [ 'Item', 'Block', 'Save' ]) {
+    for (const content of [ 'Item', 'Block', 'New', 'Save' ]) {
       const key = content.toLowerCase();
       const position = this.meta['position'][key];
       this.setMenuDesc(context, position['col'] + 1,  position['row'], content);
     }
     await this.setMenuBlockIcon();
-    await this.setMenuSaveIcon();
+    await this.setMenuIcons();
   }  // menuContext()
 
   setMenuDesc(context, col, row, text) {
@@ -285,11 +285,13 @@ class LittleMagicMake extends LittleMagic {
     this.system['lastBlock']--;
   }  // setStateLastBlock()
 
-  async setMenuSaveIcon() {
-    const position = this.meta['position']['save'];
-    const src = 'layer0/save/00';
-    await this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], src);
-  }
+  async setMenuIcons() {
+    for (const content of [ 'new', 'save' ]) {
+      const src = `layer0/${content}/00`;
+      const position = this.meta['position'][content];
+      await this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], src);
+    }
+  }  // setMenuIcons()
 
   selectSystemItembox(col, row) {
     this.state['item'] = this.blocks[this.layers['system']][row][col]
