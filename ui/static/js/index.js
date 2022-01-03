@@ -17,6 +17,7 @@ window.addEventListener('load', function () {
   const canvas = document.querySelector('canvas:last-child');
 
   // click event, hold emulates right click
+  const rightButton = 2;
   canvas.addEventListener('contextmenu', function(event) {
     event.preventDefault();
     littleMagic.mouseEvent(canvas, event);
@@ -30,8 +31,7 @@ window.addEventListener('load', function () {
     if (event.button === 0) {
       const clickReleaseTime = new Date().getTime();
       if (clickReleaseTime - clickTimer > clickDuration) {
-        // right click
-        button = 2;
+        button = rightButton;
       }
       littleMagic.mouseEvent(canvas, event, button);
     }
@@ -44,7 +44,7 @@ window.addEventListener('load', function () {
     event.preventDefault();
     tapLock = true;
     let touch = event.touches[0];
-    littleMagic.mouseEvent(canvas, touch, 2);
+    littleMagic.mouseEvent(canvas, touch, rightButton);
   }  // touchHandler()
   const touchStart = function(event) {
     if (event.touches.length === 1)
