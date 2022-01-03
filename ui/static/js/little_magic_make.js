@@ -201,6 +201,8 @@ class LittleMagicMake extends LittleMagic {
         this.state['item'] = ''
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectMenuBlock(col, row, -1);
+      } else if (this.areaBlock(col, row, 'new')) {
+        this.selectMenuNew();
       } else if (this.areaBlock(col, row, 'save')) {
         this.selectMenuSave();
       }
@@ -347,6 +349,15 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // updateBlock()
 
+  selectMenuNew() {
+    this.state['stage'] = 'new';
+    const restData = {
+      'graphic': this.state['graphic'],
+      'file'   : [ 'menu/make', 'stage/new' ],
+    };
+    this.rest('/post/read', restData, this.setStage);
+  }  // selectMenuNew()
+
   selectMenuSave() {
     let stageBlocks = {};
     for (const layer of this.layerGroup['stage']) {
@@ -446,6 +457,16 @@ class LittleMagicMake extends LittleMagic {
     // show game screen
     littleMagic.loadScreen(false);
   }  // setGame()
+
+  async setStage(littleMagic, restData) {
+    const layers = Object.keys(restData);
+    littleMagic.blocks = restData;
+    littleMagic.setSpriteLayer(littleMagic.layerGroup['stage']);
+    littleMagic.setSpriteLayer(littleMagic.layers['system'], { 'noPrerender': true });
+    littleMagic.setMenuBlockIcon();
+    // clear stage state
+    littleMagic.state['stage'] = '';
+  }  // setStage()
 
   saveStage(littleMagic, restData) {
     const layer = littleMagic.layers['menu'];
