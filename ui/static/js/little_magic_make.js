@@ -169,8 +169,6 @@ class LittleMagicMake extends LittleMagic {
         this.selectMenuItembox();
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectMenuBlock(col, row, 1);
-      } else if (this.areaBlock(col, row, 'save')) {
-        this.selectMenuSave();
       }
       break;
     case this.layers['system']:
@@ -203,6 +201,8 @@ class LittleMagicMake extends LittleMagic {
         this.state['item'] = ''
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectMenuBlock(col, row, -1);
+      } else if (this.areaBlock(col, row, 'save')) {
+        this.selectMenuSave();
       }
       break;
     case this.layers['system']:
