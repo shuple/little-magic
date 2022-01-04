@@ -367,8 +367,8 @@ class LittleMagicMake extends LittleMagic {
   }  // updateBlock()
 
   selectMenuNew() {
-    if (this.state['stage'] === 'new') return;
-    this.state['stage'] = 'new';
+    if (this.state['stage'] === '' && this.state['hash'] === this.stageHash()) return;
+    this.state['stage'] = '';
     const restData = {
       'graphic': this.state['graphic'],
       'file'   : [ 'menu/make', 'stage/new' ],
@@ -490,16 +490,18 @@ class LittleMagicMake extends LittleMagic {
   async setStage(littleMagic, restData) {
     const layers = Object.keys(restData);
     littleMagic.blocks = restData;
-    littleMagic.state['hash'] = littleMagic.stageHash();
 
     // use this.state['block'] for new stage
-    if (littleMagic.state['stage'] === 'new') {
+    if (littleMagic.state['stage'] === '') {
       const block = parseInt(/(\d)$/.exec(littleMagic.findStageBlock('layer1'))[1]);
       if (littleMagic.state['block'] != block) {
         const updateLayers = littleMagic.layerGroup['stage'].concat(littleMagic.layers['system']);
         littleMagic.updateBlock(updateLayers, littleMagic.state['block']);
       }
     }
+
+    // calculate new hash
+    littleMagic.state['hash'] = littleMagic.stageHash();
 
     // update sprite
     littleMagic.setSpriteLayer(littleMagic.layerGroup['stage']);
