@@ -97,7 +97,7 @@ class LittleMagicMake extends LittleMagic {
     const [ x, y ] = [ this.imageSize * position['itemboxStart']['col'], 0 ];
     const width = this.gameWidth - this.imageSize *
       (position['itemboxEnd']['col'] - position['itemboxStart']['col'] + 1);
-    const height = this.gameHeight - this.imageSize * position['itemboxEnd']['row'];
+    const height = this.gameHeight - this.imageSize * (position['itemboxEnd']['row'] - 1);
     const itemboxStart = position['itemboxStart'];
     const itemboxEnd = position['itemboxEnd'];
     const context = this.contexts[layer];
@@ -452,15 +452,11 @@ class LittleMagicMake extends LittleMagic {
 
   updateSystemItembox(nextBlock) {
     const position = this.meta['position'];
-    const [ colStart, colEnd ] =
-      [ position['itemboxStart']['col'], position['itemboxEnd']['col'] ];
-    const [ rowStart, rowEnd ] =
-      [ position['itemboxStart']['row'], position['itemboxEnd']['row'] ];
     let opt = {
-      'colStart'   : colStart,
-      'colEnd'     : colEnd,
-      'rowStart'   : rowStart,
-      'rowEnd'     : rowEnd,
+      'colStart'   : position['itemboxStart']['col'],
+      'colEnd'     : position['itemboxEnd']['col'],
+      'rowStart'   : position['itemboxStart']['row'],
+      'rowEnd'     : position['itemboxEnd']['row'],
       'noPrerender': this.state['layer'] !== this.layers['system']
     };
     this.updateBlock(this.layers['system'], nextBlock);
