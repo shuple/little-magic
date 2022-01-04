@@ -1,6 +1,17 @@
 import { LittleMagic } from './little_magic.js';
 export { LittleMagicMake }
 
+String.prototype.hashCode = function() {
+	let hash = 0, i, ch;
+	if (this.length === 0) return hash;
+	for (i = 0; i < this.length; i++) {
+		ch = this.charCodeAt(i);
+		hash  = ((hash << 5) - hash) + ch;
+		hash |= 0; // convert to 32bit integer
+	}
+	return hash;
+};  // String.prototype.hashCode()
+
 class LittleMagicMake extends LittleMagic {
   constructor() {
     super();
@@ -15,7 +26,8 @@ class LittleMagicMake extends LittleMagic {
       'row'  : 0,
       'layer': 'layer1',
       'block': 0,
-      'stage': '001'
+      'stage': '001',
+      'hash' : ''
     });
 
     this.system = Object.assign(this.system, {
@@ -67,12 +79,16 @@ class LittleMagicMake extends LittleMagic {
 
   setMenuReplyText(context, col, row, text) {
     const imageSize = this.imageSize
-    const [ x, y ] = [ (imageSize * (col - 2)) + (imageSize / 8), imageSize * (row + 1.4) ];
+    const [ x, y ] = [ imageSize * col + (imageSize / 8), imageSize * (row + 1.4) ];
     context.font = this.font['medium'];
     context.textAlign = 'start';
     context.textBaseline = 'alphabetic';
     context.fillStyle = this.color['menu'];
+    context.clearRect(imageSize * col, imageSize * (row + 1), imageSize * 2, imageSize);
     context.fillText(text, x, y);
+    setTimeout(function(imageSize, col, row) {
+      context.clearRect(imageSize * col, imageSize * (row + 1), imageSize * 2, imageSize);
+    }, this.system['timeout'] * 20, imageSize, col, row);
   }  // setMenuReplyText
 
   systemContext() {
@@ -350,6 +366,7 @@ class LittleMagicMake extends LittleMagic {
   }  // updateBlock()
 
   selectMenuNew() {
+    if (this.state['stage'] === 'new') return;
     this.state['stage'] = 'new';
     const restData = {
       'graphic': this.state['graphic'],
@@ -359,6 +376,12 @@ class LittleMagicMake extends LittleMagic {
   }  // selectMenuNew()
 
   selectMenuSave() {
+    if (this.state['hash'] === this.stageHash()) {
+      const context = this.contexts[this.layers['menu']];
+      const position = this.meta['position']['save'];
+      this.setMenuReplyText(context, position['col'], position['row'], 'No\nChanges');
+      return;
+    }
     let stageBlocks = {};
     for (const layer of this.layerGroup['stage']) {
       stageBlocks[layer] = this.blocks[layer];
@@ -371,6 +394,14 @@ class LittleMagicMake extends LittleMagic {
     };
     this.rest('/post/write', restData , this.saveStage);
   }  // selectMenuSave()
+
+  stageHash() {
+    let stages = [];
+    for (const stage of this.layerGroup['stage']) {
+      stages.push(this.blocks[stage]);
+    }
+    return JSON.stringify(stages).hashCode();
+  }  // stageHash()
 
   itemOnStageBlock(col ,row) {
     let src = '';
@@ -441,6 +472,7 @@ class LittleMagicMake extends LittleMagic {
   async setGame(littleMagic, restData) {
     const layers = Object.keys(restData);
     littleMagic.blocks = restData;
+    littleMagic.state['hash'] = littleMagic.stageHash();
     await littleMagic.setSpriteLayer(layers);
     await littleMagic.menuContext();
     littleMagic.systemContext();
@@ -461,6 +493,7 @@ class LittleMagicMake extends LittleMagic {
   async setStage(littleMagic, restData) {
     const layers = Object.keys(restData);
     littleMagic.blocks = restData;
+    littleMagic.state['hash'] = littleMagic.stageHash();
 
     // use this.state['block'] for new stage
     if (littleMagic.state['stage'] === 'new') {
@@ -475,9 +508,6 @@ class LittleMagicMake extends LittleMagic {
     littleMagic.setSpriteLayer(littleMagic.layerGroup['stage']);
     littleMagic.setSpriteLayer(littleMagic.layers['system'], { 'noPrerender': true });
     littleMagic.setMenuBlockIcon();
-
-    // clear stage state
-    littleMagic.state['stage'] = '';
   }  // setStage()
 
   saveStage(littleMagic, restData) {
@@ -485,13 +515,9 @@ class LittleMagicMake extends LittleMagic {
     const context = littleMagic.contexts[layer];
     const position = littleMagic.meta['position']['save'];
     littleMagic.setMenuReplyText(
-      context, littleMagic.col, position['row'], `Saved ${restData['stage']}!!`);
-    setTimeout(function(imageSize, position) {
-      context.clearRect(
-        imageSize * position['col'], imageSize * (position['row'] + 1), imageSize * 2, imageSize
-      );
-    }, littleMagic.system['timeout'] * 20, littleMagic.imageSize, position);
+      context, position['col'], position['row'], `Saved ${restData['stage']}!!`);
     // save state
     littleMagic.state['stage'] = restData['stage'];
+    littleMagic.state['hash'] = littleMagic.stageHash();
   }  // saveStage()
 }  // class LittleMagicMake
