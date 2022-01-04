@@ -59,7 +59,7 @@ class LittleMagic {
 
   setGameSize() {
     this.scrollWidth = this.canvas['layer0'].scrollWidth / this.col;
-    this.font= { 'medium': `bold ${this.imageSize * 0.35 }px Merio` };
+    this.font= { 'medium': `bold ${this.imageSize * 0.30 }px Arial` };
     this.setCanvasScale();
   }  // setGameSize()
 

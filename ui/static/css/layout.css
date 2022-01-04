@@ -3,7 +3,7 @@ body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  font-family: 'Meiryo', 'Hiragino Kaku Gothic Pro', sans-serif;
+  font-family: Arial;
   background-color: #000;
   /* disable text selection */
   user-select: none;          /* Chrome Opera */
