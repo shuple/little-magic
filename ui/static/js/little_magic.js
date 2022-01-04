@@ -257,7 +257,4 @@ class LittleMagic {
   setMeta(littleMagic, restData) {
     littleMagic.meta = restData;
   }  // setMeta
-
-  systemMessage(littleMagic, restData) {
-  }  // systemMessage
 };  // class LittleMagic
