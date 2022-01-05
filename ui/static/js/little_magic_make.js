@@ -454,11 +454,11 @@ class LittleMagicMake extends LittleMagic {
   updateSystemItembox(nextBlock) {
     const position = this.meta['position'];
     let opt = {
-      'colStart'   : position['itemboxStart']['col'],
-      'colEnd'     : position['itemboxEnd']['col'],
-      'rowStart'   : position['itemboxStart']['row'],
-      'rowEnd'     : position['itemboxEnd']['row'],
-      'noPrerender': this.state['layer'] !== this.layers['system']
+      'colStart'  : position['itemboxStart']['col'],
+      'colEnd'    : position['itemboxEnd']['col'],
+      'rowStart'  : position['itemboxStart']['row'],
+      'rowEnd'    : position['itemboxEnd']['row'],
+      'renderOnly': this.state['layer'] !== this.layers['system']
     };
     this.updateBlock(this.layers['system'], nextBlock);
     this.setSpriteLayer(this.layers['system'], opt);
@@ -505,7 +505,7 @@ class LittleMagicMake extends LittleMagic {
 
     // update sprite
     littleMagic.setSpriteLayer(littleMagic.layerGroup['stage']);
-    littleMagic.setSpriteLayer(littleMagic.layers['system'], { 'noPrerender': true });
+    littleMagic.setSpriteLayer(littleMagic.layers['system'], { 'renderOnly': true });
     littleMagic.setMenuBlockIcon();
   }  // loadStage()
 

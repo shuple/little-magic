@@ -98,13 +98,13 @@ class LittleMagic {
       // draw on render
       this.clearLayer(layers, true);
       await this.drawSpriteImages(images, false);
-      if (!opt['noPrerender']) this.showLayer(layers, true);
+      if (!opt['renderOnly']) this.showLayer(layers, true);
 
       // copy render to layer
       images = [];
       this.setCanvasImage(images, layers);
       await this.drawSpriteImages(images);
-      if (!opt['noPrerender']) this.showLayer(layers);
+      if (!opt['renderOnly']) this.showLayer(layers);
     }
   }  // setSpriteLayer
 
