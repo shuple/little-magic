@@ -55,21 +55,18 @@ class LittleMagicMake extends LittleMagic {
   }  // constructor()
 
   async menuContext() {
-    const context = this.contexts[this.layers['menu']];
-    const imageSize = this.imageSize
-    const item = this.meta['position']['item'];
-    context.fillSytle = this.color['blank'];
-    context.fillRect(item['col'] * imageSize, item['row'] * imageSize, imageSize, imageSize);
-    for (const content of [ 'Item', 'Block', 'New', 'Save' ]) {
+    for (let content of [ 'Item', 'Block', 'New', 'Save' ]) {
       const key = content.toLowerCase();
       const position = this.meta['position'][key];
-      this.setMenuDesc(context, position['col'] + 1,  position['row'], content);
+      // menu text
+      this.setMenuDesc(position['col'] + 1,  position['row'], content);
+      // menu sprite
+      await this.setMenuSprite(key, position['col'], position['row']);
     }
-    await this.setMenuBlockIcon();
-    await this.setMenuIcons();
   }  // menuContext()
 
-  setMenuDesc(context, col, row, text) {
+  setMenuDesc(col, row, text) {
+    const context = this.contexts[this.layers['menu']];
     context.font = this.font['medium'];
     context.fillStyle = this.color['menu'];
     context.textAlign='start';
@@ -77,6 +74,25 @@ class LittleMagicMake extends LittleMagic {
     const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
     context.fillText(text, iconWidth + (this.imageSize / this.col), iconHeight + (this.imageSize / 2));
   }  // setMenuDesc
+
+  async setMenuSprite(content, col, row) {
+    const context = this.contexts[this.layers['menu']];
+    const imageSize = this.imageSize;
+    context.fillStyle = this.color['blank'];
+      switch (content) {
+        case 'item' :
+          context.fillStyle = this.color['blank'];
+          context.fillRect(col * imageSize, row * imageSize, imageSize, imageSize);
+          break;
+        case 'block':
+          await this.setMenuBlockIcon();
+          break;
+        case 'new' :
+        case 'save':
+          await this.setMenuIcon(content);
+          break;
+      }
+  }  // setMenuSprite
 
   setMenuReplyText(context, col, row, text) {
     const imageSize = this.imageSize
@@ -304,13 +320,11 @@ class LittleMagicMake extends LittleMagic {
     this.system['lastBlock']--;
   }  // setStateLastBlock()
 
-  async setMenuIcons() {
-    for (const content of [ 'new', 'save' ]) {
-      const src = `layer0/${content}/00`;
-      const position = this.meta['position'][content];
-      await this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], src);
-    }
-  }  // setMenuIcons()
+  async setMenuIcon(content) {
+    const src = `layer0/${content}/00`;
+    const position = this.meta['position'][content];
+    await this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], src);
+  }  // setMenuIcon()
 
   selectSystemItembox(col, row) {
     this.state['item'] = this.blocks[this.layers['system']][row][col]
