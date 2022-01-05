@@ -55,7 +55,7 @@ class LittleMagicMake extends LittleMagic {
   }  // constructor()
 
   async menuContext() {
-    for (let content of [ 'Item', 'Block', 'New', 'Save' ]) {
+    for (let content of [ 'Item', 'Block', 'Stage', 'New', 'Save' ]) {
       const key = content.toLowerCase();
       const position = this.meta['position'][key];
       // menu text
@@ -81,6 +81,7 @@ class LittleMagicMake extends LittleMagic {
     context.fillStyle = this.color['blank'];
       switch (content) {
         case 'item' :
+        case 'stage':
           context.fillStyle = this.color['blank'];
           context.fillRect(col * imageSize, row * imageSize, imageSize, imageSize);
           break;
