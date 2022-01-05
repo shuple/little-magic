@@ -214,7 +214,7 @@ class LittleMagicMake extends LittleMagic {
         this.removeSpriteBlock(col, row, this.state['layer']);
         this.rotateItemReset();
       } else if (this.areaBlock(col, row, 'item')) {
-        this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/00');
+        this.setBlankBlock(col, row, this.layers['menu']);
         this.state['item'] = ''
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectMenuBlock(col, row, -1);
@@ -228,7 +228,7 @@ class LittleMagicMake extends LittleMagic {
       if (this.areaRange(col, row, 'stage')) {
         this.closeSystemItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'item')) {
-        this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/void/00');
+        this.setBlankBlock(col, row, this.layers['menu']);
         this.state['item'] = ''
         this.closeSystemItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'block')) {

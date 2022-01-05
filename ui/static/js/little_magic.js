@@ -226,6 +226,13 @@ class LittleMagic {
     });
   }  // drawSpriteBlock();
 
+  setBlankBlock(col, row, layer) {
+    const context = this.contexts[layer];
+    const imageSize = this.imageSize;
+    context.fillStyle = this.color['blank'];
+    context.fillRect(col * imageSize, row * imageSize, imageSize, imageSize);
+  }  // setBlankBlock()
+
   removeSpriteBlock(col, row, layer) {
     const x = col * this.imageSize;
     const y = row * this.imageSize;
