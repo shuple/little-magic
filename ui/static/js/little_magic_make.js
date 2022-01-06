@@ -68,25 +68,20 @@ class LittleMagicMake extends LittleMagic {
   }  // menuContext()
 
   setMenuDesc(col, row, text) {
-    const context = this.menuTextContext();
-    const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
-    context.fillText(text, iconWidth + this.imageSize / this.col, iconHeight + this.imageSize / 2);
+    const imageSize = this.imageSize;
+    const [ x, y ] = [ imageSize * col, imageSize * row ];
+    const context = this.menuContextText();
+    context.textAlign = 'start';
+    context.textBaseline = 'middle'
+    context.fillText(text, x + 2, y + imageSize / 2);
   }  // setMenuDesc
 
-  setMenuSpriteDesc(col, row, text) {
-    const context = this.menuTextContext();
-    const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
-    context.fillText(text, iconWidth + this.imageSize / 4, iconHeight + (this.imageSize / 2));
-  }  // setMenuDesc
-
-  menuTextContext() {
+  menuContextText() {
     const context = this.contexts[this.layers['menu']];
     context.font = this.font['medium'];
     context.fillStyle = this.color['menu'];
-    context.textAlign = 'start';
-    context.textBaseline = 'middle'
     return context;
-  }  // menuTextContext()
+  }  // menuContextText()
 
   async setMenuSprite(content, col, row) {
     const context = this.contexts[this.layers['menu']];
@@ -109,12 +104,25 @@ class LittleMagicMake extends LittleMagic {
   }  // setMenuSprite
 
   setMenuSpriteText(content, col, row) {
+    const imageSize = this.imageSize;
+    const context = this.contexts[this.layers['menu']];
+    context.fillStyle = this.color['blank'];
     switch (content) {
     case 'stage':
+      context.fillRect(col * imageSize, row * imageSize, imageSize, imageSize);
       this.setMenuSpriteDesc(col, row, this.state['stage'] || 'new');
       break;
     }
   }  // setMenuSpriteText()
+
+  setMenuSpriteDesc(col, row, text) {
+    const imageSize = this.imageSize;
+    const [ x, y ] = [ imageSize * col , imageSize * row ];
+    const context = this.menuContextText();
+    context.textAlign = 'center';
+    context.textBaseline = 'middle'
+    context.fillText(text, x + imageSize / 2, y + imageSize / 2);
+  }  // setMenuDesc
 
   setMenuReplyText(context, col, row, text) {
     const imageSize = this.imageSize
@@ -547,6 +555,10 @@ class LittleMagicMake extends LittleMagic {
     littleMagic.setMenuBlockIcon();
     if (graphicChange)
       littleMagic.setSpriteLayer(littleMagic.layers['system'], { 'renderOnly': true });
+
+    // update stage number
+    const position = littleMagic.meta['position']['stage'];
+    littleMagic.setMenuSpriteText('stage', position['col'], position['row']);
   }  // loadStage()
 
   saveStage(littleMagic, restData) {
