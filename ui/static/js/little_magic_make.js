@@ -415,7 +415,7 @@ class LittleMagicMake extends LittleMagic {
     this.state['stage'] = '';
     const restData = {
       'graphic': this.state['graphic'],
-      'file'   : [ 'menu/make', 'stage/new' ],
+      'file'   : [ 'stage/new' ],
     };
     this.rest('/post/read', restData, this.loadStage);
   }  // selectMenuNew()
@@ -532,17 +532,15 @@ class LittleMagicMake extends LittleMagic {
   }  // setGame()
 
   async loadStage(littleMagic, restData) {
-    const graphicChange = littleMagic.state['graphic'] != littleMagic.state['prev']['graphic'];
     const layers = Object.keys(restData);
-    littleMagic.blocks = restData;
+    littleMagic.blocks = Object.assign(littleMagic.blocks, restData);
 
     // use this.state['block'] for new stage
     if (littleMagic.state['stage'] === '') {
       const block = parseInt(/(\d)$/.exec(littleMagic.findStageBlock('layer1'))[1]);
       if (littleMagic.state['block'] != block) {
         const updateLayers = littleMagic.layerGroup['stage']
-        if (graphicChange)
-          updateLayers.concat(littleMagic.layers['system']);
+        updateLayers.concat(layers);
         littleMagic.updateBlock(updateLayers, littleMagic.state['block']);
       }
     }
@@ -551,10 +549,9 @@ class LittleMagicMake extends LittleMagic {
     littleMagic.state['hash'] = littleMagic.stageHash();
 
     // update sprite
-    littleMagic.setSpriteLayer(littleMagic.layerGroup['stage']);
+    littleMagic.setSpriteLayer(layers, { 'renderOnly': true });
     littleMagic.setMenuBlockIcon();
-    if (graphicChange)
-      littleMagic.setSpriteLayer(littleMagic.layers['system'], { 'renderOnly': true });
+    littleMagic.showLayer(littleMagic.layerGroup['stage']);
 
     // update stage number
     const position = littleMagic.meta['position']['stage'];
