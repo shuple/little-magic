@@ -387,16 +387,16 @@ class LittleMagicMake extends LittleMagic {
   }  // selectMenuBlock()
 
   updateBlock(layers, newBlock) {
-    if (typeof layers == 'string') layers = layers.split(' ');
+    if (typeof layers == 'string')
+      layers = layers.split(' ');
     for (const layer of layers) {
       const block = this.blocks[layer];
       for (let row =  0; row < this.row; row++) {
         for (let col = 0; col < this.col; col++) {
           const src = block[row][col];
           const match = /\/(block\/\d)/.exec(src);
-          if (match) {
+          if (match)
             block[row][col] = src.replace(/block\/\d{2}/, `${match[1]}${newBlock}`);
-          }
         }
       }
     }
