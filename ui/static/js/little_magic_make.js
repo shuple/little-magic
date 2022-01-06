@@ -62,18 +62,31 @@ class LittleMagicMake extends LittleMagic {
       this.setMenuDesc(position['col'] + 1,  position['row'], content);
       // sprite
       await this.setMenuSprite(key, position['col'], position['row']);
+      // text on sprite
+      this.setMenuSpriteText(key, position['col'], position['row']);
     }
   }  // menuContext()
 
   setMenuDesc(col, row, text) {
+    const context = this.menuTextContext();
+    const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
+    context.fillText(text, iconWidth + this.imageSize / this.col, iconHeight + this.imageSize / 2);
+  }  // setMenuDesc
+
+  setMenuSpriteDesc(col, row, text) {
+    const context = this.menuTextContext();
+    const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
+    context.fillText(text, iconWidth + this.imageSize / 4, iconHeight + (this.imageSize / 2));
+  }  // setMenuDesc
+
+  menuTextContext() {
     const context = this.contexts[this.layers['menu']];
     context.font = this.font['medium'];
     context.fillStyle = this.color['menu'];
-    context.textAlign='start';
-    context.textBaseline = 'middle';
-    const [ iconWidth, iconHeight ] = [ this.imageSize * col, this.imageSize * row ];
-    context.fillText(text, iconWidth + (this.imageSize / this.col), iconHeight + (this.imageSize / 2));
-  }  // setMenuDesc
+    context.textAlign = 'start';
+    context.textBaseline = 'middle'
+    return context;
+  }  // menuTextContext()
 
   async setMenuSprite(content, col, row) {
     const context = this.contexts[this.layers['menu']];
@@ -94,6 +107,14 @@ class LittleMagicMake extends LittleMagic {
           break;
       }
   }  // setMenuSprite
+
+  setMenuSpriteText(content, col, row) {
+    switch (content) {
+    case 'stage':
+      this.setMenuSpriteDesc(col, row, this.state['stage'] || 'new');
+      break;
+    }
+  }  // setMenuSpriteText()
 
   setMenuReplyText(context, col, row, text) {
     const imageSize = this.imageSize
