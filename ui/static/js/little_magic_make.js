@@ -58,9 +58,9 @@ class LittleMagicMake extends LittleMagic {
     for (let content of [ 'Item', 'Block', 'Stage', 'New', 'Save' ]) {
       const key = content.toLowerCase();
       const position = this.meta['position'][key];
-      // menu text
+      // text
       this.setMenuDesc(position['col'] + 1,  position['row'], content);
-      // menu sprite
+      // sprite
       await this.setMenuSprite(key, position['col'], position['row']);
     }
   }  // menuContext()
