@@ -21,7 +21,7 @@ class LittleMagicMake extends LittleMagic {
     this.loadScreen(true);
 
     this.state = Object.assign(this.state, {
-      'prev' : { 'layer': 'layer1' },
+      'prev' : { 'layer': 'layer1', 'graphic': 'sfc' },
       'item' : '',
       'col'  : 0,
       'row'  : 0,
@@ -524,6 +524,7 @@ class LittleMagicMake extends LittleMagic {
   }  // setGame()
 
   async loadStage(littleMagic, restData) {
+    const graphicChange = littleMagic.state['graphic'] != littleMagic.state['prev']['graphic'];
     const layers = Object.keys(restData);
     littleMagic.blocks = restData;
 
@@ -531,7 +532,9 @@ class LittleMagicMake extends LittleMagic {
     if (littleMagic.state['stage'] === '') {
       const block = parseInt(/(\d)$/.exec(littleMagic.findStageBlock('layer1'))[1]);
       if (littleMagic.state['block'] != block) {
-        const updateLayers = littleMagic.layerGroup['stage'].concat(littleMagic.layers['system']);
+        const updateLayers = littleMagic.layerGroup['stage']
+        if (graphicChange)
+          updateLayers.concat(littleMagic.layers['system']);
         littleMagic.updateBlock(updateLayers, littleMagic.state['block']);
       }
     }
@@ -541,8 +544,9 @@ class LittleMagicMake extends LittleMagic {
 
     // update sprite
     littleMagic.setSpriteLayer(littleMagic.layerGroup['stage']);
-    littleMagic.setSpriteLayer(littleMagic.layers['system'], { 'renderOnly': true });
     littleMagic.setMenuBlockIcon();
+    if (graphicChange)
+      littleMagic.setSpriteLayer(littleMagic.layers['system'], { 'renderOnly': true });
   }  // loadStage()
 
   saveStage(littleMagic, restData) {
