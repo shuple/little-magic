@@ -124,13 +124,12 @@ class LittleMagicMake extends LittleMagic {
     context.fillText(text, x + imageSize / 2, y + imageSize / 2);
   }  // setMenuDesc
 
-  setMenuReplyText(context, col, row, text) {
+  setMenuReplyText(col, row, text) {
     const imageSize = this.imageSize
     const [ x, y ] = [ imageSize * col + (imageSize / 8), imageSize * (row + 1.4) ];
-    context.font = this.font['medium'];
+    const context = this.menuContextText();
     context.textAlign = 'start';
     context.textBaseline = 'alphabetic';
-    context.fillStyle = this.color['menu'];
     context.clearRect(imageSize * col, imageSize * (row + 1), imageSize * 2, imageSize);
     context.fillText(text, x, y);
     setTimeout(function(imageSize, col, row) {
@@ -424,9 +423,8 @@ class LittleMagicMake extends LittleMagic {
 
   selectMenuSave() {
     if (this.state['hash'] === this.stageHash()) {
-      const context = this.contexts[this.layers['menu']];
       const position = this.meta['position']['save'];
-      this.setMenuReplyText(context, position['col'], position['row'], 'No\nChanges');
+      this.setMenuReplyText(position['col'], position['row'], 'No\nChanges');
       return;
     }
     let stageBlocks = {};
@@ -561,11 +559,8 @@ class LittleMagicMake extends LittleMagic {
   }  // loadStage()
 
   saveStage(littleMagic, restData) {
-    const layer = littleMagic.layers['menu'];
-    const context = littleMagic.contexts[layer];
     const position = littleMagic.meta['position']['save'];
-    littleMagic.setMenuReplyText(
-      context, position['col'], position['row'], `Saved ${restData['stage']}!!`);
+    littleMagic.setMenuReplyText(position['col'], position['row'], `Saved ${restData['stage']}!!`);
     // save state
     littleMagic.state['stage'] = restData['stage'];
     littleMagic.state['hash'] = littleMagic.stageHash();
