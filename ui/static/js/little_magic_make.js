@@ -172,8 +172,10 @@ class LittleMagicMake extends LittleMagic {
     if (this.meta['debug']['mouseDebug']) {
       const imageSize = this.imageSize
       const [ x, y ] = [  imageSize * 15, imageSize * 0.6 ];
-      const context = this.contexts[this.layers['menu']];
       const ctx = /(\d)/.exec(this.state['layer'])[1];
+      const context = this.contexts[this.layers['menu']];
+      context.textAlign = 'start';
+      context.textBaseline = 'alphabetic';
       context.clearRect(x, 0, imageSize, imageSize * 4);
       context.fillStyle = this.color['menu'];
       const contents = [ xAxis, yAxis, col, row, ctx ];
