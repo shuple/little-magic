@@ -233,6 +233,8 @@ class LittleMagicMake extends LittleMagic {
         this.selectMenuItembox();
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectMenuBlock(col, row, 1);
+      } else if (this.areaBlock(col, row, 'stage')) {
+        this.selectMenuStage(1);
       }
       break;
     case this.layers['system']:
@@ -411,6 +413,15 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // updateBlock()
 
+  selectMenuStage(next) {
+    let nextStage = this.state['stage'] || 0;
+    const restData = {
+      'graphic': this.state['graphic'],
+      'stage'  : parseInt(nextStage) + next
+    };
+    this.rest('/post/stage', restData, this.nextStage);
+  }  // selectMenuStage()
+
   selectMenuNew() {
     if (this.state['stage'] === '' && this.state['hash'] === this.stageHash()) return;
     this.state['stage'] = '';
@@ -557,6 +568,19 @@ class LittleMagicMake extends LittleMagic {
     const position = littleMagic.meta['position']['stage'];
     littleMagic.setMenuSpriteText('stage', position['col'], position['row']);
   }  // loadStage()
+
+  nextStage(littleMagic, restData) {
+    // update stage number
+    const position = littleMagic.meta['position']['stage']
+    const [ col, row ] = [ position['col'], position['row'] ];
+    const imageSize = littleMagic.imageSize;
+    const context = littleMagic.contexts[littleMagic.layers['menu']];
+    context.fillStyle = littleMagic.color['blank'];
+    context.fillRect(col * imageSize, row * imageSize, imageSize, imageSize);
+    littleMagic.setMenuSpriteDesc(position['col'], position['row'], restData['stage']);
+    // update stage block
+    littleMagic.loadStage(littleMagic, restData['blocks']);
+  }  // nextStage()
 
   saveStage(littleMagic, restData) {
     const position = littleMagic.meta['position']['save'];

@@ -77,6 +77,26 @@ def post_write():
     return data
 #  def post_read()
 
+# next stage
+#
+@app.route('/post/stage', methods=['POST'])
+def post_stage():
+    try:
+        post = flask.request.json
+        file = 'stage/%03i' % (int(post['stage']));
+        file_path = f"{path}/../data/system/{post['graphic']}/{file}.json"
+        post['file'] = [ file ] if os.path.exists(file_path) else [ 'stage/001' ]
+        stage = re.search(r'stage/(\d+)', post['file'][0])
+        data = { 'data':
+            { 'stage' : '%03i' % (int(stage.group(1))),
+              'blocks': read_file(post)['data'] }
+        }
+    except Exception as e:
+        logging.error(f'{flask.request.path} {traceback.format_exc()}')
+        data = { 'error': f'{str(e)}' }
+    return data
+# def post_stage
+
 # parse command line argument
 #
 def parse_args():
