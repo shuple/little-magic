@@ -63,7 +63,7 @@ class LittleMagicMake extends LittleMagic {
       // sprite
       await this.setMenuSprite(key, position['col'], position['row']);
       // text on sprite
-      this.setMenuSpriteText(key, position['col'], position['row']);
+      this.setMenuSpriteText(position['col'], position['row'], key);
     }
   }  // menuContext()
 
@@ -103,7 +103,7 @@ class LittleMagicMake extends LittleMagic {
       }
   }  // setMenuSprite
 
-  setMenuSpriteText(content, col, row) {
+  setMenuSpriteText(col, row, content) {
     const imageSize = this.imageSize;
     const context = this.contexts[this.layers['menu']];
     context.fillStyle = this.color['blank'];
@@ -566,7 +566,7 @@ class LittleMagicMake extends LittleMagic {
 
     // update stage number
     const position = littleMagic.meta['position']['stage'];
-    littleMagic.setMenuSpriteText('stage', position['col'], position['row']);
+    littleMagic.setMenuSpriteText(position['col'], position['row'], 'stage');
   }  // loadStage()
 
   nextStage(littleMagic, restData) {
