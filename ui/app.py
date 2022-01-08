@@ -75,7 +75,7 @@ def post_write():
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
         data = { 'error': f'{str(e)}' }
     return data
-#  def post_read()
+#  def post_write()
 
 # next stage
 #
