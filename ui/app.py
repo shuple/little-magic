@@ -104,7 +104,6 @@ def parse_args():
     parser.add_argument('--host', default='0.0.0.0', help='bind IP address')
     parser.add_argument('-d', '--debug', action='store_true', help='development mode')
     parser.add_argument('-p', '--port', type=int, default=44344, help='bind port')
-
     return vars(parser.parse_args())
 #  def parse_arg()
 
