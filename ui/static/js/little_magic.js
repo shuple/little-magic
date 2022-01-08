@@ -35,6 +35,7 @@ class LittleMagic {
     // static game system parameter
     this.system = {
       'load'   : false,
+      'tap'    : false,
       'timeout': 100
     };
 
@@ -74,6 +75,14 @@ class LittleMagic {
       }
     }
   }  // setCanvasScale()
+
+  loading(timeout = 2) {
+    if (this.load) return this.load;
+    this.load = true;
+    setTimeout(function(littleMagic) {
+      littleMagic.load = false;
+    }, this.system['timeout'] * timeout, this);
+  }  // def loading()
 
   loadScreen(on) {
     const layer = document.querySelector('canvas:last-child').id

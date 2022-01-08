@@ -382,11 +382,7 @@ class LittleMagicMake extends LittleMagic {
 
   selectMenuBlock(col, row, rotate) {
     // prevent click bashing
-    if (this.load) return;
-    this.load = true;
-    setTimeout(function(littleMagic) {
-      littleMagic.load = false;
-    }, this.system['timeout'] * 2, this);
+    if (this.loading()) return;
     let block = this.state['block'] + rotate;
     block = block < 0 ? this.system['lastBlock'] : block %= this.system['lastBlock'] + 1;
     this.state['block'] = block;
@@ -417,12 +413,28 @@ class LittleMagicMake extends LittleMagic {
   }  // updateBlock()
 
   selectMenuStage(next) {
-    let nextStage = this.state['stage'];
-    const restData = {
-      'graphic': this.state['graphic'],
-      'stage'  : parseInt(nextStage) + next
-    };
-    this.rest('/post/stage', restData, this.nextStage);
+    // warn if the stage is modified
+    const position = this.meta['position']['stage'];
+    const [ col, row ] = [ position['col'], position['row'] ];
+    if (this.state['hash'] != this.stageHash() && this.system['tap'] === false) {
+      this.system['tap'] = true;
+      this.setMenuReplyText(col, row, 'Tap Again');
+      setTimeout(function(littleMagic) {
+        littleMagic.system['tap'] = false;
+      }, this.system['timeout'] * 20, this);
+    } else {
+      // prevent click bashing
+      if (this.loading()) return;
+      const imageSize = this.imageSize;
+      const context = this.contexts[this.layers['menu']];
+      context.clearRect(imageSize * col, imageSize * (row + 1), imageSize * 2, imageSize);
+      let nextStage = this.state['stage'];
+      const restData = {
+        'graphic': this.state['graphic'],
+        'stage'  : parseInt(nextStage) + next
+      };
+      this.rest('/post/stage', restData, this.nextStage);
+    }
   }  // selectMenuStage()
 
   selectMenuNew() {
