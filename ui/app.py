@@ -83,9 +83,15 @@ def post_write():
 def post_stage():
     try:
         post = flask.request.json
-        file = 'stage/%03i' % (int(post['stage']));
-        file_path = f"{path}/../data/system/{post['graphic']}/{file}.json"
-        post['file'] = [ file ] if os.path.exists(file_path) else [ 'stage/001' ]
+        if post['stage'] == 0:
+            stage_path = f"{path}/../data/system/{post['graphic']}/stage"
+            file_path = max(glob.glob(f"{stage_path}/[0-9][0-9][0-9].json"))
+            file = 'stage/%03i' % (int(os.path.splitext(os.path.basename(file_path))[0]))
+        else:
+            stage_string = '%03i' % (post['stage'])
+            file_path = f"{path}/../data/system/{post['graphic']}/stage/{stage_string}.json"
+            file = f'stage/{stage_string}' if os.path.exists(file_path) else 'stage/001'
+        post['file'] = [ file ]
         stage = re.search(r'stage/(\d+)', post['file'][0])
         data = { 'data':
             { 'stage' : '%03i' % (int(stage.group(1))),

@@ -271,6 +271,8 @@ class LittleMagicMake extends LittleMagic {
         this.selectMenuNew();
       } else if (this.areaBlock(col, row, 'save')) {
         this.selectMenuSave();
+      } else if (this.areaBlock(col, row, 'stage')) {
+        this.selectMenuStage(-1);
       }
       break;
     case this.layers['system']:
