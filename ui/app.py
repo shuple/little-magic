@@ -35,23 +35,26 @@ def index():
 @app.route('/post/read', methods=['POST'])
 def post_read():
     try:
-        post = flask.request.json
-        data = post.get('returnValue', {})
-        for file in post['file']:
-            file_path = f"{path}/../data/system/{post['graphic']}/{file}.json"
-            with open(file_path) as f:
-                d = json.loads(f.read())
-                if isinstance(data, list):
-                    data += [ { k: v } for k, v in d.items() ]
-                elif isinstance(data, dict):
-                    data = { **data, **d }
-        #  for
-        data = { 'data': data }
+        data = read_file(flask.request.json)
     except Exception as e:
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
         data = { 'error': f'{str(e)}' }
     return data
 #  def post_read()
+
+def read_file(post):
+    data = post.get('returnValue', {})
+    for file in post['file']:
+        file_path = f"{path}/../data/system/{post['graphic']}/{file}.json"
+        with open(file_path) as f:
+            d = json.loads(f.read())
+            if isinstance(data, list):
+                data += [ { k: v } for k, v in d.items() ]
+            elif isinstance(data, dict):
+                data = { **data, **d }
+    #  for
+    return { 'data': data }
+#  def read_file()
 
 # write file
 #
