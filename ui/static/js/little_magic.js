@@ -245,6 +245,10 @@ class LittleMagic {
     return `/static/image/sprite/${this.state['graphic']}/${src}.png`;
   } // imagesrc()
 
+  padZero(n) {
+    return ('00' + n).slice(-3);
+  }  // padZero
+
   async rest(url, restData, callback) {
     await fetch(url, {
       method: 'POST',

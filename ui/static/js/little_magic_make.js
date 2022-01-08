@@ -27,7 +27,7 @@ class LittleMagicMake extends LittleMagic {
       'row'  : 0,
       'layer': 'layer1',
       'block': 0,
-      'stage': '001',
+      'stage': 1,
       'hash' : ''
     });
 
@@ -109,8 +109,9 @@ class LittleMagicMake extends LittleMagic {
     context.fillStyle = this.color['blank'];
     switch (content) {
     case 'stage':
+      const stage = this.state['stage'] ? this.padZero(this.state['stage']) : 'new';
       context.fillRect(col * imageSize, row * imageSize, imageSize, imageSize);
-      this.setMenuSpriteDesc(col, row, this.state['stage'] || 'new');
+      this.setMenuSpriteDesc(col, row, stage);
       break;
     }
   }  // setMenuSpriteText()
@@ -416,7 +417,7 @@ class LittleMagicMake extends LittleMagic {
   }  // updateBlock()
 
   selectMenuStage(next) {
-    let nextStage = this.state['stage'] || 0;
+    let nextStage = this.state['stage'];
     const restData = {
       'graphic': this.state['graphic'],
       'stage'  : parseInt(nextStage) + next
@@ -426,7 +427,7 @@ class LittleMagicMake extends LittleMagic {
 
   selectMenuNew() {
     if (this.state['stage'] === '' && this.state['hash'] === this.stageHash()) return;
-    this.state['stage'] = '';
+    this.state['stage'] = 0;
     const restData = {
       'graphic': this.state['graphic'],
       'file'   : [ 'stage/new' ],
@@ -549,7 +550,7 @@ class LittleMagicMake extends LittleMagic {
     littleMagic.blocks = Object.assign(littleMagic.blocks, restData);
 
     // use this.state['block'] for new stage
-    if (littleMagic.state['stage'] === '') {
+    if (littleMagic.state['stage'] === 0) {
       const block = parseInt(/(\d)$/.exec(littleMagic.findStageBlock('layer1'))[1]);
       if (littleMagic.state['block'] != block) {
         const updateLayers = littleMagic.layerGroup['stage']
@@ -587,7 +588,8 @@ class LittleMagicMake extends LittleMagic {
 
   saveStage(littleMagic, restData) {
     const position = littleMagic.meta['position']['save'];
-    littleMagic.setMenuReplyText(position['col'], position['row'], `Saved ${restData['stage']}!!`);
+    const stage = littleMagic.padZero(restData['stage']);
+    littleMagic.setMenuReplyText(position['col'], position['row'], `Saved ${stage}!!`);
     // save state
     littleMagic.state['stage'] = restData['stage'];
     littleMagic.state['hash'] = littleMagic.stageHash();

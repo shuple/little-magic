@@ -65,11 +65,11 @@ def post_write():
         if post['content'] == 'stage':
             stage_path = f"{path}/../data/system/{post['graphic']}/stage"
             file_path = max(glob.glob(f"{stage_path}/[0-9][0-9][0-9].json"))
-            stage = post['stage'] if post['stage'] else \
+            stage = '%03i' % (post['stage']) if post['stage'] else \
                 '%03i' % (int(os.path.splitext(os.path.basename(file_path))[0]) + 1)
             with open(f'{stage_path}/{stage}.json', 'w') as fp:
                 fp.write(json.dumps(post['blocks']))
-            data = { 'data': { 'stage': stage } }
+            data = { 'data': { 'stage': int(stage) } }
         #  if
     except Exception as e:
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
@@ -94,7 +94,7 @@ def post_stage():
         post['file'] = [ file ]
         stage = re.search(r'stage/(\d+)', post['file'][0])
         data = { 'data':
-            { 'stage' : '%03i' % (int(stage.group(1))),
+            { 'stage' : int(stage.group(1)),
               'blocks': read_file(post)['data'] }
         }
     except Exception as e:
