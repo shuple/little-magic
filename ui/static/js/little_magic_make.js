@@ -570,6 +570,7 @@ class LittleMagicMake extends LittleMagic {
   }  // loadStage()
 
   nextStage(littleMagic, restData) {
+    littleMagic.state['stage'] = restData['stage'];
     // update stage number
     const position = littleMagic.meta['position']['stage']
     const [ col, row ] = [ position['col'], position['row'] ];
