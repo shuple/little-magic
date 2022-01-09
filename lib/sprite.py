@@ -80,6 +80,8 @@ class Sprite:
     #
     def write_image_dict(self):
         path = f"{self.path['root']}/data/system/{self.option['graphic']}/meta"
+        if not os.path.exists(path):
+            os.makedirs(path)
         file = f"{path}/{self.option['file']}.json"
         image_dict = { k : self.image_dict[k] for k in sorted(self.image_dict) }
         with open(file, 'w') as f:
