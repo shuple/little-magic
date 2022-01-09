@@ -17,35 +17,34 @@ window.addEventListener('load', function () {
   // control canvas layer
   const canvas = document.querySelector('canvas:last-child');
 
-  // click event, hold emulates right click
-  const rightButton = 2;
+  // click event, right click emulates hold press
   canvas.addEventListener('contextmenu', function(event) {
     event.preventDefault();
-    littleMagic.mouseEvent(canvas, event);
+    littleMagic.mouseEvent(canvas, event, true);
   });
   let [ clickTimer, clickDuration ] = [ 0, 300 ];
   canvas.addEventListener('mousedown', function(event) {
     clickTimer = new Date().getTime();
   });
   canvas.addEventListener('mouseup', function(event) {
-    let button = undefined;
+    let pressHold = false;
     if (event.button === 0) {
       const clickReleaseTime = new Date().getTime();
       if (clickReleaseTime - clickTimer > clickDuration) {
-        button = rightButton;
+        pressHold = true;
       }
-      littleMagic.mouseEvent(canvas, event, button);
+      littleMagic.mouseEvent(canvas, event, pressHold);
     }
   });
 
-  // tap event, hold emulates right click
+  // tap event
   let [ touchTimer, touchDuration ] = [ null, 300 ];
   let tapLock = false;
   const touchHandler = function(event) {
     event.preventDefault();
     tapLock = true;
     let touch = event.touches[0];
-    littleMagic.mouseEvent(canvas, touch, rightButton);
+    littleMagic.mouseEvent(canvas, touch, true);
   }  // touchHandler()
   const touchStart = function(event) {
     if (event.touches.length === 1)

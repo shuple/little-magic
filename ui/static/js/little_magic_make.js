@@ -185,19 +185,13 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // mouseDebug()
 
-  mouseEvent(canvas, event, button) {
+  mouseEvent(canvas, event, pressHold) {
     const [x, y] = this.mousePosition(canvas, event);
     const [ col, row ] = this.mousePositionToIndex(x, y);
-    switch (button || event.button) {
-    // left click
-    case 0:
-      this.leftClick(col, row, event);
-      break;
-    // contextmenu
-    case 2:
-      this.rightClick(col, row);
-      break;
-    default:
+    if (pressHold) {
+      this.pressHold(col, row);
+    } else {
+      this.click(col, row, event);
     }
     this.mouseDebugStatus(x, y, col, row);
   }  // mouseEvent
@@ -214,7 +208,7 @@ class LittleMagicMake extends LittleMagic {
     return [ col, row ];
   }  // mousePositionToIndex
 
-  leftClick(col, row, event) {
+  click(col, row, event) {
     switch (this.state['layer']) {
     case 'layer1':
     case 'layer2':
@@ -252,9 +246,9 @@ class LittleMagicMake extends LittleMagic {
       }
       break;
     }
-  }  // leftClick()
+  }  // click()
 
-  rightClick(col, row) {
+  pressHold(col, row) {
     switch (this.state['layer']) {
     case 'layer1':
     case 'layer2':
@@ -291,7 +285,7 @@ class LittleMagicMake extends LittleMagic {
       break;
     default:
     }
-  }  // rightClick()
+  }  // pressHold()
 
   areaRange(col, row, content) {
       const position = this.meta['position'];
@@ -413,7 +407,7 @@ class LittleMagicMake extends LittleMagic {
   }  // updateBlock()
 
   selectMenuStage(next) {
-    // right click discards the stage changes
+    // hold press hold discards the stage changes
     const position = this.meta['position']['stage'];
     const [ col, row ] = [ position['col'], position['row'] ];
     const stageChange = this.state['hash'] != this.stageHash();
