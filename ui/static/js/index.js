@@ -4,12 +4,11 @@ window.addEventListener('load', function () {
   const littleMagic = new LittleMagicMake();
   const graphic = littleMagic.state['graphic'];
   const init = async function() {
-    const path = 'meta/make';
-    const metaData = [ `${path}/sprite`, `${path}/position`, `${path}/debug` ];
+    const metaData = [ `meta/sprite`, `meta/position`, `meta/debug` ];
     await littleMagic.rest('/post/read',
       { 'file': metaData, 'graphic': graphic }, littleMagic.setMeta);
     await littleMagic.rest('/post/read',
-      { 'file': [ 'menu/make', `stage/${littleMagic.padZero(littleMagic.state['stage'])}` ],
+      { 'file': [ 'menu/game', `stage/${littleMagic.padZero(littleMagic.state['stage'])}` ],
         'graphic': graphic, }, littleMagic.setGame);
   }
   init();
