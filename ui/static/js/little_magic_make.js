@@ -62,7 +62,7 @@ class LittleMagicMake extends LittleMagic {
     for (let content of [ 'item', 'block', 'stage', 'new', 'save' ]) {
       const position = this.meta['position'][content];
       // text
-      this.setMenuDesc(position['col'] + 1,  position['row'], content.capitalizeFirstLetter());
+      this.setMenuDesc(position['col'] + 1,  position['row'], content);
       // sprite
       await this.setMenuSprite(position['col'], position['row'], content);
       // text on sprite
@@ -76,7 +76,7 @@ class LittleMagicMake extends LittleMagic {
     const context = this.menuContextText();
     context.textAlign = 'start';
     context.textBaseline = 'middle'
-    context.fillText(text, x + 2, y + imageSize / 2);
+    context.fillText(text.capitalizeFirstLetter(), x + 2, y + imageSize / 2);
   }  // setMenuDesc
 
   menuContextText() {
