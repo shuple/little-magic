@@ -71,12 +71,13 @@ class LittleMagicMake extends LittleMagic {
   }  // menuContext()
 
   setMenuDesc(col, row, text) {
+    text = text.length > 2 ? text.capitalizeFirstLetter() : text.toUpperCase();
     const imageSize = this.imageSize;
     const [ x, y ] = [ imageSize * col, imageSize * row ];
     const context = this.menuContextText();
     context.textAlign = 'start';
     context.textBaseline = 'middle'
-    context.fillText(text.capitalizeFirstLetter(), x + 2, y + imageSize / 2);
+    context.fillText(text, x + 2, y + imageSize / 2);
   }  // setMenuDesc
 
   menuContextText() {
