@@ -60,7 +60,6 @@ class LittleMagicMake extends LittleMagic {
 
   async menuContext() {
     for (let content of Object.keys(this.meta['position'])) {
-      if (/(Start|End)/.exec(content)) continue;
       const position = this.meta['position'][content];
       // text
       this.setMenuDesc(position['col'] + 1,  position['row'], content);
@@ -145,13 +144,13 @@ class LittleMagicMake extends LittleMagic {
 
   systemContext() {
     const layer = this.layers['fill'];
-    const position = this.meta['position'];
-    const [ x, y ] = [ this.imageSize * position['itemboxStart']['col'], 0 ];
+    const position = this.meta['positionRange']['itembox'];
+    const [ x, y ] = [ this.imageSize * position['start']['col'], 0 ];
     const width = this.gameWidth - this.imageSize *
-      (position['itemboxEnd']['col'] - position['itemboxStart']['col'] + 1);
-    const height = this.gameHeight - this.imageSize * (position['itemboxEnd']['row'] - 1);
-    const itemboxStart = position['itemboxStart'];
-    const itemboxEnd = position['itemboxEnd'];
+      (position['end']['col'] - position['start']['col'] + 1);
+    const height = this.gameHeight - this.imageSize * (position['end']['row'] - 1);
+    const itemboxStart = position['start'];
+    const itemboxEnd = position['end'];
     const context = this.contexts[layer];
     context.fillStyle = this.color['system'];
     context.fillRect( x, y, width, height);
@@ -293,9 +292,9 @@ class LittleMagicMake extends LittleMagic {
   }  // pressHold()
 
   areaRange(col, row, content) {
-      const position = this.meta['position'];
-      const start = position[`${content}Start`];
-      const end = position[`${content}End`];
+      const position = this.meta['positionRange'][content];
+      const start = position['start'];
+      const end = position['end'];
       return (col >= start['col'] && col <= end['col'] && row >= start['row'] && row <= end['row']);
   }  // areaRange()
 
@@ -519,12 +518,12 @@ class LittleMagicMake extends LittleMagic {
   }  // updateMenuItem()
 
   updateSystemItembox(nextBlock) {
-    const position = this.meta['position'];
+    const position = this.meta['positionRange']['itembox'];
     let opt = {
-      'colStart'  : position['itemboxStart']['col'],
-      'colEnd'    : position['itemboxEnd']['col'],
-      'rowStart'  : position['itemboxStart']['row'],
-      'rowEnd'    : position['itemboxEnd']['row'],
+      'colStart'  : position['start']['col'],
+      'colEnd'    : position['end']['col'],
+      'rowStart'  : position['start']['row'],
+      'rowEnd'    : position['end']['row'],
       'renderOnly': this.state['layer'] !== this.layers['system']
     };
     this.updateBlock(this.layers['system'], nextBlock);
