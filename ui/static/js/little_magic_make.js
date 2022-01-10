@@ -59,7 +59,8 @@ class LittleMagicMake extends LittleMagic {
   }  // constructor()
 
   async menuContext() {
-    for (let content of [ 'item', 'block', 'stage', 'new', 'save' ]) {
+    for (let content of Object.keys(this.meta['position'])) {
+      if (/(Start|End)/.exec(content)) continue;
       const position = this.meta['position'][content];
       // text
       this.setMenuDesc(position['col'] + 1,  position['row'], content);
