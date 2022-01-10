@@ -100,6 +100,7 @@ class LittleMagicMake extends LittleMagic {
         case 'block':
           await this.setMenuBlockIcon();
           break;
+        case 'cg'  :
         case 'new' :
         case 'save':
           await this.setMenuIcon(content);
