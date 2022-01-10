@@ -385,7 +385,7 @@ class LittleMagicMake extends LittleMagic {
     let block = this.state['block'] + rotate;
     block = block < 0 ? this.system['lastBlock'] : block %= this.system['lastBlock'] + 1;
     this.state['block'] = block;
-    const src = `layer1/block/0${block}/field/00`;
+    const src = `layer1/block/${this.padZero(block, 2)}/field/00`;
 
     // update sprite
     this.setSpriteBlock(col, row, this.layers['menu'], src);
