@@ -64,7 +64,7 @@ class LittleMagicMake extends LittleMagic {
       // text
       this.setMenuDesc(position['col'] + 1,  position['row'], content.capitalizeFirstLetter());
       // sprite
-      await this.setMenuSprite(content, position['col'], position['row']);
+      await this.setMenuSprite(position['col'], position['row'], content);
       // text on sprite
       this.setMenuSpriteText(position['col'], position['row'], content);
     }
@@ -86,7 +86,7 @@ class LittleMagicMake extends LittleMagic {
     return context;
   }  // menuContextText()
 
-  async setMenuSprite(content, col, row) {
+  async setMenuSprite(col, row, content) {
     const context = this.contexts[this.layers['menu']];
     const imageSize = this.imageSize;
     context.fillStyle = this.color['blank'];
