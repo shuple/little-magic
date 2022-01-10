@@ -13,6 +13,10 @@ String.prototype.hashCode = function() {
 	return hash;
 };  // String.prototype.hashCode()
 
+String.prototype.capitalizeFirstLetter = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
 class LittleMagicMake extends LittleMagic {
   constructor() {
     super();
@@ -55,15 +59,14 @@ class LittleMagicMake extends LittleMagic {
   }  // constructor()
 
   async menuContext() {
-    for (let content of [ 'Item', 'Block', 'Stage', 'New', 'Save' ]) {
-      const key = content.toLowerCase();
-      const position = this.meta['position'][key];
+    for (let content of [ 'item', 'block', 'stage', 'new', 'save' ]) {
+      const position = this.meta['position'][content];
       // text
-      this.setMenuDesc(position['col'] + 1,  position['row'], content);
+      this.setMenuDesc(position['col'] + 1,  position['row'], content.capitalizeFirstLetter());
       // sprite
-      await this.setMenuSprite(key, position['col'], position['row']);
+      await this.setMenuSprite(content, position['col'], position['row']);
       // text on sprite
-      this.setMenuSpriteText(position['col'], position['row'], key);
+      this.setMenuSpriteText(position['col'], position['row'], content);
     }
   }  // menuContext()
 
