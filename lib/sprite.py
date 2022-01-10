@@ -8,7 +8,7 @@ class Sprite:
 
     # parameter:
     #
-    # option['graphic'] : 'sfc'
+    # option['cg'] : 'sfc'
     #
     def __init__(self, option):
         # copy option
@@ -20,7 +20,7 @@ class Sprite:
         # application paths
         self.path = {
             'root'  : path,
-            'sprite': f"{path}/data/image/sprite/{option['graphic']}",
+            'sprite': f"{path}/data/image/sprite/{option['cg']}",
         }
 
         # dict, key: relative path to image, dict meta data
@@ -66,7 +66,7 @@ class Sprite:
     # image_dict : self.image_dict
     #
     def merge_image_dict(self):
-        path = f"{self.path['root']}/data/system/{self.option['graphic']}/meta"
+        path = f"{self.path['root']}/data/system/{self.option['cg']}/meta"
         file = f"{path}/{self.option['file']}.json"
         if os.path.exists(file):
             with open(file, 'r') as f:
@@ -79,7 +79,7 @@ class Sprite:
     # write self.image_dict to json
     #
     def write_image_dict(self):
-        path = f"{self.path['root']}/data/system/{self.option['graphic']}/meta"
+        path = f"{self.path['root']}/data/system/{self.option['cg']}/meta"
         if not os.path.exists(path):
             os.makedirs(path)
         file = f"{path}/{self.option['file']}.json"

@@ -9,8 +9,8 @@ import little_magic_stage as lm
 def parse_args():
     # options
     parser = argparse.ArgumentParser(description='Generate stage from json file')
+    parser.add_argument('-c', '--cg', default='sfc', help='CG type')
     parser.add_argument('file', nargs='?', default='', help='stage file in json format')
-    parser.add_argument('-g', '--graphic', default='sfc', help='graphic type')
 
     # convert to dict
     return vars(parser.parse_args())
@@ -20,7 +20,7 @@ if __name__ == '__main__':
     args = parse_args()
     o = lm.LittleMagicStage(args)
     o.load()
-    stage_file = f"{path}/../data/system/{args['graphic']}/stage/{args['file']}.json"
+    stage_file = f"{path}/../data/system/{args['cg']}/stage/{args['file']}.json"
     with open(stage_file, 'r') as f:
         data = json.load(f)
         o.generate(args['file'], data)

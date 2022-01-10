@@ -25,7 +25,7 @@ class LittleMagicMake extends LittleMagic {
     this.loadScreen(true);
 
     this.state = Object.assign(this.state, {
-      'prev' : { 'layer': 'layer1', 'graphic': 'sfc' },
+      'prev' : { 'layer': 'layer1', 'cg': 'sfc' },
       'item' : '',
       'col'  : 0,
       'row'  : 0,
@@ -425,8 +425,8 @@ class LittleMagicMake extends LittleMagic {
       context.clearRect(imageSize * col, imageSize * (row + 1), imageSize * 2, imageSize);
       let nextStage = this.state['stage'];
       const restData = {
-        'graphic': this.state['graphic'],
-        'stage'  : parseInt(nextStage) + next
+        'cg'   : this.state['cg'],
+        'stage': parseInt(nextStage) + next
       };
       this.rest('/post/stage', restData, this.nextStage);
     }
@@ -436,8 +436,8 @@ class LittleMagicMake extends LittleMagic {
     if (this.state['stage'] === '' && this.state['hash'] === this.stageHash()) return;
     this.state['stage'] = 0;
     const restData = {
-      'graphic': this.state['graphic'],
-      'file'   : [ 'stage/new' ],
+      'cg'  : this.state['cg'],
+      'file': [ 'stage/new' ],
     };
     this.rest('/post/read', restData, this.loadStage);
   }  // selectMenuNew()
@@ -454,7 +454,7 @@ class LittleMagicMake extends LittleMagic {
     }
     const restData = {
       'content': 'stage',
-      'graphic': this.state['graphic'],
+      'cg'     : this.state['cg'],
       'stage'  : this.state['stage'],
       'blocks' : stageBlocks
     };

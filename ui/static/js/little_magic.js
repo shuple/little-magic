@@ -10,7 +10,7 @@ class LittleMagic {
 
     // game state
     this.state = {
-      'graphic': 'sfc',
+      'cg': 'sfc',
       'windowWidth' : window.width,
       'windowHeigth': window.heigth,
     };
@@ -250,7 +250,7 @@ class LittleMagic {
   }  // removeSpriteBlock()
 
   imagesrc(src) {
-    return `/static/image/sprite/${this.state['graphic']}/${src}.png`;
+    return `/static/image/sprite/${this.state['cg']}/${src}.png`;
   } // imagesrc()
 
   padZero(n) {
