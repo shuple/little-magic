@@ -23,7 +23,7 @@ class LittleMagicStage(sprite.Sprite):
     #
     # data : stage data
     #
-    def generate(self, data):
+    def generate(self, file, data):
         # create image
         layer = next(iter(data))
         width  = len(data[layer][0]);
@@ -43,8 +43,7 @@ class LittleMagicStage(sprite.Sprite):
             self.block['height'] * len(data[layer])
         ))
 
-        timestamp =  datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
-        stage_name  = f"{self.option['graphic']}/{timestamp}.png"
+        stage_name  = f"{self.option['graphic']}/{file}.png"
         stage_file  = f"{self.path['root']}/data/image/stage/{stage_name}"
         image.save(stage_file, 'png')
     #  def generate()
