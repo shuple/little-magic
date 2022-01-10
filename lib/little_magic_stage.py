@@ -11,7 +11,7 @@ class LittleMagicStage(sprite.Sprite):
 
     # parameter:
     #
-    # option['cg'] : 'sfc'
+    # option['cg'] : 0
     #
     def __init__(self, option):
         super().__init__(option)
@@ -43,7 +43,7 @@ class LittleMagicStage(sprite.Sprite):
             self.block['height'] * len(data[layer])
         ))
 
-        stage_name  = f"{self.option['cg']}/{file}.png"
+        stage_name  = '%02i/%03i.png' % (self.option['cg'], file)
         stage_file  = f"{self.path['root']}/data/image/stage/{stage_name}"
         image.save(stage_file, 'png')
     #  def generate()

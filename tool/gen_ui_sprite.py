@@ -11,7 +11,7 @@ def parse_args():
     # options
     parser = argparse.ArgumentParser(description='Copy and resize sprite')
     parser.add_argument('path', nargs='?', default=path, help='ui sprite path')
-    parser.add_argument('-c', '--cg', default='sfc', help='CG type')
+    parser.add_argument('-c', '--cg', type=int, default=0, help='CG type')
     parser.add_argument('--delete', action='store_true', default=False, help='delete existing image file')
     parser.add_argument('-s', '--scale', type=float, default=2.0, help='scale of image')
 
@@ -22,10 +22,11 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
     path = f'{os.path.dirname(os.path.abspath(__file__))}/../data/image'
+    cg = '%02i' % (args['cg'])
     if (args['delete']):
-        ui_path = f"{os.path.dirname(os.path.abspath(__file__))}/../ui/static/image/{args['cg']}"
+        ui_path = f"{os.path.dirname(os.path.abspath(__file__))}/../ui/static/image/{cg}"
         if os.path.exists(ui_path): shutil.rmtree(ui_path)
-    for file in pathlib.Path(f"{path}/sprite/{args['cg']}").rglob('*.png'):
+    for file in pathlib.Path(f"{path}/sprite/{cg}").rglob('*.png'):
         image = Image.open(file).convert('RGBA')
 
         # resize image by scale

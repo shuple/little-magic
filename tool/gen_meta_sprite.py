@@ -8,7 +8,7 @@ import sprite
 def parse_args():
     # options
     parser = argparse.ArgumentParser(description='Generate meta sprite data')
-    parser.add_argument('-c', '--cg', default='sfc', help='CG type')
+    parser.add_argument('-c', '--cg', type=int, default=0, help='CG type')
     parser.add_argument('-f', '--file', default='sprite', help='save file name')
 
     # convert to dict
