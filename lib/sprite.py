@@ -91,7 +91,7 @@ class Sprite:
     # load self.image_data, dict, key: relative path to image, value: PIL Image
     #
     def load_image_data(self):
-        for image in self.image_dict.keys():
+        for image in self.image_dict['sprite'].keys():
             file = f"{self.path['sprite']}/{image}.png"
             if os.path.exists(file):
                 self.image_data[image] = Image.open(file).convert('RGBA')
