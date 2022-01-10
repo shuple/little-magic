@@ -121,8 +121,12 @@ class LittleMagic {
     const block = this.blocks[layer];
     const imageSize = this.imageSize;
     const render = layer.replace('layer', 'render');
-    for (let row = opt['rowStart'] || 0; row < (opt['rowEnd'] || this.row); row++) {
-      for (let col = opt['colStart'] || 0; col < (opt['colEnd'] || this.col); col++) {
+    for (const series of [ 'col', 'row']) {
+      if (opt[series] === undefined)
+        opt[series] = { 'start': 0, 'end': this[series] };
+    }
+    for (let row = opt['row']['start']; row < opt['row']['end']; row++) {
+      for (let col = opt['col']['start']; col < opt['col']['end']; col++) {
         if (block[row][col]) {
           images.push({
             'src'   : this.imagesrc(block[row][col]),

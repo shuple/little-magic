@@ -521,10 +521,14 @@ class LittleMagicMake extends LittleMagic {
   updateSystemItembox(nextBlock) {
     const position = this.meta['positionRange']['itembox'];
     let opt = {
-      'colStart'  : position['start']['col'],
-      'colEnd'    : position['end']['col'],
-      'rowStart'  : position['start']['row'],
-      'rowEnd'    : position['end']['row'],
+      'col': {
+        'start': position['start']['col'],
+        'end'  : position['end']['col'],
+      },
+      'row': {
+        'start': position['start']['row'],
+        'end'  : position['end']['row'],
+      },
       'renderOnly': this.state['layer'] !== this.layers['system']
     };
     this.updateBlock(this.layers['system'], nextBlock);
