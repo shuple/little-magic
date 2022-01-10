@@ -25,7 +25,7 @@ class LittleMagicMake extends LittleMagic {
     this.loadScreen(true);
 
     this.state = Object.assign(this.state, {
-      'prev' : { 'layer': 'layer1', 'cg': 'sfc' },
+      'prev' : { 'layer': 'layer1', 'cg': this.state['cg'] },
       'item' : '',
       'col'  : 0,
       'row'  : 0,
