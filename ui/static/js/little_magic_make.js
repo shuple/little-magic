@@ -230,7 +230,7 @@ class LittleMagicMake extends LittleMagic {
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectMenuBlock(col, row, 1);
       } else if (this.areaBlock(col, row, 'stage')) {
-        this.selectMenuStage(1);
+        this.selectMenuStage(col, row, 1);
       }
       break;
     case this.layers['system']:
@@ -268,7 +268,7 @@ class LittleMagicMake extends LittleMagic {
       } else if (this.areaBlock(col, row, 'save')) {
         this.selectMenuSave();
       } else if (this.areaBlock(col, row, 'stage')) {
-        this.selectMenuStage(-1);
+        this.selectMenuStage(col, row, -1);
       }
       break;
     case this.layers['system']:
@@ -399,10 +399,9 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // updateBlock()
 
-  selectMenuStage(next) {
+  selectMenuStage(col, row, next) {
     // require confirm to discards the stage changes
     const position = this.meta['position']['stage'];
-    const [ col, row ] = [ position['col'], position['row'] ];
     if (this.state['hash'] != this.stageHash() && this.state['confirm'] === false) {
       this.setMenuReplyText(col, row, 'Tap Again');
       this.timeout('confirm', 10);
