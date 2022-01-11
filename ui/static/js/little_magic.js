@@ -75,13 +75,13 @@ class LittleMagic {
     }
   }  // setCanvasScale()
 
-  loading(timeout = 2) {
-    if (this.system['load']) return this.system['load'];
-    this.system['load'] = true;
-    setTimeout(function(littleMagic) {
-      littleMagic.system['load'] = false;
-    }, this.system['timeout'] * timeout, this);
-  }  // def loading()
+  timeout(content, timeout = 2) {
+    if (this.system[content]) return this.system[content];
+    this.system[content] = true;
+    setTimeout(function(littleMagic, content) {
+      littleMagic.system[content] = false;
+    }, this.system['timeout'] * timeout, this, content);
+  }  // timeout
 
   loadScreen(on) {
     const layer = document.querySelector('canvas:last-child').id

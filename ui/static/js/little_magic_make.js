@@ -381,7 +381,7 @@ class LittleMagicMake extends LittleMagic {
 
   selectMenuBlock(col, row, rotate) {
     // prevent click bashing
-    if (this.loading()) return;
+    if (this.timeout('load')) return;
     let block = this.state['block'] + rotate;
     block = block < 0 ? this.system['lastBlock'] : block %= this.system['lastBlock'] + 1;
     this.state['block'] = block;
@@ -420,7 +420,7 @@ class LittleMagicMake extends LittleMagic {
       this.setMenuReplyText(col, row, 'Press Hold');
     } else {
       // prevent click bashing
-      if (this.loading()) return;
+      if (this.timeout('load')) return;
       if (stageChange) next = Math.abs(next);
       const imageSize = this.imageSize;
       const context = this.contexts[this.layers['menu']];
