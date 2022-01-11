@@ -389,8 +389,10 @@ class LittleMagicMake extends LittleMagic {
     this.setSpriteLayer(this.layers['system'],
       { 'renderOnly': this.state['layer'] != this.layers['system'] });
     this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/cg/00');
-    const position = this.meta['position']['item'];
-    this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], this.state['item']);
+    if (this.state['item']) {
+      const position = this.meta['position']['item'];
+      this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], this.state['item']);
+    }
   }  // selectMenuCG()
 
   selectMenuBlock(col, row, next) {
