@@ -16,7 +16,11 @@ class LittleMagic {
     };
 
     // game system parameter
-    this.system = {};
+    this.system = {
+      'confirm': false,
+      'load'   : false,
+      'timeout': 100
+    };
 
     // layer alias
     this.layers = {};
@@ -31,13 +35,6 @@ class LittleMagic {
     [ this.col, this.row ] = [ 16, 14 ];
     [ this.gameWidth, this.gameHeight ] =
       [ this.col * this.imageSize, this.row * this.imageSize ];
-
-    // static game system parameter
-    this.system = {
-      'confirm': false,
-      'load'   : false,
-      'timeout': 100
-    };
 
     this.canvas = {};
     this.contexts = {};
