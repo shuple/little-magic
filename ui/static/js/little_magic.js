@@ -17,9 +17,6 @@ class LittleMagic {
       'windowHeigth': window.heigth
     };
 
-    // game system parameter
-    this.system = {};
-
     // layer alias
     this.layers = {};
     this.layerGroup = {};

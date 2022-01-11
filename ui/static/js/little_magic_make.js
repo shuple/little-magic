@@ -35,10 +35,6 @@ class LittleMagicMake extends LittleMagic {
       'hash' : ''
     });
 
-    this.system = Object.assign(this.system, {
-      'lastBlock': 0
-    });
-
     // layer alias
     this.layers  = Object.assign(this.layers, {
       'menu'  : 'layer5',
@@ -347,15 +343,6 @@ class LittleMagicMake extends LittleMagic {
     return 'layer1/block/00/field/00';
   }  // findStageBlock()
 
-  setSystemLastBlock() {
-    let lastBlock = this.system['lastBlock'];
-    while (`layer1/block/${this.padZero(lastBlock, 2)}/field/00` in this.meta['sprite'])
-      lastBlock++;
-
-    // handle overflow
-    this.system['lastBlock'] = --lastBlock;
-  }  // setSystemLastBlock()
-
   async setMenuIcon(content) {
     const src = `layer0/${content}/00`;
     const position = this.meta['position'][content];
@@ -384,7 +371,7 @@ class LittleMagicMake extends LittleMagic {
     // prevent click bashing
     if (this.timeout('load')) return;
     let block = this.state['block'] + rotate;
-    block = block < 0 ? this.system['lastBlock'] : block %= this.system['lastBlock'] + 1;
+    block = block < 0 ? this.meta['lastBlock'] : block %= this.meta['lastBlock'] + 1;
     this.state['block'] = block;
     const src = `layer1/block/${this.padZero(block, 2)}/field/00`;
 
@@ -543,7 +530,6 @@ class LittleMagicMake extends LittleMagic {
     await littleMagic.setSpriteLayer(layers);
     await littleMagic.menuContext();
     littleMagic.systemContext();
-    littleMagic.setSystemLastBlock();
 
     // debug option
     littleMagic.mouseDebug();
