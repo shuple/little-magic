@@ -367,10 +367,10 @@ class LittleMagicMake extends LittleMagic {
     }
   }  // closeSystemItembox()
 
-  selectMenuBlock(col, row, rotate) {
+  selectMenuBlock(col, row, next) {
     // prevent click bashing
     if (this.timeout('load')) return;
-    let block = this.state['block'] + rotate;
+    let block = this.state['block'] + next;
     block = block < 0 ? this.meta['lastBlock'] : block %= this.meta['lastBlock'] + 1;
     this.state['block'] = block;
     const src = `layer1/block/${this.padZero(block, 2)}/field/00`;
