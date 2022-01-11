@@ -412,23 +412,21 @@ class LittleMagicMake extends LittleMagic {
   }  // updateBlock()
 
   selectMenuStage(next) {
-    // hold press hold discards the stage changes
+    // require confirm to discards the stage changes
     const position = this.meta['position']['stage'];
     const [ col, row ] = [ position['col'], position['row'] ];
-    const stageChange = this.state['hash'] != this.stageHash();
-    if (stageChange && next === 1) {
-      this.setMenuReplyText(col, row, 'Press Hold');
+    if (this.state['hash'] != this.stageHash() && this.system['confirm'] === false) {
+      this.setMenuReplyText(col, row, 'Tap Again');
+      this.timeout('confirm', 10);
     } else {
       // prevent click bashing
       if (this.timeout('load')) return;
-      if (stageChange) next = Math.abs(next);
       const imageSize = this.imageSize;
       const context = this.contexts[this.layers['menu']];
       context.clearRect(imageSize * col, imageSize * (row + 1), imageSize * 2, imageSize);
-      let nextStage = this.state['stage'];
       const restData = {
         'cg'   : this.state['cg'],
-        'stage': parseInt(nextStage) + next
+        'stage': this.state['stage'] + next
       };
       this.rest('/post/stage', restData, this.nextStage);
     }

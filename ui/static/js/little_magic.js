@@ -34,6 +34,7 @@ class LittleMagic {
 
     // static game system parameter
     this.system = {
+      'confirm': false,
       'load'   : false,
       'timeout': 100
     };
