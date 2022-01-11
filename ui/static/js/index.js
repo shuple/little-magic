@@ -3,7 +3,7 @@ import { LittleMagicMake } from './little_magic_make.js';
 window.addEventListener('load', function () {
   const littleMagic = new LittleMagicMake();
   const init = async function() {
-    const metaData = [ 'meta/sprite', 'meta/position', 'meta/debug' ];
+    const metaData = [ 'meta/data', 'meta/sprite' ];
     await littleMagic.rest('/post/read',
       { 'file': metaData, 'cg': littleMagic.state['cg'] }, littleMagic.setMeta);
     await littleMagic.rest('/post/read',
