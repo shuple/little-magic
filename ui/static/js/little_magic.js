@@ -11,15 +11,14 @@ class LittleMagic {
     // game state
     this.state = {
       'cg': 0,
+      'confirm': false,
+      'load'   : false,
       'windowWidth' : window.width,
-      'windowHeigth': window.heigth,
+      'windowHeigth': window.heigth
     };
 
     // game system parameter
-    this.system = {
-      'confirm': false,
-      'load'   : false
-    };
+    this.system = {};
 
     // layer alias
     this.layers = {};
@@ -73,10 +72,10 @@ class LittleMagic {
   }  // setCanvasScale()
 
   timeout(content, timeout = 2) {
-    if (this.system[content]) return this.system[content];
-    this.system[content] = true;
+    if (this.state[content]) return this.state[content];
+    this.state[content] = true;
     setTimeout(function(littleMagic, content) {
-      littleMagic.system[content] = false;
+      littleMagic.state[content] = false;
     }, this.meta['timeout'] * timeout, this, content);
   }  // timeout
 

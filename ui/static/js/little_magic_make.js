@@ -415,7 +415,7 @@ class LittleMagicMake extends LittleMagic {
     // require confirm to discards the stage changes
     const position = this.meta['position']['stage'];
     const [ col, row ] = [ position['col'], position['row'] ];
-    if (this.state['hash'] != this.stageHash() && this.system['confirm'] === false) {
+    if (this.state['hash'] != this.stageHash() && this.state['confirm'] === false) {
       this.setMenuReplyText(col, row, 'Tap Again');
       this.timeout('confirm', 10);
     } else {
