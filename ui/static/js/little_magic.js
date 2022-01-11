@@ -76,10 +76,10 @@ class LittleMagic {
   }  // setCanvasScale()
 
   loading(timeout = 2) {
-    if (this.load) return this.load;
-    this.load = true;
+    if (this.system['load']) return this.system['load'];
+    this.system['load'] = true;
     setTimeout(function(littleMagic) {
-      littleMagic.load = false;
+      littleMagic.system['load'] = false;
     }, this.system['timeout'] * timeout, this);
   }  // def loading()
 
