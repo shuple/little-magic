@@ -140,7 +140,7 @@ class LittleMagicMake extends LittleMagic {
     context.fillText(text, x, y);
     setTimeout(function(imageSize, col, row) {
       context.clearRect(imageSize * col, imageSize * (row + 1), imageSize * 2, imageSize);
-    }, this.system['timeout'] * 20, imageSize, col, row);
+    }, this.meta['timeout'] * 20, imageSize, col, row);
   }  // setMenuReplyText
 
   systemContext() {

@@ -18,8 +18,7 @@ class LittleMagic {
     // game system parameter
     this.system = {
       'confirm': false,
-      'load'   : false,
-      'timeout': 100
+      'load'   : false
     };
 
     // layer alias
@@ -78,7 +77,7 @@ class LittleMagic {
     this.system[content] = true;
     setTimeout(function(littleMagic, content) {
       littleMagic.system[content] = false;
-    }, this.system['timeout'] * timeout, this, content);
+    }, this.meta['timeout'] * timeout, this, content);
   }  // timeout
 
   loadScreen(on) {
