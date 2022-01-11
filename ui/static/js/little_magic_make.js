@@ -435,7 +435,7 @@ class LittleMagicMake extends LittleMagic {
     const position = this.meta['position']['stage'];
     if (this.state['hash'] != this.stageHash() && this.state['confirm'] === false) {
       this.setMenuReplyText(col, row, 'Tap Again');
-      this.timeout('confirm', 10);
+      this.timeout('confirm', 20);
     } else {
       // prevent click bashing
       if (this.timeout('load')) return;
