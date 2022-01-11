@@ -348,11 +348,12 @@ class LittleMagicMake extends LittleMagic {
   }  // findStageBlock()
 
   setSystemLastBlock() {
-    while (`layer1/block/0${this.system['lastBlock']}/field/00` in this.meta['sprite'])
-      this.system['lastBlock']++;
+    let lastBlock = this.system['lastBlock'];
+    while (`layer1/block/${this.padZero(lastBlock, 2)}/field/00` in this.meta['sprite'])
+      lastBlock++;
 
     // handle overflow
-    this.system['lastBlock']--;
+    this.system['lastBlock'] = --lastBlock;
   }  // setSystemLastBlock()
 
   async setMenuIcon(content) {
