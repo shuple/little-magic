@@ -378,7 +378,7 @@ class LittleMagicMake extends LittleMagic {
   selectMenuCG(col, row, next) {
     // prevent click bashing
     if (this.timeout('load')) return;
-    let cg = this.state['cg'] + next;
+    const cg = this.state['cg'] + next;
     this.state['prev']['cg'] = this.state['cg'];
     this.state['cg'] = cg < 0 ? this.meta['lastCG'] : cg % (this.meta['lastCG'] + 1);
 
