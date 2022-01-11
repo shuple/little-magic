@@ -347,13 +347,13 @@ class LittleMagicMake extends LittleMagic {
     return 'layer1/block/00/field/00';
   }  // findStageBlock()
 
-  setStateLastBlock() {
+  setSystemLastBlock() {
     while (`layer1/block/0${this.system['lastBlock']}/field/00` in this.meta['sprite'])
       this.system['lastBlock']++;
 
     // handle overflow
     this.system['lastBlock']--;
-  }  // setStateLastBlock()
+  }  // setSystemLastBlock()
 
   async setMenuIcon(content) {
     const src = `layer0/${content}/00`;
@@ -542,7 +542,7 @@ class LittleMagicMake extends LittleMagic {
     await littleMagic.setSpriteLayer(layers);
     await littleMagic.menuContext();
     littleMagic.systemContext();
-    littleMagic.setStateLastBlock();
+    littleMagic.setSystemLastBlock();
 
     // debug option
     littleMagic.mouseDebug();
