@@ -202,7 +202,9 @@ class LittleMagic {
   }
 
   async setSpriteBlock(col, row, layer, src) {
-    if (src === this.blocks[layer][row][col]) return;
+    const blocks = this.blocks
+    if (src === blocks[layer][row][col] && this.state['cg'] === this.state['prev']['cg'])
+      return;
     // add render
     const render = `render${/layer(\d)\//.exec(src)[1]}`
     this.removeSpriteBlock(col, row, render);
@@ -215,7 +217,7 @@ class LittleMagic {
     this.removeSpriteBlock(col, row, render);
     this.canvas[render].style.display = 'none';
     // update blocks
-    this.blocks[layer][row][col] = src;
+    blocks[layer][row][col] = src;
   }  // setSpriteBlock();
 
   drawSpriteBlock(col, row, layer, src) {

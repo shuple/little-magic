@@ -229,6 +229,8 @@ class LittleMagicMake extends LittleMagic {
         this.selectMenuItembox();
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectMenuBlock(col, row, 1);
+      } else if (this.areaBlock(col, row, 'cg')) {
+        this.selectMenuCG(col, row, 1);
       } else if (this.areaBlock(col, row, 'stage')) {
         this.selectMenuStage(col, row, 1);
       }
@@ -242,6 +244,8 @@ class LittleMagicMake extends LittleMagic {
         this.closeSystemItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectMenuBlock(col, row, 1);
+      } else if (this.areaBlock(col, row, 'cg')) {
+        this.selectMenuCG(col, row, 1);
       } else if (this.areaRange(col, row, 'menu')) {
         this.closeSystemItembox(this.state['prev']['layer']);
       }
@@ -263,6 +267,8 @@ class LittleMagicMake extends LittleMagic {
         this.state['item'] = ''
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectMenuBlock(col, row, -1);
+      } else if (this.areaBlock(col, row, 'cg')) {
+        this.selectMenuCG(col, row, -1);
       } else if (this.areaBlock(col, row, 'new')) {
         this.selectMenuNew();
       } else if (this.areaBlock(col, row, 'save')) {
@@ -280,6 +286,8 @@ class LittleMagicMake extends LittleMagic {
         this.closeSystemItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectMenuBlock(col, row, -1);
+      } else if (this.areaBlock(col, row, 'cg')) {
+        this.selectMenuCG(col, row, -1);
       } else if (this.areaRange(col, row, 'menu')) {
         this.closeSystemItembox(this.state['prev']['layer']);
       }
@@ -366,6 +374,20 @@ class LittleMagicMake extends LittleMagic {
       this.canvas[layer].style.display = 'none';
     }
   }  // closeSystemItembox()
+
+  selectMenuCG(col, row, next) {
+    // prevent click bashing
+    if (this.timeout('load')) return;
+    let cg = this.state['cg'] + next;
+    this.state['prev']['cg'] = this.state['cg'];
+    this.state['cg'] = cg < 0 ? this.meta['lastCG'] : cg % (this.meta['lastCG'] + 1);
+
+    // update sprite
+    this.setSpriteLayer(this.layerGroup['stage']);
+    this.setSpriteLayer(this.layers['system'],
+      { 'renderOnly': this.state['layer'] != this.layers['system'] });
+    this.setSpriteBlock(col, row, this.layers['menu'], 'layer0/cg/00');
+  }  // selectMenuCG()
 
   selectMenuBlock(col, row, next) {
     // prevent click bashing
