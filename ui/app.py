@@ -84,7 +84,7 @@ def post_stage():
     try:
         post = flask.request.json
         cg = '%02i' % (post['cg'])
-        if post['stage'] == 0:
+        if post['stage'] <= 0:
             stage_path = f"{path}/../data/system/{cg}/stage"
             file_path = max(glob.glob(f"{stage_path}/[0-9][0-9][0-9].json"))
             file = 'stage/%03i' % (int(os.path.splitext(os.path.basename(file_path))[0]))
