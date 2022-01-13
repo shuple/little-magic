@@ -96,6 +96,7 @@ class LittleMagicMake extends LittleMagic {
         case 'block':
           await this.setMenuBlockIcon();
           break;
+        case 'fill':
         case 'cg'  :
         case 'new' :
         case 'save':
@@ -267,6 +268,8 @@ class LittleMagicMake extends LittleMagic {
       } else if (this.areaBlock(col, row, 'item')) {
         this.setBlankBlock(col, row, this.layers['menu']);
         this.state['item'] = ''
+      } else if (this.areaBlock(col, row, 'fill')) {
+        this.selectMenuFill();
       } else if (this.areaBlock(col, row, 'block')) {
         this.selectMenuBlock(col, row, -1);
       } else if (this.areaBlock(col, row, 'cg')) {
@@ -280,7 +283,9 @@ class LittleMagicMake extends LittleMagic {
       }
       break;
     case this.layers['system']:
-      if (this.areaRange(col, row, 'stage')) {
+      if (this.areaBlock(col, row, 'fill')) {
+        this.selectMenuFill();
+      } else if (this.areaRange(col, row, 'stage')) {
         this.closeSystemItembox(this.state['prev']['layer']);
       } else if (this.areaBlock(col, row, 'item')) {
         this.setBlankBlock(col, row, this.layers['menu']);
@@ -397,6 +402,18 @@ class LittleMagicMake extends LittleMagic {
       this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], this.state['item']);
     }
   }  // selectMenuCG()
+
+  selectMenuFill() {
+    const item = this.state['item'];
+    if (item === '') return;
+    const layer = this.itemLayer(item);
+    for (let row = 1; row < this.row - 1; row++) {
+      for (let col = 2; col < this.col - 3; col++) {
+        this.blocks[layer][row][col] = item;
+      }
+    }
+    this.setSpriteLayer(layer);
+  }  // selectMenuFill()
 
   selectMenuBlock(col, row, next) {
     // prevent click bashing
