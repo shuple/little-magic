@@ -404,9 +404,9 @@ class LittleMagicMake extends LittleMagic {
   }  // selectMenuCG()
 
   selectMenuFill() {
+    if (this.state['item'] === '' && this.state['layer'] === '') return;
     const item = this.state['item'];
-    if (item === '') return;
-    const layer = this.itemLayer(item);
+    const layer = item === '' ? this.state['layer'] : this.itemLayer(item);
     for (let row = 1; row < this.row - 1; row++) {
       for (let col = 2; col < this.col - 3; col++) {
         this.blocks[layer][row][col] = item;
