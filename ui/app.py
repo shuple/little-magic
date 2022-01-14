@@ -84,14 +84,17 @@ def post_stage():
     try:
         post = flask.request.json
         cg = '%02i' % (post['cg'])
-        if post['stage'] <= 0:
-            stage_path = f"{path}/../data/system/{cg}/stage"
-            file_path = max(glob.glob(f"{stage_path}/[0-9][0-9][0-9].json"))
-            file = 'stage/%03i' % (int(os.path.splitext(os.path.basename(file_path))[0]))
+        file_path = max(glob.glob(f"{path}/../data/system/{cg}/stage/[0-9][0-9][0-9].json"))
+        last_stage = 'stage/%03i' % (int(os.path.splitext(os.path.basename(file_path))[0]))
+        if post['stage'] + post['next'] <= 0:
+            file = last_stage
         else:
-            stage_string = '%03i' % (post['stage'])
+            stage_string = '%03i' % (post['stage'] + post['next'])
             file_path = f"{path}/../data/system/{cg}/stage/{stage_string}.json"
-            file = f'stage/{stage_string}' if os.path.exists(file_path) else 'stage/001'
+            if os.path.exists(file_path):
+                file = f'stage/{stage_string}'
+            else:
+                file = last_stage if post['next'] < 0 else 'stage/001'
         post['file'] = [ file ]
         stage = re.search(r'stage/(\d+)', post['file'][0])
         data = { 'data':

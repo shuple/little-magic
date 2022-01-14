@@ -461,7 +461,8 @@ class LittleMagicMake extends LittleMagic {
       context.clearRect(imageSize * col, imageSize * (row + 1), imageSize * 2, imageSize);
       const restData = {
         'cg'   : this.state['cg'],
-        'stage': this.state['stage'] + next
+        'stage': this.state['stage'],
+        'next' : next
       };
       this.rest('/post/stage', restData, this.nextStage);
     }
