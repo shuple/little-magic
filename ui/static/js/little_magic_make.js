@@ -600,8 +600,8 @@ class LittleMagicMake extends LittleMagic {
     littleMagic.blocks = Object.assign(littleMagic.blocks, restData);
 
     // block change
-    const block = this.state['block'];
-    this.state['block'] = parseInt(/block\/(\d{2})/.exec(littleMagic.findStageBlock('layer1'))[1]);
+    const block = littleMagic.state['block'];
+    littleMagic.state['block'] = parseInt(/block\/(\d{2})/.exec(littleMagic.findStageBlock('layer1'))[1]);
 
     // use this.state['block'] for new stage
     if (littleMagic.state['stage'] === 0) {
@@ -617,10 +617,10 @@ class LittleMagicMake extends LittleMagic {
 
     // update sprite
     littleMagic.setSpriteLayer(layers, { 'renderOnly': true });
-    littleMagic.setMenuBlockIcon(this.state['block']);
+    littleMagic.setMenuBlockIcon(littleMagic.state['block']);
     littleMagic.showLayer(littleMagic.layerGroup['stage']);
-    if (this.state['block'] != block) {
-      littleMagic.updateSystemItembox(this.state['block']);
+    if (littleMagic.state['block'] != block) {
+      littleMagic.updateSystemItembox(littleMagic.state['block']);
     }
 
     // update stage number
