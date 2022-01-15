@@ -295,6 +295,8 @@ class LittleMagicMake extends LittleMagic {
         this.selectMenuBlock(col, row, -1);
       } else if (this.areaBlock(col, row, 'cg')) {
         this.selectMenuCG(col, row, -1);
+      } else if (this.areaBlock(col, row, 'stage')) {
+        this.selectMenuStage(col, row, -1);
       } else if (this.areaRange(col, row, 'menu')) {
         this.closeSystemItembox(this.state['prev']['layer']);
       }
