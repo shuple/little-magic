@@ -621,6 +621,7 @@ class LittleMagicMake extends LittleMagic {
     littleMagic.setMenuBlockIcon(littleMagic.state['block']);
     littleMagic.showLayer(littleMagic.layerGroup['stage']);
     if (littleMagic.state['stage'] != 0 && littleMagic.state['block'] != block) {
+      littleMagic.updateMenuItem(this.state['block']);
       littleMagic.updateSystemItembox(littleMagic.state['block']);
     }
 
