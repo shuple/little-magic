@@ -603,12 +603,13 @@ class LittleMagicMake extends LittleMagic {
     const block = littleMagic.state['block'];
     littleMagic.state['block'] = parseInt(/block\/(\d{2})/.exec(littleMagic.findStageBlock('layer1'))[1]);
 
-    // use this.state['block'] for new stage
+    // new stage
     if (littleMagic.state['stage'] === 0) {
       if (littleMagic.state['block'] != block) {
         const updateLayers = littleMagic.layerGroup['stage']
         updateLayers.concat(layers);
-        littleMagic.updateBlock(updateLayers, littleMagic.state['block']);
+        littleMagic.state['block'] = block;
+        littleMagic.updateBlock(updateLayers, block);
       }
     }
 
@@ -619,7 +620,7 @@ class LittleMagicMake extends LittleMagic {
     littleMagic.setSpriteLayer(layers, { 'renderOnly': true });
     littleMagic.setMenuBlockIcon(littleMagic.state['block']);
     littleMagic.showLayer(littleMagic.layerGroup['stage']);
-    if (littleMagic.state['block'] != block) {
+    if (littleMagic.state['stage'] != 0 && littleMagic.state['block'] != block) {
       littleMagic.updateSystemItembox(littleMagic.state['block']);
     }
 
