@@ -140,6 +140,15 @@ class LittleMagicMake extends LittleMagic {
     }, this.meta['timeout'] * 20, imageSize, col, row);
   }  // setMenuReplyText
 
+  setMenuStageText(text) {
+    const imageSize = this.imageSize;
+    const [ col, row ] = [ this.meta['position']['stage']['col'], this.meta['position']['stage']['row'] ];
+    const context = this.contexts[this.layers['menu']];
+    context.fillStyle = this.color['blank'];
+    context.fillRect(col * imageSize, row * imageSize, imageSize, imageSize);
+    this.setMenuSpriteDesc(col, row, this.padZero(text, 3));
+  }  // setMenuStage
+
   systemContext() {
     const layer = this.layers['fill'];
     const position = this.meta['positionRange']['itembox'];
@@ -632,22 +641,16 @@ class LittleMagicMake extends LittleMagic {
 
   nextStage(littleMagic, restData) {
     littleMagic.state['stage'] = restData['stage'];
-    // update stage number
-    const position = littleMagic.meta['position']['stage']
-    const [ col, row ] = [ position['col'], position['row'] ];
-    const imageSize = littleMagic.imageSize;
-    const context = littleMagic.contexts[littleMagic.layers['menu']];
-    context.fillStyle = littleMagic.color['blank'];
-    context.fillRect(col * imageSize, row * imageSize, imageSize, imageSize);
-    littleMagic.setMenuSpriteDesc(position['col'], position['row'], restData['stage']);
-    // update stage block
+    littleMagic.setMenuStageText(restData['stage']);
     littleMagic.loadStage(littleMagic, restData['blocks']);
   }  // nextStage()
 
   saveStage(littleMagic, restData) {
+    const imageSize = littleMagic.imageSize;
     const position = littleMagic.meta['position']['save'];
     const stage = littleMagic.padZero(restData['stage']);
     littleMagic.setMenuReplyText(position['col'], position['row'], `Saved ${stage}!!`);
+    littleMagic.setMenuStageText(restData['stage']);
     // save state
     littleMagic.state['stage'] = restData['stage'];
     littleMagic.state['hash'] = littleMagic.stageHash();
