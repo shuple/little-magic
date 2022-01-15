@@ -334,13 +334,15 @@ class LittleMagicMake extends LittleMagic {
     this.canvas[layer].style.display = 'inline';
   }  // selectMenuItembox()
 
-  async setMenuBlockIcon() {
+  async setMenuBlockIcon(block) {
     // find block src from layer1
-    const src = this.findStageBlock('layer1');
-    const block = /\/block\/(\d{2})/.exec(src)[1];
-    this.state['block'] = parseInt(block);
-
+    if (block === undefined) {
+      const src = this.findStageBlock('layer1');
+      block = parseInt(/\/block\/(\d{2})/.exec(src)[1]);
+      this.state['block'] = parseInt(block);
+    }
     // set block on menu
+    block = this.padZero(block, 2);
     const position = this.meta['position'];
     const [ col, row ] = [ position['block']['col'], position['block']['row'] ];
     await this.setSpriteBlock(col, row, this.layers['menu'], `layer1/block/${block}/field/00`);
@@ -597,7 +599,7 @@ class LittleMagicMake extends LittleMagic {
 
     // block change
     const block = this.state['block'];
-    this.state['block'] = parseInt(/(\d)$/.exec(littleMagic.findStageBlock('layer1'))[1]);
+    this.state['block'] = parseInt(/block\/(\d{2})/.exec(littleMagic.findStageBlock('layer1'))[1]);
 
     // use this.state['block'] for new stage
     if (littleMagic.state['stage'] === 0) {
@@ -613,7 +615,7 @@ class LittleMagicMake extends LittleMagic {
 
     // update sprite
     littleMagic.setSpriteLayer(layers, { 'renderOnly': true });
-    littleMagic.setMenuBlockIcon();
+    littleMagic.setMenuBlockIcon(this.state['block']);
     littleMagic.showLayer(littleMagic.layerGroup['stage']);
     if (this.state['block'] != block) {
       littleMagic.updateSystemItembox(this.state['block']);
