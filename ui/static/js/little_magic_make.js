@@ -226,7 +226,8 @@ class LittleMagicMake extends LittleMagic {
       if (this.areaRange(col, row, 'stage')) {
         if (event.altKey) {
           this.state['item'] = this.itemOnStageBlock(col, row);
-          this.state['layer'] = this.itemLayer(this.state['item']);
+          if (this.state['item'])
+            this.state['layer'] = this.itemLayer(this.state['item']);
         } else if (this.state['item']) {
           const layer = this.itemLayer(this.state['item']);
           const src = this.rotateItem(col, row, layer, this.state['item']);
