@@ -124,7 +124,8 @@ class LittleMagic {
       for (let col = opt['col']['start']; col < opt['col']['end']; col++) {
         let src = block[row][col];
         if (src) {
-          src = this.meta['sprite'][block[row][col]]['opacity'] || src;
+          if (this.layerGroup['stage'].includes(layer))
+            src = this.meta['sprite'][block[row][col]]['alpha'] || src;
           images.push({
             'src'   : this.imagesrc(src),
             'layer' : layer,
@@ -210,7 +211,7 @@ class LittleMagic {
     if (src === blocks[layer][row][col] && this.state['cg'] === this.state['prev']['cg'])
       return;
     if (this.layerGroup['stage'].includes(layer))
-      src = this.meta['sprite'][src]['opacity'] || src;
+      src = this.meta['sprite'][src]['alpha'] || src;
     // add render
     const render = `render${/layer(\d)\//.exec(src)[1]}`
     this.removeSpriteBlock(col, row, render);
