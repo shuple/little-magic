@@ -48,7 +48,6 @@ class LittleMagicMake extends LittleMagic {
     });
 
     this.layerGroup = Object.assign(this.layerGroup, {
-      'stage' : [ 'layer1', 'layer2', 'layer3' ],
       'system': [ this.layers['fill'], this.layers['system'] ],
       'make'  : [ 'layer1', 'layer2', 'layer3', this.layers['system'] ]
     });

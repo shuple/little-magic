@@ -19,7 +19,9 @@ class LittleMagic {
 
     // layer alias
     this.layers = {};
-    this.layerGroup = {};
+    this.layerGroup = {
+      'stage': [ 'layer1', 'layer2', 'layer3' ]
+    };
 
     this.color = {
       'blank': '#000'
@@ -120,9 +122,11 @@ class LittleMagic {
     }
     for (let row = opt['row']['start']; row < opt['row']['end']; row++) {
       for (let col = opt['col']['start']; col < opt['col']['end']; col++) {
-        if (block[row][col]) {
+        let src = block[row][col];
+        if (src) {
+          src = this.meta['sprite'][block[row][col]]['opacity'] || src;
           images.push({
-            'src'   : this.imagesrc(block[row][col]),
+            'src'   : this.imagesrc(src),
             'layer' : layer,
             'render': render,
             'x'     : col * imageSize,
@@ -205,6 +209,8 @@ class LittleMagic {
     const blocks = this.blocks
     if (src === blocks[layer][row][col] && this.state['cg'] === this.state['prev']['cg'])
       return;
+    if (this.layerGroup['stage'].includes(layer))
+      src = this.meta['sprite'][src]['opacity'] || src;
     // add render
     const render = `render${/layer(\d)\//.exec(src)[1]}`
     this.removeSpriteBlock(col, row, render);
