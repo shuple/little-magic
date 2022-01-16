@@ -521,7 +521,7 @@ class LittleMagicMake extends LittleMagic {
     let src = '';
     for (const layer of [ ...this.layerGroup['stage'] ].reverse()) {
       if (this.blocks[layer][row][col]) {
-        src = this.blocks[layer][row][col];
+        src = this.blocks[layer][row][col].replace('_alpha', '');
         const position = this.meta['position']['item'];
         this.setSpriteBlock(position['col'], position['row'], this.layers['menu'], src);
         break;
