@@ -11,6 +11,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Generate stage from json file')
     parser.add_argument('-c', '--cg', type=int, default=0, help='CG type')
     parser.add_argument('file', nargs='?', type=int, default=1, help='stage file in json format')
+    parser.add_argument('-s', '--scale', type=float, default=2.0, help='scale of image')
 
     # convert to dict
     return vars(parser.parse_args())

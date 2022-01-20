@@ -43,6 +43,11 @@ class LittleMagicStage(sprite.Sprite):
             self.block['height'] * len(data[layer])
         ))
 
+        # rescale
+        scale = self.option['scale']
+        width, height = image.size
+        image = image.resize((int(width * scale), int(height * scale)), Image.NEAREST)
+
         stage_name  = '%02i/%03i.png' % (self.option['cg'], file)
         stage_file  = f"{self.path['root']}/data/image/stage/{stage_name}"
         image.save(stage_file, 'png')
