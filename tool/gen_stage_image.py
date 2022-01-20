@@ -21,7 +21,6 @@ if __name__ == '__main__':
     args = parse_args()
     o = lm.LittleMagicStage(args)
     o.load()
-    stage_file = f"{path}/../data/system/{args['cg']}/stage/{args['file']}.json"
     stage_file = '%s/../data/system/%02i/stage/%03i.json' % (path, args['cg'], args['file'])
     with open(stage_file, 'r') as f:
         data = json.load(f)
