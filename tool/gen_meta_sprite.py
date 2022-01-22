@@ -7,7 +7,7 @@ import sprite
 
 def parse_args():
     # options
-    parser = argparse.ArgumentParser(description='Generate meta sprite data')
+    parser = argparse.ArgumentParser(description='Generate data/<cg>/system/meta/sprite.json')
     parser.add_argument('-c', '--cg', type=int, default=0, help='CG type')
     parser.add_argument('-f', '--file', default='sprite', help='save file name')
 

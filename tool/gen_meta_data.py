@@ -5,7 +5,7 @@ path = f'{(os.path.dirname(os.path.abspath(__file__)))}/../data'
 
 def parse_args():
     # options
-    parser = argparse.ArgumentParser(description='Generate meta sprite data')
+    parser = argparse.ArgumentParser(description='Generate data/<cg>/system/meta/data.json')
     parser.add_argument('-c', '--cg', type=int, default=0, help='CG type')
     parser.add_argument('-f', '--file', default='data', help='save file name')
 

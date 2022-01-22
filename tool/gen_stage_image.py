@@ -8,7 +8,7 @@ import little_magic_stage as lm
 
 def parse_args():
     # options
-    parser = argparse.ArgumentParser(description='Generate stage from json file')
+    parser = argparse.ArgumentParser(description='Generate data/<cg>/image/stage/<stage>.png')
     parser.add_argument('-c', '--cg', type=int, default=0, help='CG type')
     parser.add_argument('file', nargs='?', type=int, default=0, help='stage file json format')
     parser.add_argument('-s', '--scale', type=float, default=2.0, help='scale of image')

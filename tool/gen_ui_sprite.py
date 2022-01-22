@@ -9,7 +9,7 @@ def parse_args():
     path = f'{os.path.dirname(os.path.abspath(__file__))}/../ui/static/image'
 
     # options
-    parser = argparse.ArgumentParser(description='Copy and resize sprite')
+    parser = argparse.ArgumentParser(description='Generate ui/static/image/sprite/<cg>')
     parser.add_argument('path', nargs='?', default=path, help='ui sprite path')
     parser.add_argument('-c', '--cg', type=int, default=0, help='CG type')
     parser.add_argument('--delete', action='store_true', default=False, help='delete existing image file')
