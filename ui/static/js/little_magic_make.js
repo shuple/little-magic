@@ -492,6 +492,13 @@ class LittleMagicMake extends LittleMagic {
   }  // selectMenuNew()
 
   selectMenuSave() {
+    // disable save in demo mode
+    if (this.meta['demo']) {
+      console.log('Demo mode!!');
+      const position = this.meta['position']['save'];
+      this.setMenuReplyText(position['col'], position['row'], `Demo mode`);
+      return;
+    }
     if (this.state['hash'] === this.stageHash()) {
       const position = this.meta['position']['save'];
       this.setMenuReplyText(position['col'], position['row'], 'No\nChanges');
