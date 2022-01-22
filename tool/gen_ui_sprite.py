@@ -21,8 +21,8 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    path = f'{os.path.dirname(os.path.abspath(__file__))}/../data/image'
     cg = '%02i' % (args['cg'])
+    path = f'{os.path.dirname(os.path.abspath(__file__))}/../data/{cg}/image'
     if (args['delete']):
         ui_path = f"{os.path.dirname(os.path.abspath(__file__))}/../ui/static/image/{cg}"
         if os.path.exists(ui_path): shutil.rmtree(ui_path)

@@ -17,7 +17,7 @@ def parse_args():
 #
 def meta_data(file, cg):
     meta = {}
-    with open(f'{path}/system/{cg}/meta/{file}.json', 'r') as fp:
+    with open(f'{path}/{cg}/system/meta/{file}.json', 'r') as fp:
         meta = json.loads(fp.read())
         meta['lastBlock'] = block_count(cg)
         meta['lastCG'] = cg_count()
@@ -25,12 +25,12 @@ def meta_data(file, cg):
 #  def meta_data()
 
 def block_count(cg):
-    file = max(glob.glob(f'{path}/image/sprite/{cg}/layer1/block/[0-9][0-9]'))
+    file = max(glob.glob(f'{path}/{cg}/image/sprite/layer1/block/[0-9][0-9]'))
     return int(os.path.basename(file))
 #  def block_count()
 
 def cg_count():
-    file = max(glob.glob(f'{path}/image/sprite/[0-9][0-9]'))
+    file = max(glob.glob(f'{path}/[0-9][0-9]'))
     return int(os.path.basename(file))
 #  def cg_count():
 
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     file = args['file']
     cg = '%02i' % (args['cg'])
     meta = meta_data(file, cg)
-    with open(f'{path}/system/{cg}/meta/{file}.json', 'w') as fp:
+    with open(f'{path}/{cg}/system/meta/{file}.json', 'w') as fp:
         print(json.dumps(meta, indent=2))
         fp.write(json.dumps(meta, indent=2))
     #  with

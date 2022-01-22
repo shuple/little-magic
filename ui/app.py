@@ -45,7 +45,7 @@ def post_read():
 def read_file(post):
     data = post.get('returnValue', {})
     for file in post['file']:
-        file_path = '%s/../data/system/%02i/%s.json' % (path, post['cg'], file)
+        file_path = '%s/../data/%02i/system/%s.json' % (path, post['cg'], file)
         with open(file_path) as f:
             d = json.loads(f.read())
             if isinstance(data, list):
@@ -63,7 +63,7 @@ def post_write():
     try:
         post = flask.request.json
         if post['content'] == 'stage':
-            stage_path = '%s/../data/system/%02i/stage' % (path, post['cg'])
+            stage_path = '%s/../data/%02i/system/stage' % (path, post['cg'])
             file_path = max(glob.glob(f"{stage_path}/[0-9][0-9][0-9].json"))
             stage = '%03i' % (post['stage']) if post['stage'] else \
                 '%03i' % (int(os.path.splitext(os.path.basename(file_path))[0]) + 1)
@@ -84,13 +84,13 @@ def post_stage():
     try:
         post = flask.request.json
         cg = '%02i' % (post['cg'])
-        file_path = max(glob.glob(f"{path}/../data/system/{cg}/stage/[0-9][0-9][0-9].json"))
+        file_path = max(glob.glob(f"{path}/../data/{cg}/system/stage/[0-9][0-9][0-9].json"))
         last_stage = 'stage/%03i' % (int(os.path.splitext(os.path.basename(file_path))[0]))
         if post['stage'] + post['next'] <= 0:
             file = last_stage
         else:
             stage_string = '%03i' % (post['stage'] + post['next'])
-            file_path = f"{path}/../data/system/{cg}/stage/{stage_string}.json"
+            file_path = f"{path}/../data/{cg}/system/stage/{stage_string}.json"
             if os.path.exists(file_path):
                 file = f'stage/{stage_string}'
             else:

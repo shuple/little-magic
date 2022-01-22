@@ -22,7 +22,7 @@ if __name__ == '__main__':
     o = lm.LittleMagicStage(args)
     o.load()
     stage_files = []
-    stage_path = '%s/../data/system/%02i/stage' % (path, args['cg'])
+    stage_path = '%s/../data/%02i/system/stage' % (path, args['cg'])
     if args['file'] == 0:
         for stage_file in sorted(glob.glob(f'{stage_path}/[0-9][0-9][0-9].json')):
             stage_files.append(stage_file)
