@@ -15,6 +15,11 @@ app = flask.Flask(__name__, static_url_path='/static')
 with open("%s/../config/app.json" % (path), 'r') as fp:
     env = json.loads(fp.read())
 
+# return template path
+#
+def template():
+    return f'{flask.request.path.replace("/", "")}.htm'
+
 # index
 #
 @app.route('/', methods=['GET'])
@@ -24,7 +29,7 @@ def root():
 @app.route('/index', methods=['GET'])
 def index():
     try:
-        return flask.render_template('index.htm', path='index.htm', env=env)
+        return flask.render_template(template(), path=template(), env=env)
     except Exception as e:
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
         return {}
