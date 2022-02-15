@@ -3,9 +3,9 @@ export { LittleMagicMake }
 
 String.prototype.hashCode = function() {
   let hash = 0;
-  let i, ch;
+  let ch;
   if (this.length === 0) return hash;
-  for (i = 0; i < this.length; i++) {
+  for (let i = 0; i < this.length; i++) {
     ch = this.charCodeAt(i);
     hash  = ((hash << 5) - hash) + ch;
     hash |= 0; // convert to 32bit integer
