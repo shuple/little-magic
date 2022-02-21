@@ -212,18 +212,10 @@ class LittleMagic {
       return;
     if (this.layerGroup['stage'].includes(layer))
       src = this.meta['sprite'][src]['alpha'] || src;
-    // add render
-    const render = `render${/layer(\d)\//.exec(src)[1]}`
-    this.removeSpriteBlock(col, row, render);
-    await this.drawSpriteBlock(col, row, render, src);
-    this.canvas[render].style.display = 'inline';
-    // add layer
-    this.removeSpriteBlock(col, row, layer);
+    const context = this.contexts[layer];
+    context.save();
     await this.drawSpriteBlock(col, row, layer, src);
-    // remove prerender
-    this.removeSpriteBlock(col, row, render);
-    this.canvas[render].style.display = 'none';
-    // update blocks
+    context.restore();
     blocks[layer][row][col] = src;
   }  // setSpriteBlock();
 
