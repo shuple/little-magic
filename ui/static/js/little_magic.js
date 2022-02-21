@@ -208,10 +208,10 @@ class LittleMagic {
 
   async setSpriteBlock(col, row, layer, src) {
     const blocks = this.blocks
-    if (src === blocks[layer][row][col] && this.state['cg'] === this.state['prev']['cg'])
-      return;
     if (this.layerGroup['stage'].includes(layer))
       src = this.meta['sprite'][src]['alpha'] || src;
+    if (src === blocks[layer][row][col] && this.state['cg'] === this.state['prev']['cg'])
+      return;
     const context = this.contexts[layer];
     context.save();
     await this.drawSpriteBlock(col, row, layer, src);
