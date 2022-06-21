@@ -10,7 +10,7 @@ String.prototype.hashCode = function() {
     hash  = ((hash << 5) - hash) + ch;
     hash |= 0; // convert to 32bit integer
   }
-	return hash;
+  return hash;
 };  // String.prototype.hashCode()
 
 String.prototype.capitalizeFirstLetter = function() {
