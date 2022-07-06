@@ -192,7 +192,7 @@ class LittleMagicMake extends LittleMagic {
         context.fillText(`: ${contents[i]}`, x, y * (i + 1));
       }
     }
-  }  // mouseDebug()
+  }  // mouseDebugStatus()
 
   mouseEvent(canvas, event, pressHold) {
     const [x, y] = this.mousePosition(canvas, event);
