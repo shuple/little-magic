@@ -35,19 +35,25 @@ def index():
         return {}
 #  def index()
 
-# read arbitrary files
+# call arbitrary method
 #
-@app.route('/post/read', methods=['POST'])
-def post_read():
+@app.route('/post', methods=['POST'])
+def post_method():
     try:
-        data = read_file(flask.request.json)
+        post = flask.request.json
+        method = re.sub(r'/', '_', post['method'])
+        module = sys.modules[__name__]
+        if hasattr(module, method) and callable(getattr(module, method)):
+            data = getattr(module, method)(post)
+        else:
+            data = { 'error': f'method not found {method}' }
     except Exception as e:
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
         data = { 'error': f'{str(e)}' }
     return data
-#  def post_read()
+#  def post_method()
 
-def read_file(post):
+def read_stage(post):
     data = post.get('returnValue', {})
     for file in post['file']:
         file_path = '%s/../data/%02i/system/%s.json' % (path, post['cg'], file)
@@ -59,14 +65,12 @@ def read_file(post):
                 data = { **data, **d }
     #  for
     return { 'data': data }
-#  def read_file()
+#  def read_stage()
 
-# write file
+# write stage file
 #
-@app.route('/post/write', methods=['POST'])
-def post_write():
+def write_stage(post):
     try:
-        post = flask.request.json
         if post['content'] == 'stage':
             stage_path = '%s/../data/%02i/system/stage' % (path, post['cg'])
             file_path = max(glob.glob(f"{stage_path}/[0-9][0-9][0-9].json"))
@@ -80,14 +84,12 @@ def post_write():
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
         data = { 'error': f'{str(e)}' }
     return data
-#  def post_write()
+#  def write_stage()
 
-# next stage
+# traverse stage
 #
-@app.route('/post/stage', methods=['POST'])
-def post_stage():
+def next_stage(post):
     try:
-        post = flask.request.json
         cg = '%02i' % (post['cg'])
         file_path = max(glob.glob(f"{path}/../data/{cg}/system/stage/[0-9][0-9][0-9].json"))
         last_stage = 'stage/%03i' % (int(os.path.splitext(os.path.basename(file_path))[0]))
@@ -104,7 +106,7 @@ def post_stage():
         stage = re.search(r'stage/(\d+)', post['file'][0])
         data = { 'data':
             { 'stage' : int(stage.group(1)),
-              'blocks': read_file(post)['data'] }
+              'blocks': read_stage(post)['data'] }
         }
     except Exception as e:
         logging.error(f'{flask.request.path} {traceback.format_exc()}')

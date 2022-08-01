@@ -472,11 +472,12 @@ class LittleMagicMake extends LittleMagic {
       const context = this.contexts[this.layers['menu']];
       context.clearRect(imageSize * col, imageSize * (row + 1), imageSize * 2, imageSize);
       const restData = {
-        'cg'   : this.state['cg'],
-        'stage': this.state['stage'],
-        'next' : next
+        'cg'    : this.state['cg'],
+        'stage' : this.state['stage'],
+        'next'  : next,
+        'method': 'next/stage',
       };
-      this.rest('/post/stage', restData, this.nextStage);
+      this.rest('/post', restData, this.nextStage);
     }
   }  // selectMenuStage()
 
@@ -484,10 +485,11 @@ class LittleMagicMake extends LittleMagic {
     if (this.state['stage'] === '' && this.state['hash'] === this.stageHash()) return;
     this.state['stage'] = 0;
     const restData = {
-      'cg'  : this.state['cg'],
-      'file': [ 'stage/new' ],
+      'cg'    : this.state['cg'],
+      'file'  : [ 'stage/new' ],
+      'method': 'read/stage',
     };
-    this.rest('/post/read', restData, this.loadStage);
+    this.rest('/post', restData, this.loadStage);
   }  // selectMenuNew()
 
   selectMenuSave() {
@@ -511,9 +513,10 @@ class LittleMagicMake extends LittleMagic {
       'content': 'stage',
       'cg'     : this.state['cg'],
       'stage'  : this.state['stage'],
-      'blocks' : stageBlocks
+      'blocks' : stageBlocks,
+      'method' : 'write/stage',
     };
-    this.rest('/post/write', restData , this.saveStage);
+    this.rest('/post', restData , this.saveStage);
   }  // selectMenuSave()
 
   stageHash() {

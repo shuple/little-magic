@@ -4,11 +4,11 @@ window.addEventListener('load', function () {
   const littleMagic = new LittleMagicMake();
   const init = async function() {
     const metaData = [ 'meta/data', 'meta/sprite' ];
-    await littleMagic.rest('/post/read',
-      { 'file': metaData, 'cg': littleMagic.state['cg'] }, littleMagic.setMeta);
-    await littleMagic.rest('/post/read',
+    await littleMagic.rest('/post',
+      { 'file': metaData, 'cg': littleMagic.state['cg'], 'method': 'read/stage' }, littleMagic.setMeta);
+    await littleMagic.rest('/post',
       { 'file': [ 'menu/game', `stage/${littleMagic.padZero(littleMagic.state['stage'])}` ],
-        'cg': littleMagic.state['cg'] }, littleMagic.setGame);
+        'cg': littleMagic.state['cg'], 'method': 'read/stage' }, littleMagic.setGame);
   }
   init();
 
