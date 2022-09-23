@@ -225,6 +225,7 @@ class LittleMagic {
       const imageSize = this.imageSize;
       const image = new Image();
       image.onload = () => {
+        context.clearRect(imageSize * col, imageSize * row, imageSize, imageSize);
         resolve(context.drawImage(image, imageSize * col, imageSize * row, imageSize, imageSize));
       };
       image.src = this.imagesrc(src);
