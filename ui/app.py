@@ -38,7 +38,7 @@ def index():
 # call arbitrary method
 #
 @app.route('/post', methods=['POST'])
-def post_method():
+def post():
     try:
         post = flask.request.json
         method = re.sub(r'/', '_', post['method'])
