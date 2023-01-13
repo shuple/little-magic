@@ -5,7 +5,7 @@ The UI is written entirely in vanilla Javascript.
 
 ## Demo
 
-https://cheatsheet.jp:44343
+https://little-magic.jp:44343
 
 The demo contains all stages from SNES and GBC, including unused stages.
 
