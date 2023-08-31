@@ -4,7 +4,7 @@ import argparse, glob, json, os, re, sys
 
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, f'{path}/../lib')
-import little_magic_stage as lm
+import littlemagic_stage as lm
 
 def parse_args():
     # options

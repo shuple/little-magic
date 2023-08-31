@@ -1,4 +1,4 @@
-import { LittleMagic } from './little_magic.js';
+import { LittleMagic } from './littlemagic.js';
 export { LittleMagicMake }
 
 String.prototype.hashCode = function() {

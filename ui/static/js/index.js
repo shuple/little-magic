@@ -1,4 +1,4 @@
-import { LittleMagicMake } from './little_magic_make.js';
+import { LittleMagicMake } from './littlemagic_make.js';
 
 window.addEventListener('load', function () {
   const littleMagic = new LittleMagicMake();
