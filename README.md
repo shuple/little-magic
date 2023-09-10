@@ -40,7 +40,6 @@ Tap hold and release to create a new stage.
 __Save:__\
 Tap hold and release to save the stage. The feature is disabled on the demo site.
 
-
 ## Change log
 ##### 0.1a (2022-02-01)
 - Initial Alpha Release.
