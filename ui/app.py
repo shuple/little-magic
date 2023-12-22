@@ -6,28 +6,25 @@ import logging, traceback
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, f'{path}/../lib')
 
-# flask instance
-#
+# Flask instance
 app = flask.Flask(__name__, static_url_path='/static')
 
-# application info
-#
+# Application info
 with open("%s/../config/app.json" % (path), 'r') as fp:
     env = json.loads(fp.read())
 
-# return template path
-#
 def template():
+    """  Returns str: The URL path before any query parameters """
     return f'{flask.request.path.replace("/", "")}.htm'
 
-# index
-#
 @app.route('/', methods=['GET'])
 def root():
+    """ Redirect to the index page """
     return flask.redirect('/index')
 
 @app.route('/index', methods=['GET'])
 def index():
+    """ Render the index page """
     try:
         return flask.render_template(template(), path=template(), env=env)
     except Exception as e:
@@ -35,10 +32,16 @@ def index():
         return {}
 #  def index()
 
-# call arbitrary method
-#
 @app.route('/post', methods=['POST'])
 def post():
+    """
+    Handles a POST request to '/post/read'.
+
+    This function takes JSON data from the request and passes it to the api() for further processing.
+
+    Returns:
+        dict: The response from the api().
+    """
     try:
         post = flask.request.json
         method = re.sub(r'/', '_', post['method'])
@@ -54,6 +57,7 @@ def post():
 #  def post_method()
 
 def read_stage(post):
+    """ Returns dict: Stage data """
     data = post.get('returnValue', {})
     for file in post['file']:
         file_path = '%s/../data/%02i/system/%s.json' % (path, post['cg'], file)
@@ -67,9 +71,17 @@ def read_stage(post):
     return { 'data': data }
 #  def read_stage()
 
-# write stage file
-#
 def write_stage(post):
+    """
+    Write stage data to a file.
+
+    Args:
+        post (dict): Data received from UI.
+            content (str): 'stage'
+            cg (str): 'sfc' or 'gbc'
+            stage (int): Stage number.
+            blocks (dict): dict of nested list of block data.
+    """
     try:
         if post['content'] == 'stage':
             stage_path = '%s/../data/%02i/system/stage' % (path, post['cg'])
@@ -86,9 +98,17 @@ def write_stage(post):
     return data
 #  def write_stage()
 
-# traverse stage
-#
 def next_stage(post):
+    """
+    Move to next or previous stage.
+
+    Args:
+        post (dict): Data received from UI.
+            cg (str): 'sfc' or 'gbc'
+            stage (int): Stage number.
+            next (int): The increment to move to the next or previous stage. 
+                        A positive value moves forward, while a negative value moves backward.
+    """
     try:
         cg = '%02i' % (post['cg'])
         file_path = max(glob.glob(f"{path}/../data/{cg}/system/stage/[0-9][0-9][0-9].json"))
@@ -114,9 +134,8 @@ def next_stage(post):
     return data
 # def post_stage
 
-# parse command line argument
-#
 def parse_args():
+    """ Returns dict: Parsed command line arguments """
     parser = argparse.ArgumentParser(description='Little Magic REST API')
     parser.add_argument('--host', default='0.0.0.0', help='bind IP address')
     parser.add_argument('-d', '--debug', action='store_true', help='development mode')
@@ -124,8 +143,6 @@ def parse_args():
     return vars(parser.parse_args())
 #  def parse_arg()
 
-# run flask
-#
 if __name__ == '__main__':
     # command line argument
     args = parse_args()
