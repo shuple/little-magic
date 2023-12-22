@@ -1,17 +1,26 @@
 @charset "UTF-8";
 
 body {
+  /* Box model properties */
   margin: 0;
   height: 100%;
   overflow: hidden;
+
+  /* Typography */
   font-family: Arial;
+
+  /* Background */
   background-color: #000;
+
+  /* User interaction */
+  user-select: none;          /* Chrome, Opera */
+  -ms-user-select: none;      /* Edge */
+  -moz-user-select: none;     /* Firefox */
+  -webkit-user-select: none;  /* Safari */
+  -webkit-touch-callout: none; /* Safari iOS */
+
+  /* Miscellaneous */
   /* disable text selection */
-  user-select: none;          /* Chrome Opera */
-  -ms-user-select: none;      /* Edge         */
-  -moz-user-select: none;     /* Firefox      */
-  -webkit-user-select:none;   /* Safari       */
-  -webkit-touch-callout:none; /* Safari IOS   */
 }
 
 div.game {
