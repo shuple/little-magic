@@ -1,7 +1,12 @@
+// Javascript for index.htm
+
 import { LittleMagicMake } from './littlemagic_make.js';
 
 window.addEventListener('load', function () {
   const littleMagic = new LittleMagicMake();
+  /**
+   * Load stage and menu
+   */
   const init = async function() {
     const metaData = [ 'meta/data', 'meta/sprite' ];
     await littleMagic.rest('/post',
