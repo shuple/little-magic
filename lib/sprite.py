@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
 
+# Little Magic sprite interface
+
 import copy, json, os, re
 from PIL import Image
 
 class Sprite:
-    'Little Magic Sprite'
+    """ Little Magic sprite interface """
 
-    # parameter:
-    #
-    # option['cg'] : 0
-    #
     def __init__(self, option):
+        """
+        Initialize attributes.
+
+        Args:
+            option (dict): Configuration options.
+                cg (int): 0 for 'sfc', 1 for 'gbc'
+                file (str): Stage configuration file name.
+        """
         # copy option
         self.option = copy.deepcopy(option)
 
@@ -39,18 +45,15 @@ class Sprite:
         }
     #  def __init__
 
-    # load self.image_dict self.image_data
-    #
     def load(self):
+        """ Load self.image_dict self.image_data """
         self.load_image_dict()
         self.merge_image_dict()
         self.load_image_data()
     #  def load()
 
-    #  load self.image_dict
-    # '/path/to/image/01': {}
-    #
     def load_image_dict(self):
+        """ Load self.image_dict['sprite'] in { '/path/to/image/01': {} } format """
         for root, _, files in sorted(os.walk(self.path['sprite'])):
             if not files: continue
             for file in files:
@@ -61,11 +64,8 @@ class Sprite:
         #  for
     #  def load_image_dict()
 
-    # merge self.image_dict with existing meta/sprite.json
-    #
-    # image_dict : self.image_dict
-    #
     def merge_image_dict(self):
+        """ merge self.image_dict with existing meta/sprite.json """
         path = '%s/data/%02i/system/meta' % (self.path['root'], self.option['cg'])
         file = f"{path}/{self.option['file']}.json"
         if os.path.exists(file):
@@ -76,9 +76,8 @@ class Sprite:
         #  if
     #  def merge_image_dict
 
-    # write self.image_dict to json
-    #
     def write_image_dict(self):
+        """ Write self.image_dict to json """
         path = '%s/data/%02i/system/meta' % (self.path['root'], self.option['cg'])
         if not os.path.exists(path):
             os.makedirs(path)
@@ -88,9 +87,8 @@ class Sprite:
             f.write(json.dumps(image_dict, indent=2))
     #  def write_image_dict()
 
-    # load self.image_data, dict, key: relative path to image, value: PIL Image
-    #
     def load_image_data(self):
+        """ Load self.image_data dict with key: relative path to image, value: PIL Image """
         for image in self.image_dict['sprite'].keys():
             file = f"{self.path['sprite']}/{image}.png"
             if os.path.exists(file):

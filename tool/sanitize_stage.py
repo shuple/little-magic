@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
+# Sanitize data/<cg>/system/stage/<stage>.json
+
 import argparse, json, glob, os, re, sys
 path = os.path.dirname(os.path.abspath(__file__))
 
 def parse_args():
-    # options
+    """ Returns dict: Parsed command line arguments """
     parser = argparse.ArgumentParser(description='Sanitize data/<cg>/system/stage/<stage>.json')
     parser.add_argument('-c', '--cg', type=int, default=0, help='CG type')
     parser.add_argument('file', nargs='?', type=int, default=0, help='stage file json format')
@@ -13,11 +15,13 @@ def parse_args():
     return vars(parser.parse_args())
 #  def parse_args()
 
-# add layer1/block/<block>/field/00 under layer3/block/<block>/pillar/00
-#
-# blocks : dict of data/<cg>/system/stage/<stage>.json
-#
 def add_field(blocks):
+    """
+    Add layer1/block/<block>/field/00 under layer3/block/<block>/pillar/00 to blocks.
+
+    Args:
+        blocks (dict): Loaded data/<cg>/system/stage/<stage>.json.
+    """
     for row in range(len(blocks['layer3'])):
         for col in range(len(blocks['layer3'][row])):
             match = re.search(r'(block/\d{2})/pillar/', blocks['layer3'][row][col])

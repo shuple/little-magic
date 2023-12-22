@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# Generate data/<cg>/image/stage/<stage>.png given a stage configuration file
+
 import argparse, glob, json, os, re, sys
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -7,7 +9,7 @@ sys.path.insert(0, f'{path}/../lib')
 import littlemagic_stage as lm
 
 def parse_args():
-    # options
+    """ Returns dict: Parsed command line arguments """
     parser = argparse.ArgumentParser(description='Generate data/<cg>/image/stage/<stage>.png')
     parser.add_argument('-c', '--cg', type=int, default=0, help='CG type')
     parser.add_argument('file', nargs='?', type=int, default=0, help='stage file json format')

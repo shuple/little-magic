@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
+# Generate ui/static/image/sprite/<cg> rescaled for the web GUI
+
 import argparse, os, pathlib, re, shutil, sys
 from PIL import Image
 
 sys.path.insert(0, f'{(os.path.dirname(os.path.abspath(__file__)))}/../lib')
 
 def parse_args():
+    """ Returns dict: Parsed command line arguments """
     path = f'{os.path.dirname(os.path.abspath(__file__))}/../ui/static/image'
 
     # options
