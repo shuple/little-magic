@@ -5,7 +5,7 @@ The UI is written entirely in vanilla Javascript.
 
 ## Demo
 
-https://littlemagic.app:44343
+https://littlemagic.app
 
 The demo contains all stages from SNES and GBC, including unused stages.
 
