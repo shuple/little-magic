@@ -9,7 +9,7 @@ sys.path.insert(0, f'{path}/../lib')
 # Flask instance
 app = flask.Flask(__name__, static_url_path='/static')
 
-# Create a blueprint with 'console' as the prefix
+# Create a blueprint with 'littlemagic' as the prefix
 app_bp = flask.Blueprint('littlemagic', __name__,static_folder='static', url_prefix='/littlemagic')
 
 # Application info
