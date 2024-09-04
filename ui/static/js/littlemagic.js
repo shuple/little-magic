@@ -399,7 +399,7 @@ class LittleMagic {
    * @param {function} callback - The callback function to execute with the response data.
    */
   async rest(url, restData, callback) {
-    await fetch(url, {
+    await fetch(`/littlemagic${url}`, {
       method: 'POST',
       body: JSON.stringify(restData),
       headers: { 'Content-Type': 'application/json' },

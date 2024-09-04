@@ -9,30 +9,39 @@ sys.path.insert(0, f'{path}/../lib')
 # Flask instance
 app = flask.Flask(__name__, static_url_path='/static')
 
+# Create a blueprint with 'console' as the prefix
+app_bp = flask.Blueprint('littlemagic', __name__,static_folder='static', url_prefix='/littlemagic')
+
 # Application info
 with open("%s/../config/app.json" % (path), 'r') as fp:
     env = json.loads(fp.read())
 
+def htm():
+    """ Returns str: The filename (str) for an HTML template """
+    return f'{template()}.htm'
+
 def template():
     """  Returns str: The URL path before any query parameters """
-    return f'{flask.request.path.replace("/", "")}.htm'
+    url = re.sub(r'/$', '', flask.request.path)
+    url = '/'.join(url.split('/')[2:])
+    return '/'.join(url.split('?')[0].split('/')[0:])
 
-@app.route('/', methods=['GET'])
+@app_bp.route('/', methods=['GET'])
 def root():
     """ Redirect to the index page """
     return flask.redirect('/index')
 
-@app.route('/index', methods=['GET'])
+@app_bp.route('/index', methods=['GET'])
 def index():
     """ Render the index page """
     try:
-        return flask.render_template(template(), path=template(), env=env)
+        return flask.render_template(htm(), path=template(), env=env)
     except Exception as e:
         logging.error(f'{flask.request.path} {traceback.format_exc()}')
         return {}
 #  def index()
 
-@app.route('/post', methods=['POST'])
+@app_bp.route('/post', methods=['POST'])
 def post():
     """
     Handles a POST request to '/post/read'.
@@ -44,6 +53,7 @@ def post():
     """
     try:
         post = flask.request.json
+        print(post)
         method = re.sub(r'/', '_', post['method'])
         module = sys.modules[__name__]
         if hasattr(module, method) and callable(getattr(module, method)):
@@ -55,6 +65,10 @@ def post():
         data = { 'error': f'{str(e)}' }
     return data
 #  def post_method()
+
+# Register blueprint
+app.register_blueprint(app_bp)
+
 
 def read_stage(post):
     """ Returns dict: Stage data """
