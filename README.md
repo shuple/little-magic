@@ -5,7 +5,7 @@ The UI is written entirely in vanilla Javascript.
 
 ## Demo
 
-The demo is currently closed. Please get in touch with me to enable it. 
+https://tonchinkan.jp/littlemagic
 
 The demo contains all stages from SNES and GBC, including unused stages.
 
